@@ -1,0 +1,96 @@
+desktop personalization
+	color
+	lock screen disable pic
+	start menu
+		disable recently
+		disable jump lists
+		show only settings
+	taskbar
+		remove search & etc
+		replace powershell
+		hide badges
+		notification area
+			show defender
+			disable input indicator
+			disable action center
+
+defender:
+	disable cloud delivery
+	disable automatic sample submission
+	
+	dismiss yellow icon
+	reputaion based protection?
+	
+System Settings
+	Display: 144hz
+	Sound: Asus Xonar, default playback & recording, mic disable front panel
+
+	notifications
+		disable
+			
+	focus assist: alarms only
+	power options: disable fast startup
+	multitasking: alt+tab (open windows only)
+	remote desktop: enable, disable remote assistance
+
+	
+Accounts:
+	account picture
+	
+Gaming:
+	disable xbox game bar
+	
+Search:
+	SafeSearch off
+	cloud content search all off
+
+Privacy:
+	notifications disable
+	
+Update & Security
+	disable delivery optimization
+	enable developer settings
+	
+	
+
+	
+rename "this pc"
+
+file explorer:
+	open in this pc
+	disable show files & folder quick access
+	disable index search on file explorer
+
+User Folders:
+	move to roam
+	hide unused
+	apply tweaks:
+	tweak: user folder full path & mklink
+
+Start menu:
+	cachels only usable folders
+		Developing
+			projects, term, tools
+		Profile
+			Profile, Documents, Downloads
+		Extensions
+			bin
+			
+network
+	sharing options
+
+configs:
+	ie & edge & firefox
+	np++
+	
+	shells
+
+
+cleanup:
+	uninstall onedrive
+	uninstall paint 3d & remove context menu entrie
+	uninstall sticky notes
+	
+TODO:
+	switch audio
+	full path

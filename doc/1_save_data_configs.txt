@@ -1,0 +1,47 @@
+Keys:
+	office
+	windows (slmgr /dli)
+		nirsoft "produckey.exe"
+		
+		bios auslesen, wenn leer dann nicht im bios
+		 - wmic path softwarelicensingservice get OA3xOriginalProductKey
+		 - (Get-WmiObject -query ’select * from SoftwareLicensingService‘).OA3xOriginalProductKey
+		 
+	sublime text?
+	etc. ?
+
+
+
+program configs
+	gitconfig
+	7zip
+	office rules
+	jdownloader export settings
+	np++ roaming folder
+	firefox profile folder
+	
+	
+	
+
+Folders (clean up)
+	C:\term
+	C:\projects
+	C:\bin
+	C:\vm
+	C:\tools
+	C:\scripts
+	C:\code
+	users folders
+		look at C:\Users\eno
+		look at C:\Users\Michi
+		C:\Users\roam
+		
+		
+		
+Misc
+	env's
+	startmenu layout
+	winx layout
+	context menu layout
+	windos theme color
+	gpo

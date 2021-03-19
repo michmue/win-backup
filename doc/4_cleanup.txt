@@ -1,0 +1,17 @@
+CLEAN UP
+	Downloads
+	Documents
+	Pictures
+	VMs
+	Public Folders
+	hidden users?
+	per user %tmp%
+
+dism
+
+c: cleanup
+
+c: cleanup admin
+
+
+disable guest

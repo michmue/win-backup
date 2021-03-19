@@ -1,0 +1,124 @@
+
+	TWEAKS
+		regs
+			fasterstartup
+			"IconSpacing"="115"
+			"IconVerticalSpacing"="80"
+			copyaspath
+			
+
+		passwordless login?
+		remove apps
+			cortana
+			Get-AppxPackage -AllUsers -PackageTypeFilter Bundle -name "Microsoft.BingWeather" | Remove-AppxPackage -AllUsers
+Get-AppxPackage -AllUsers -PackageTypeFilter Bundle -name "Microsoft.GetHelp" | Remove-AppxPackage -AllUsers
+Get-AppxPackage -AllUsers -PackageTypeFilter Bundle -name "Microsoft.Getstarted" | Remove-AppxPackage -AllUsers
+Get-AppxPackage -AllUsers -PackageTypeFilter Bundle -name "Microsoft.Office.OneNote" | Remove-AppxPackage -AllUsers
+Get-AppxPackage -AllUsers -PackageTypeFilter Bundle -name "MMicrosoft.MicrosoftStickyNotes" | Remove-AppxPackage -AllUsers
+Get-AppxPackage -AllUsers -PackageTypeFilter Bundle -name "Microsoft.MicrosoftOfficeHub" | Remove-AppxPackage -AllUsers
+Get-AppxPackage -AllUsers -PackageTypeFilter Bundle -name "Microsoft.MicrosoftSolitaireCollection" | Remove-AppxPackage -AllUsers
+Get-AppxPackage -AllUsers -PackageTypeFilter Bundle -name "Microsoft.MicrosoftSolitaireCollection" | Remove-AppxPackage -AllUsers
+Get-AppxPackage -AllUsers -PackageTypeFilter Bundle -name "Microsoft.Windows.Photos" | Remove-AppxPackage -AllUsers
+Get-AppxPackage -AllUsers -PackageTypeFilter Bundle -name "Microsoft.Microsoft3DViewer" | Remove-AppxPackage -AllUsers
+			Microsoft.XboxApp
+			Microsoft.Photos
+			Microsoft.WindowsFeedbackHub
+			Microsoft.ScreenSketch
+			Microsoft.Office.OneNote
+			Microsoft.Getstarted
+			Microsoft.MicrosoftOfficeHub
+			Microsoft.MicrosoftSolitaireCollection
+			Microsoft.MicrosoftStickyNotes
+
+		desktop icons size + spacing (100/80)
+		Photo Viewer
+		
+		folder options
+			this pc (quick access)
+			view hidden
+			view ext
+			
+		developer mode
+		
+		context menu
+			
+		Xmenu
+		
+		startmenu
+		
+		3d objects folder?
+		
+		taskbar & notification area
+		
+		
+		C:\Windows\System32\GroupPolicy\Machine\Scripts\Shutdown
+		C:\Windows\System32\GroupPolicy\Machine\Scripts\Startup
+		C:\ProgramData\Microsoft\Windows\Start Menu\Programs\StartUp
+		
+		C:\Windows\System32\GroupPolicy\User\Scripts\Shutdown
+		C:\Windows\System32\GroupPolicy\User\Scripts\Startup
+		C:\Users\eno\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup
+		
+
+
+	TOOLS
+		7zip + sdk
+		winrar?
+		git
+		adopt java
+		maven
+		gradle
+		
+		mp3tag
+		filebot portable
+		wincp
+		deezloader
+		ffmpeg
+		regscanner
+		treefilesize
+		wolcmd
+		youtube-dl
+
+
+	SHORTCUTS
+		sc fodler
+		np++
+		envs + path
+		
+
+
+	PROGRAMS
+		np++
+			https://npp-user-manual.org/docs/command-prompt/
+			replace notepad
+		office (activate)
+		adobe	(activate)
+			dc atmlib?
+				settings
+					fit page
+					centimeter
+					single page
+		firefox
+		jdownloader
+		
+
+
+	CLEAN UP
+		features
+		msconfig
+		autostart
+		services
+		context menu
+			adobe
+		
+		dism
+		SoftwareDistribution
+		servicing LCU
+		c:\
+		
+		powershell remove apps
+			Remove-ProvisionedAppxPackage
+			cortana
+			xbox?
+			
+		tasks

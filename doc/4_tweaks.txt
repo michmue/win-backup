@@ -1,0 +1,30 @@
+USER FOLDER / ACCOUNTS
+	[roam & icacls roam /grant eno=(OI)(CI)F]
+	hide unused folders (Links, Favorites)
+	create links
+	quick access to links
+	user icons
+	
+	
+POWERSHELL
+		remove apps
+			cortana
+			Get-AppxPackage -AllUsers -PackageTypeFilter Bundle -name "Microsoft.BingWeather" | Remove-AppxPackage -AllUsers
+Get-AppxPackage -AllUsers -PackageTypeFilter Bundle -name "Microsoft.GetHelp" | Remove-AppxPackage -AllUsers
+Get-AppxPackage -AllUsers -PackageTypeFilter Bundle -name "Microsoft.Getstarted" | Remove-AppxPackage -AllUsers
+Get-AppxPackage -AllUsers -PackageTypeFilter Bundle -name "Microsoft.Office.OneNote" | Remove-AppxPackage -AllUsers
+Get-AppxPackage -AllUsers -PackageTypeFilter Bundle -name "MMicrosoft.MicrosoftStickyNotes" | Remove-AppxPackage -AllUsers
+Get-AppxPackage -AllUsers -PackageTypeFilter Bundle -name "Microsoft.MicrosoftOfficeHub" | Remove-AppxPackage -AllUsers
+Get-AppxPackage -AllUsers -PackageTypeFilter Bundle -name "Microsoft.MicrosoftSolitaireCollection" | Remove-AppxPackage -AllUsers
+Get-AppxPackage -AllUsers -PackageTypeFilter Bundle -name "Microsoft.MicrosoftSolitaireCollection" | Remove-AppxPackage -AllUsers
+Get-AppxPackage -AllUsers -PackageTypeFilter Bundle -name "Microsoft.Windows.Photos" | Remove-AppxPackage -AllUsers
+Get-AppxPackage -AllUsers -PackageTypeFilter Bundle -name "Microsoft.Microsoft3DViewer" | Remove-AppxPackage -AllUsers
+			Microsoft.XboxApp
+			Microsoft.Photos
+			Microsoft.WindowsFeedbackHub
+			Microsoft.ScreenSketch
+			Microsoft.Office.OneNote
+			Microsoft.Getstarted
+			Microsoft.MicrosoftOfficeHub
+			Microsoft.MicrosoftSolitaireCollection
+			Microsoft.MicrosoftStickyNotes

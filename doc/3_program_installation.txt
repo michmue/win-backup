@@ -1,0 +1,18 @@
+office
+	activation
+	auto kms task
+	
+adobe
+	patching
+	cleanup bat file
+	
+windows foto viewer
+firefox
+np++
+
+VM
+
+ENVS:
+	JD2_HOME	C:\Users\eno\AppData\Local\JDownloader 2.0
+	PIPENV_VENV_IN_PROJECT	1
+	PATH: c:\term;c:\bin;c:\tools;
