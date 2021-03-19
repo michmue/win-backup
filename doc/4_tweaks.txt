@@ -6,6 +6,23 @@ USER FOLDER / ACCOUNTS
 	user icons
 	
 	
+REGISTRY
+	GLOBAL
+		Photo Viewer
+		
+	
+	USER
+		desktop icons spacing (100/80) [size]
+		
+		
+MISC TWEAKS
+
+	GLOBAL
+		Hide_StartMenu_GuestAccount
+
+	USER
+		Hide_PointlessUserFolders
+
 POWERSHELL
 		remove apps
 			cortana

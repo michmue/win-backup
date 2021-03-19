@@ -102,19 +102,38 @@ NORMAL SETTINGS
 
 METRO SETTINGS (ignore: devices, Phone, network & internet, time & language, ease of access)
 	Permission & History
+	
 	Update & Security
+		Developer Settings
+	
 	Personalization (all)
+		Taskbar
+		
+		
 	Privacy
 		notifications
+		
 	System
 		notifications
-	search
-	xbox game bar
 		
+	search
+	
+	xbox game bar
 
 
 EXPLORER SETTINGS
-	view
-		save details for all
-		remove grouping
-		global folder options vs folder types
+	
+	FOLDER OPTIONS
+		this pc (quick access)
+		view hidden
+		view ext
+		
+	VIEW
+		save detail view for all folder types?
+			remove grouping
+		global folder options vs folder types?
+		for each folder in c:root
+		
+		
+CUSTOMIZATION
+	start menu

@@ -1,17 +1,52 @@
-CLEAN UP
+FOLDER CLEAN UP 
+	VMs
 	Downloads
 	Documents
+	per user %tmp%
+	
+	c:\
+	c:\windows\servicing\LCU
+	c:\windows\SoftwareDistribution
+	
 	Pictures
-	VMs
 	Public Folders
 	hidden users?
-	per user %tmp%
+	
+	
+	
+PROGRAMMICAL CLEANUP
+	dism
+	drive properties cleanup
+	drive properties as admin
+	disable guest
+	
+	!! Remove-ProvisionedAppPackage !! (for new users)
+	Remove-AppxPackage
+	Remove-AppPackage
+		-AllUsers
+		cortana
+		Microsoft.BingWeather
+		Microsoft.GetHelp
+		Microsoft.Microsoft3DViewer
+		Microsoft.XboxApp
+		Microsoft.Photos
+		Microsoft.WindowsFeedbackHub
+		Microsoft.ScreenSketch
+		Microsoft.Office.OneNote
+		Microsoft.Getstarted
+		Microsoft.MicrosoftOfficeHub
+		Microsoft.MicrosoftSolitaireCollection
+		Microsoft.MicrosoftStickyNotes
 
-dism
-
-c: cleanup
-
-c: cleanup admin
 
 
-disable guest
+
+WINDOWS METRO FEATURES CLEANUP
+
+
+
+AUTOSTARTS
+	msconfig
+	autostart
+	autoruns
+	schdtsk
