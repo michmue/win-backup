@@ -69,6 +69,7 @@ DRIVER
 		default communication (already default?)
 		
 	nvidea 144hz
+		switch audio again
 	
 	
 	
@@ -96,7 +97,8 @@ NORMAL SETTINGS
 		list seperator: ;
 		date with dot
 		apply system wide
-		
+	
+	power options: disable fast startup
 	
 		
 
@@ -104,24 +106,49 @@ METRO SETTINGS (ignore: devices, Phone, network & internet, time & language, eas
 	Permission & History
 	
 	Update & Security
+		disable delivery optimization
 		Developer Settings
 	
 	Personalization (all)
-		Taskbar
+		color
+		lock screen disable pic
+		start menu
+			disable recently
+			disable jump lists
+			show only settings
+		taskbar
+			remove search & etc
+			replace powershell
+			hide badges
+			notification area
+				show defender
+				disable input indicator
+				disable action center
 		
 		
-	Privacy
-		notifications
 		
 	System
 		notifications
 		
-	search
+	Search
+		SafeSearch off
+		cloud content search all off
 	
 	xbox game bar
+	
+	defender
+		disable cloud delivery
+		disable automatic sample submission		
+		dismiss yellow icon
+		reputaion based protection?
 
+	focus assist: alarms only	
+	multitasking: alt+tab (open windows only)
+	remote desktop: enable, disable remote assistance
+	
 
 EXPLORER SETTINGS
+	disable index search on file explorer
 	
 	FOLDER OPTIONS
 		this pc (quick access)
@@ -136,4 +163,12 @@ EXPLORER SETTINGS
 		
 		
 CUSTOMIZATION
-	start menu
+	Start menu:
+		cachels only usable folders
+		
+		Developing
+			projects, term, tools
+		Profile
+			Profile, Documents, Downloads
+		Extensions
+			bin

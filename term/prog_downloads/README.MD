@@ -1,4 +1,21 @@
 # TODOs
+	7zip + sdk
+	winrar?
+	git
+	adopt java
+	maven
+	gradle
+	
+	mp3tag
+	filebot portable
+	wincp
+	deezloader
+	ffmpeg
+	regscanner
+	treefilesize
+	wolcmd
+	youtube-dl
+
 http://www.lupopensuite.com/bestapps.htm
 https://portableapps.com/de
 https://www.chip.de/bildergalerie/Die-50-besten-portablen-Tools-fuer-den-USB-Stick-Galerie_47127780.html

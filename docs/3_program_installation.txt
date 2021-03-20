@@ -9,13 +9,23 @@ adobe
 	patching
 	cleanup bat file
 	disable adobe plugin office
-	
+	acrobat
+		fit page
+		centimeter
+		single page
 	
 windows foto viewer
 firefox
 np++ TODO tools: np & npa 
 
-VM
+VM's
+	configs to c:\vm
+
+configs:
+ie & edge & firefox
+np++
+shell's
+jdownloader
 
 ENVS:
 	JD2_HOME	C:\Users\eno\AppData\Local\JDownloader 2.0
