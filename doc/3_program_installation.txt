@@ -1,10 +1,15 @@
 office
 	activation
 	auto kms task
+	default template path
+	modify saving setting
+	disable adobe plugin
 	
 adobe
 	patching
 	cleanup bat file
+	disable adobe plugin office
+	
 	
 windows foto viewer
 firefox
