@@ -1,18 +1,21 @@
 @echo off
-REM Downloading newest git version in 64bit
-REM Git binary gets downloaded into same folder as this script
 REM Double click this file or call it from command line without arguments/parameter
 
 REM https://ss64.com/nt/
 REM https://www.robvanderwoude.com/escapechars.php
 REM https://www.dostips.com/DtTipsStringManipulation.php
+setlocal
 
-
-set tmp_file=%~dp0tmp_np.html
 set "download_page=https://github.com/notepad-plus-plus/notepad-plus-plus/releases"
-bitsadmin /transfer "downloading git download page(html) for version parsing" /download /priority foreground /dynamic %download_page% %tmp_file%
 
-for /f "tokens=*" %%a in ('findstr /R "muted-link" %tmp_file%') do (
+set file_name=%~n0
+set file_name=%file_name:download_=%
+set tmp_file=%~dp0tmp_%file_name%.html
+set job_name=%time%_downloading_%file_name%
+
+bitsadmin /transfer %job_name%_tmp /download /priority foreground /dynamic %download_page% %tmp_file%
+
+for /f "tokens=*" %%a in ('findstr /R "Link--muted" %tmp_file%') do (
     set line=%%a
     goto :break
 )
@@ -34,5 +37,5 @@ set "download_url=https://github.com/notepad-plus-plus/notepad-plus-plus/release
 set "file_name=npp.%version%.Installer.x64.exe"
 set "file=%~dp0%file_name%"
 
-bitsadmin /transfer "downloading jdownloader" /download /priority foreground /dynamic %download_url% %file%
+bitsadmin /transfer %job_name% /download /priority foreground /dynamic %download_url% %file%
 endlocal

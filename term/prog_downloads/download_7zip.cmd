@@ -1,10 +1,19 @@
 @echo off
-REM Downloading newest 7zip version in 64bit
-REM Git binary gets downloaded into same folder as this script
 REM Double click this file or call it from command line without arguments/parameter
 
-set tmp_file=%~dp0tmp_7zip.html
-bitsadmin /transfer "downloading git download page(html) for version parsing" /download /priority foreground /dynamic "https://7-zip.de/download.html" %tmp_file%
+REM https://ss64.com/nt/
+REM https://www.robvanderwoude.com/escapechars.php
+REM https://www.dostips.com/DtTipsStringManipulation.php
+setlocal
+
+set "download_page=https://7-zip.de/download.html"
+
+set file_name=%~n0
+set file_name=%file_name:download_=%
+set tmp_file=%~dp0tmp_%file_name%.html
+set job_name=%time%_downloading_%file_name%
+
+bitsadmin /transfer %job_name%_tmp /download /priority foreground /dynamic %download_page% %tmp_file%
 
 
 set first_repeat=1
@@ -26,7 +35,7 @@ set "file=%line:/=" & set "file=%"
 set file=!file!
 set download_url=!line!
 SETLOCAL DisableDelayedExpansion
+set file=%~dp0%file%
 
-echo %file%
-echo %download_url%
-bitsadmin /transfer "downloading git binary" /download /priority foreground /dynamic %download_url% %~dp0%file%
+bitsadmin /transfer %job_name% /download /priority foreground /dynamic %download_url% %file%
+endlocal

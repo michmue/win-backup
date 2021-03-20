@@ -1,4 +1,10 @@
 # TODOs
+	vlcplayer
+	greenshot?
+	obs-studio
+	sublime text
+	
+
 	7zip + sdk
 	winrar?
 	git
