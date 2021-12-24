@@ -1,3 +1,6 @@
+# Configs
+template folder for office programs
+
 # MISC
 xmenu
 destructive naming convetion (remove vs disable)
