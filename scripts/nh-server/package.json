@@ -1,0 +1,16 @@
+{
+  "name": "new-folder-3",
+  "version": "1.0.0",
+  "description": "",
+  "main": "test-db.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@keyv/sqlite": "^2.0.4",
+    "express": "^4.17.2",
+    "keyv": "^4.0.4"
+  }
+}
