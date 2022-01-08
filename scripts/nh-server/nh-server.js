@@ -1,5 +1,5 @@
 const Database = require('better-sqlite3');
-const db = new Database('foobar.db', { verbose: console.log,fileMustExist: true });
+const db = new Database('nh.db', { verbose: console.log,fileMustExist: true });
 /*
 const getMethods = (obj) => {
   let properties = new Set()
@@ -13,19 +13,18 @@ const getMethods = (obj) => {
 //console.log(getMethods(db));
 
 
-db.exec("CREATE TABLE IF NOT EXISTS mangas(id INT,title TEXT)");
+//db.exec("CREATE TABLE IF NOT EXISTS mangas(id INT,title TEXT)");
 
-db.exec("INSERT INTO mangas VALUES (123, 'test')");
-const row = db.prepare('SELECT * FROM mangas').get();
-console.log(row);
-/*
+//db.exec("INSERT INTO mangas VALUES (123, 'test')");
+
+//const row = db.prepare('SELECT * FROM mangas').get();
+//console.log(db.exec("SELECT * FROM sqlite_schema ;"));
+
+
 const express = require('express')
 const app = express()
-const Keyv = require('keyv')
 
 // One of the following
-const keyv = new Keyv('sqlite://keyv.sqlite');
-
 async function getKey(key) {
 	try {
 		let dbKey = await keyv.get(key);
@@ -52,12 +51,15 @@ app.get('/addVisitedManga', function (req, res) {
 })
 
 app.get('/getManga', function (req, res) {
-  getKey(req.query.id).then( title => {
+	row = db.exec("SELECT * FROM keyv where key in ('385100', '384649')");
+	console.log(row);
+	res.send(row);
+	/*getKey(req.query.id).then( title => {
 	  res.json({
 		  "id": req.query.id,
 		  "title": title
-	  })
-  })
+	  })*/
+ 
 })
 
-app.listen(3000);*/
+app.listen(3000);
