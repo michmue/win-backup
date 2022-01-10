@@ -8,12 +8,33 @@
 // @match        https://nhentai.net/artist/*
 // @match        https://nhentai.net/character/*
 // @match        https://nhentai.net/parody/*
+// @match        https://nhentai.net/g/*
 // @updateURL	 http://localhost:8080/addon-nh4.user.js
 // @downloadURL  http://localhost:8080/addon-nh4.user.js
-// @grant        none
+// @grant       GM.xmlHttpRequest
 // ==/UserScript==
 
-//some cool doc2
+
+if (window.location.href.includes("/g/")) {
+
+  let id = window.location.href.split("/g/")[1].split("/")[0]
+  let title = document.querySelector("h1.title").textContent;
+  
+  (async () => {
+  	GM.xmlHttpRequest({
+    method: "GET",
+    url: "http://localhost:3000/addVisitedManga?id="+id+"&title="+encodeURI(title),
+    onload: function(response) {
+      //alert(response.responseText);
+    }
+  });
+  })()
+  
+
+  
+  
+} else {
+
 var baseURL = "https://nhentai.net/search/?q="
 if (window.location.href.includes("/tag/")) {
 	baseURL += "tag%3A" + window.location.href.split("/")[4]
@@ -42,7 +63,9 @@ if (window.location.href.includes("/language/")) {
 }
 	
 function getActiveCategories() {
-	var params = document.location.href.split("q=")[1].split("&");
+	var params = document.location.href.split("q=")
+  if (params !== undefined) {
+    params = params[1].split("&");
 	var pages = params[1]
 	params = params[0].split("+")
 	var categories = {"tags": [], "artist": null, "characters":[], "parody":null, language:null}
@@ -57,8 +80,9 @@ function getActiveCategories() {
 		if (category === "artist") categories.artist = entry
     if (category === "language") categories.language = entry
 	})
-	
-	return categories
+    return categories
+  }
+	return {"tags": [], "artist": null, "characters":[], "parody":null, language:null}
 }
 
 
@@ -187,3 +211,4 @@ let newCookies = mergeCategories(activeCats, cookieCats)
 saveCategoriesToCookies(newCookies)
 console.log("newCook")
 console.log(newCookies)
+}
