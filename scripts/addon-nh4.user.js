@@ -1,7 +1,8 @@
+//moz-extension://21de1b5d-f5f3-4da7-ab95-aa399d25dae1/src/content/edit-user-script.html#0d8385bc-7ea6-499d-b03e-88d344254414
 // ==UserScript==
 // @name         dev-script
 // @version      0.3
-// @author       You
+// @author       dev@michmue.de
 // @match        https://nhentai.net/search/*
 // @match        https://nhentai.net/tag/*
 // @match        https://nhentai.net/group/*
@@ -17,8 +18,8 @@
 // ==/UserScript==
 let port = "5000";
 
-
-if (window.location.href.includes("/g/")) {
+let isMangaDetailsPage = window.location.href.includes("/g/");
+if (isMangaDetailsPage) {
 
     let id = window.location.href.split("/g/")[1].split("/")[0]
     let title = document.querySelector("h1.title").textContent;
@@ -27,7 +28,11 @@ if (window.location.href.includes("/g/")) {
 
         GM.xmlHttpRequest({
             method: "GET",
+            timeout: 500,
             url: "http://localhost:" + port + "/addVisitedManga?id=" + id + "&title=" + encodeURI(title),
+            ontimeout: function () {
+                injectServerOfflineIndecator()
+            },
             onload: function (response) {
                 //alert(response.responseText);
             }
@@ -57,7 +62,7 @@ if (window.location.href.includes("/g/")) {
             highlightMangas(mangas, covers, showKnown);
         },
         ontimeout: function () {
-            console.log("server offline");
+            injectServerOfflineIndecator()
         },
     });
 
@@ -299,6 +304,14 @@ function getCookie(key, defaultValue) {
     if (cookie != undefined) return cookie.split("=")[1]
     return defaultValue
 }
-//
-// unsafeWindow.setCookie = exportFunction(setCookie, unsafeWindow);
-// unsafeWindow.getCookie = exportFunction(getCookie, unsafeWindow);
+
+function injectServerOfflineIndecator() {
+    let div = document.querySelector("div#content");
+    var offlineDiv = document.createElement("div");
+    offlineDiv.innerHTML = `
+        <div class="none" style="position: fixed;top:55px; left:0; background-color: red;z-index: 999999;">
+            <span onclick='navigator.clipboard.writeText("py C:/projects/win-backup/scripts/nh-server/nh-server.py")'>offline</span>    
+        </div>
+    `;
+    div.insertBefore(offlineDiv, div.firstChild)
+}
