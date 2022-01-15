@@ -1,0 +1,11 @@
+#install4j response file for JDownloader 2.0
+#Tue Dec 28 16:47:20 CET 2021
+sys.adminRights$Boolean=true
+createDesktopLinkAction$Boolean=true
+sys.fileAssociation.launchers$StringArray="5977","5977","5977","5977","5977"
+sys.languageId=en
+addToDockAction$Boolean=true
+sys.installationDir=C\:\\Program Files\\JDownloader2
+createQuicklaunchIconAction$Boolean=true
+executeLauncherAction$Boolean=true
+sys.fileAssociation.extensions$StringArray="dlc","jdc","ccf","rsdf","metalink"
