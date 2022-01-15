@@ -1,4 +1,5 @@
-//moz-extension://21de1b5d-f5f3-4da7-ab95-aa399d25dae1/src/content/edit-user-script.html#0d8385bc-7ea6-499d-b03e-88d344254414
+//gamerz_eno,moz-extension://21de1b5d-f5f3-4da7-ab95-aa399d25dae1/src/content/edit-user-script.html#0d8385bc-7ea6-499d-b03e-88d344254414
+//surf_eno,moz-extension://031e13cb-941a-469d-b8f4-86a4a1a8f83c/src/content/edit-user-script.html#ffad375e-0b4e-49d0-8a6d-6ddb5b9d1e68
 // ==UserScript==
 // @name         dev-script
 // @version      0.3
@@ -314,4 +315,52 @@ function injectServerOfflineIndecator() {
         </div>
     `;
     div.insertBefore(offlineDiv, div.firstChild)
+}
+
+function main() {
+    let settings = {
+        itemsSelector: "div > a.cover[href*='/g/']",
+        onVisitedMangesLoad: function (visitedMangas) {}
+    }
+
+    let FavoriteManager = {
+        settings: settings,
+
+        run: function () {
+            let mangaElements = Array.from(document.querySelectorAll(this.settings.itemsSelector));
+            console.log(mangaElements);
+        },
+        onVisitedMangesLoad: function () {
+            this.settings.onVisitedMangesLoad();
+        }
+
+    };
+
+    FavoriteManager.run();
+    var TagManager = {
+        getTagsFromURL: function () {
+            let urlParams = new URLSearchParams(window.location.search);
+            let params = new Map();
+            params.forEach(((value, key) => {
+                let strSategories = value.split(" ");
+                let categories = {}
+                strSategories.forEach(cate => {
+                    let split = cat.split(":");
+                    let cat = split[0];
+                    let val = split[1];
+                    let propExists = categories.getProperty(cat) !== undefined
+                    if (propExists) {
+                        categories.setProperty(cat, val);
+                    }
+                })
+                params.set(key, categories)
+
+            }))
+        },
+        getTagsFromSession: {tags:[]},
+    };
+    TagManager.sessionTags2()
+    FavoriteManager.injectFilterToPage();
+    sessionStorage.setItem("categories", JSON.stringify())
+
 }
