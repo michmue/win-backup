@@ -17,6 +17,15 @@
 // @downloadURL  http://localhost:8080/addon-nh4.user.js
 // @grant       GM.xmlHttpRequest
 // ==/UserScript==
+
+//TODO  v2
+//      - find duplicated through language:translated, author & title
+//        or find the original /g/id by -language:translated
+//      - find duplicated through picture comparison machine learning
+
+//TODO replace href's to /search/*, so no reload is necessary
+//TODO fix SearchParams when page > 1, params will be added behind page parameter and will not be recognized
+
 let port = "5000";
 
 let isMangaDetailsPage = window.location.href.includes("/g/");
