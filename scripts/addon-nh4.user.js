@@ -5,11 +5,6 @@
 // @version      0.3
 // @author       dev@michmue.de
 // @match        https://nhentai.net/search/*
-// @match        https://nhentai.net/tag/*
-// @match        https://nhentai.net/group/*
-// @match        https://nhentai.net/artist/*
-// @match        https://nhentai.net/character/*
-// @match        https://nhentai.net/parody/*
 // @match        https://nhentai.net/g/*
 // @match        https://nhentai.net/
 // @match        https://nhentai.net/?page=*
@@ -17,6 +12,11 @@
 // @downloadURL  http://localhost:8080/addon-nh4.user.js
 // @grant       GM.xmlHttpRequest
 // ==/UserScript==
+// @match        https://nhentai.net/tag/*
+// @match        https://nhentai.net/group/*
+// @match        https://nhentai.net/artist/*
+// @match        https://nhentai.net/character/*
+// @match        https://nhentai.net/parody/*
 
 //TODO  v2
 //      - find duplicated through language:translated, author & title
@@ -25,6 +25,74 @@
 
 //TODO replace href's to /search/*, so no reload is necessary
 //TODO fix SearchParams when page > 1, params will be added behind page parameter and will not be recognized
+
+var TagManager = {
+        getTagsFromURL: function () {
+            let urlParams = new URLSearchParams(window.location.search);
+            //get all params from the q= parameter
+            let parsedQParams = new Map()
+            let parsedQParams2 = {
+                tags:[],
+                artist:undefined,
+                languages:[],
+                characters:[],
+                parody:undefined,
+                group:undefined
+            }
+            parsedQParams.set("tag", [])
+            parsedQParams.set("language", [])
+            parsedQParams.set("character", [])
+
+            if (urlParams.has("q")) {
+                let q = urlParams.get("q");
+                let qParams = q.split(" ");
+                qParams.forEach(qp => {
+                    let keyVal = qp.split(":")
+                    let key = keyVal[0]
+                    let val = keyVal[1]
+
+                    switch (key) {
+                        case "character": parsedQParams2.characters.push(val); break;
+                        case "language": parsedQParams2.languages.push(val); break;
+                        case "tag": parsedQParams2.tags.push(val); break;
+                        case "group": parsedQParams2.group = val; break;
+                        case "parody": parsedQParams2.parody = val; break;
+                        case "artist": parsedQParams2.artist = val; break;
+                    }
+                    // if (parsedQParams.has(key)) {
+                    //     parsedQParams.get(key).push(val)
+                    // } else {
+                    //     parsedQParams.set(key, val)
+                    // }
+                });
+            }
+
+            return parsedQParams2;
+        },
+        // getTagsFromSession: {tags:[]},
+    };
+//
+// console.log(TagManager.getTagsFromURL());
+// console.log(TagManager.getTagsFromURL().get("tag"));
+
+function relocateLinksToSearch(){
+    let aNodes = document.querySelectorAll("section#tags a");
+    aNodes.forEach(a => {
+        let parts = a.href.split("/");
+        let linkDst = parts[3];
+        let linkVal = parts[4];
+        switch (linkDst) {
+            case "tag": a.href = a.href.replace("/tag/", "/search/?q=").replace(linkVal, "tag%3A" + linkVal).slice(0,-1); break;
+            case "group": a.href = a.href.replace("/group/", "/search/?q=").replace(linkVal, "group%3A" + linkVal).slice(0,-1); break;
+            case "artist": a.href = a.href.replace("/artist/", "/search/?q=").replace(linkVal, "artist%3A" + linkVal).slice(0,-1); break;
+            case "language": a.href = a.href.replace("/language/", "/search/?q=").replace(linkVal, "language%3A" + linkVal).slice(0,-1); break;
+            case "parody": a.href = a.href.replace("/parody/", "/search/?q=").replace(linkVal, "parody%3A" + linkVal).slice(0,-1); break;
+        }
+    });
+}
+relocateLinksToSearch();
+
+// console.log("TagManager.getTagsFromURL()");
 
 let port = "5000";
 
@@ -66,7 +134,6 @@ if (isMangaDetailsPage) {
         timeout: 1000,
         onload: function (response) {
             let mangas = JSON.parse(response.response);
-            console.log(mangas);
             let knownMangaIds = mangas.map(m => m.id);
             unsafeWindow.knownMangaIds = JSON.stringify(knownMangaIds);
             highlightMangas(mangas, covers, showKnown);
@@ -75,6 +142,7 @@ if (isMangaDetailsPage) {
             injectServerOfflineIndecator()
         },
     });
+
 
     function highlightMangas(mangas, covers, showKnown) {
         let knownMangaIds = mangas.map(m => m.id);
@@ -90,61 +158,11 @@ if (isMangaDetailsPage) {
     }
 
 
-    var baseURL = "https://nhentai.net/search/?q="
-
-    if (window.location.href.includes("/tag/")) {
-        baseURL += "tag%3A" + window.location.href.split("/")[4]
-        window.location.href = baseURL
-    }
-    if (window.location.href.includes("/character/")) {
-        baseURL += "character%3A" + window.location.href.split("/")[4]
-        window.location.href = baseURL
-    }
-    if (window.location.href.includes("/group/")) {
-        baseURL += "gourp%3A" + window.location.href.split("/")[4]
-        window.location.href = baseURL
-    }
-    if (window.location.href.includes("/artist/")) {
-        baseURL += "artist%3A" + window.location.href.split("/")[4]
-        window.location.href = baseURL
-    }
-    if (window.location.href.includes("/parody/")) {
-        baseURL += "parody%3A" + window.location.href.split("/")[4]
-        window.location.href = baseURL
-    }
-
-    if (window.location.href.includes("/language/")) {
-        baseURL += "language%3A" + window.location.href.split("/")[4]
-        window.location.href = baseURL
-    }
-
-    function getActiveCategories() {
-        var params = document.location.href.split("q=")
-        if (params !== undefined) {
-            params = params[0].split("+")
-            var categories = {"tags": [], "artist": null, "characters": [], "parody": null, language: null}
-            params.forEach(
-                e => {
-                    let category = e.split("%3A")[0]
-                    let entry = e.split("%3A")[1]
-                    if (category === "tag") categories.tags.push(entry)
-                    if (category === "character") categories.characters.push(entry)
-                    if (category === "group") categories.group = entry
-                    if (category === "parody") categories.parody = entry
-                    if (category === "artist") categories.artist = entry
-                    if (category === "language") categories.language = entry
-                })
-            return categories
-        }
-        return {"tags": [], "artist": null, "characters": [], "parody": null, language: null}
-    }
-
-
     function addCategoriesToBar(categories, isActive) {
-        if (categories.artist != undefined) addItemToBar("a", categories.artist, isActive)
-        if (categories.parody != undefined) addItemToBar("p", categories.parody, isActive)
-        if (categories.group != undefined) addItemToBar("g", categories.group, isActive)
-        if (categories.language != undefined) addItemToBar("l", categories.language, isActive)
+        if (categories.artist) addItemToBar("a", categories.artist, isActive)
+        if (categories.parody) addItemToBar("p", categories.parody, isActive)
+        if (categories.group) addItemToBar("g", categories.group, isActive)
+        if (categories.language) addItemToBar("l", categories.language, isActive)
         if (categories.characters.length > 0) addItemsToBar("c", categories.characters, isActive)
         if (categories.tags.length > 0) addItemsToBar("", categories.tags, isActive)
     }
@@ -172,7 +190,11 @@ if (isMangaDetailsPage) {
             //deactive Href
             // https://nhentai.net/search/?q=tag%3Asole-male+tag%3Afull-color
             var href = document.location.href
-            var categoryAndContent = href.split("q=")[1].split("&")[0].split("+").find(x => x.includes(text));
+            let strings = href.split("q=");
+            var categoryAndContent = strings[1]
+                .split("&")[0]
+                .split("+")
+                .find(x => x.includes(text));
             item.href = href.replace("+" + categoryAndContent, "").replace(categoryAndContent, "")
         }
 
@@ -180,12 +202,14 @@ if (isMangaDetailsPage) {
             //deactive Href
             // https://nhentai.net/search/?q=tag%3Asole-male+tag%3Afull-color
             var href = document.location.href
-            if (cat === "") item.href = href + "+tag%3A" + text
-            if (cat === "p") item.href = href + "+parody%3A" + text
-            if (cat === "g") item.href = href + "+group%3A" + text
-            if (cat === "l") item.href = href + "+language%3A" + text
-            if (cat === "c") item.href = href + "+character%3A" + text
-            if (cat === "a") item.href = href + "+artist%3A" + text
+            switch (cat) {
+                case "": item.href = href + "+tag%3A" + text; break;
+                case "p": item.href = href + "+parody%3A" + text; break;
+                case "g": item.href = href + "+group%3A" + text; break;
+                case "l": item.href = href + "+language%3A" + text; break;
+                case "c": item.href = href + "+character%3A" + text; break;
+                case "a": item.href = href + "+artist%3A" + text; break;
+            }
         }
         itemContainer.appendChild(item)
         bar.appendChild(itemContainer)
@@ -253,7 +277,11 @@ if (isMangaDetailsPage) {
         }, activeCats);
     }
 
-    let activeCats = getActiveCategories()
+    let activeCats = TagManager.getTagsFromURL();
+    //let activeCats = getActiveCategories()
+    //console.log(activeCats);
+    console.log(activeCats);
+    //activeTags2 = Object.fromEntries(activeTags2)
     addCategoriesToBar(activeCats, true)
 
     let cookieCats = getCookieCategories()
@@ -337,7 +365,6 @@ function main() {
 
         run: function () {
             let mangaElements = Array.from(document.querySelectorAll(this.settings.itemsSelector));
-            console.log(mangaElements);
         },
         onVisitedMangesLoad: function () {
             this.settings.onVisitedMangesLoad();
@@ -350,19 +377,21 @@ function main() {
         getTagsFromURL: function () {
             let urlParams = new URLSearchParams(window.location.search);
             let params = new Map();
-            params.forEach(((value, key) => {
-                let strSategories = value.split(" ");
+            urlParams.forEach(((value, key) => {
+                let queryParam = value.split(" ");
                 let categories = {}
-                strSategories.forEach(cate => {
-                    let split = cat.split(":");
-                    let cat = split[0];
-                    let val = split[1];
-                    let propExists = categories.getProperty(cat) !== undefined
-                    if (propExists) {
-                        categories.setProperty(cat, val);
-                    }
+                queryParam.forEach(p => {
+                    let split = p
+                    // .split(":");
+                    // let cat = split[0];
+                    // let val = split[1];
+                    // console.log("cat:" + cat +"  |  val:"+val)
+                    // let propExists = categories.getProperty(cat) !== undefined
+                    // if (propExists) {
+                    //     categories.setProperty(cat, val);
+                    // }
                 })
-                params.set(key, categories)
+                // params.set(key, categories)
 
             }))
         },
