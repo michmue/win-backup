@@ -19,6 +19,7 @@ program configs
 	jdownloader export settings
 	np++ roaming folder
 	firefox profile folder
+	obsidian
 	
 	
 	
