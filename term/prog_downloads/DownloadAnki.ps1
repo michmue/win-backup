@@ -1,0 +1,1 @@
+start https://apps.ankiweb.net/
