@@ -1,3 +1,6 @@
+# Customization
+- hide Shell Folders in Explorer & UserFolder?!?! https://www.winhelponline.com/blog/show-hide-shell-folder-namespace-windows-10/
+
 # Configs
 template folder for office programs
 
