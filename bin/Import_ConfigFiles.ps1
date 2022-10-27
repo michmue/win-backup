@@ -37,6 +37,7 @@ $RESULT += "[X] GIT Configs imported"
 
 if ( (Test-Path $NOTEPAD_PP_CONFIG_FODLER) -AND (Test-Path $CONFIG_SOURCE_FOLDER\Notepad++)){ 
     copy $CONFIG_SOURCE_FOLDER\Notepad++\* $NOTEPAD_PP_CONFIG_FODLER -Recurse -Force    
+    
     $RESULT += "[X] NOTEPAD++ Configs imported"
 } else { $RESULT += "[ ] NOTEPAD++ not installed" }
 
@@ -51,6 +52,7 @@ if ( (Test-Path $JDOWNLOADER_CONFIG_FOLDER) -AND (Test-Path $CONFIG_SOURCE_FOLDE
     
     $RESULT += "[X] JDownloader cfg Folder imported"
 } else { $RESULT += "[ ] JDownloader not installed" }
+
 
 $firefox_profile_folder = Get-ChildItem -Path $FIREFOX_CONFIG_FOLDER | WHERE name -Match default-release
 $cfg_firefox_profile_folder = Get-ChildItem -Path $CONFIG_SOURCE_FOLDER | WHERE name -Match default-release
