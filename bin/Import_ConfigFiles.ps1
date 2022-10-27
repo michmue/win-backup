@@ -14,12 +14,19 @@ $NOTEPAD_PP_CONFIG_FODLER = "$env:APPDATA\Notepad++"
 $JDOWNLOADER_CONFIG_FOLDER = "$env:ProgramFiles\JDownloader4\cfg"
 $FIREFOX_CONFIG_FOLDER = "$env:APPDATA\Mozilla\Firefox\Profiles"
 $ZIP7_CONFIG_REGISTRY = "HKCU\Software\7-zip"
+$POWERSHELL_USER_PROFILE_FOLDER = [environment]::getfolderpath("mydocuments")+"\WindowsPowerShell"
 
 
 if ( !(Test-Path $CONFIG_SOURCE_FOLDER -PathType Container) ) {
     Write-Host "Config folder not existing: $CONFIG_SOURCE_FOLDER"
     exit
 }
+
+if ( Test-Path $POWERSHELL_USER_PROFILE_FOLDER ) {
+    copy $CONFIG_SOURCE_FOLDER\WindowsPowerShell\* $POWERSHELL_USER_PROFILE_FOLDER  -Recurse -Force
+
+    $RESULT += "[X] Powershell User Profile imported"
+} else { $RESULT += "[ ] Powershell User Profile not found" }
 
 foreach ($file in $GIT_CONFIG_FILES) {
     if ( Test-Path $CONFIG_SOURCE_FOLDER\git\$file ) {
@@ -48,8 +55,8 @@ if ( (Test-Path $JDOWNLOADER_CONFIG_FOLDER) -AND (Test-Path $CONFIG_SOURCE_FOLDE
 $firefox_profile_folder = Get-ChildItem -Path $FIREFOX_CONFIG_FOLDER | WHERE name -Match default-release
 $cfg_firefox_profile_folder = Get-ChildItem -Path $CONFIG_SOURCE_FOLDER | WHERE name -Match default-release
 if (($FIREFOX_CONFIG_FOLDER -ne $null) -and ($cfg_firefox_profile_folder -ne $null)) {
-    Write-Host "closing firefox..."
-    Get-Process | WHERE ProcessName -eq firefox | Stop-Process
+    Write-Host "close your firefox..."
+    Get-Process | WHERE ProcessName -eq firefox | Wait-Process
     Write-Host "copying $cfg_firefox_profile_folder to $firefox_profile_folder"
     copy $CONFIG_SOURCE_FOLDER\$cfg_firefox_profile_folder\* $FIREFOX_CONFIG_FOLDER\$firefox_profile_folder -Recurse -Force
     

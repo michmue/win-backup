@@ -10,17 +10,21 @@ $GIT_CONFIG_FILES = @(
     "$env:USERPROFILE\.inputrc"
     "$env:USERPROFILE\.bash_profile"
 );
-Write-Host "add ~\.bash_profile after after windows/git installtion for next time"
 
 
 $NOTEPAD_PP_CONFIG_FODLER = "$env:APPDATA\Notepad++"
 $JDOWNLOADER_CONFIG_FOLDER = "$env:ProgramFiles\JDownloader4\cfg"
 $FIREFOX_CONFIG_FOLDER = "$env:APPDATA\Mozilla\Firefox\Profiles"
 $ZIP7_CONFIG_REGISTRY = "HKCU\Software\7-zip"
+$POWERSHELL_USER_PROFILE_FOLDER = [environment]::getfolderpath("mydocuments")+"\WindowsPowerShell"
 
 
 if ( !(Test-Path $CONFIG_DESTINATION_FOLDER -PathType Container) ) {
     mkdir $CONFIG_DESTINATION_FOLDER
+}
+
+if ( Test-Path $POWERSHELL_USER_PROFILE_FOLDER){ 
+    copy $POWERSHELL_USER_PROFILE_FOLDER $CONFIG_DESTINATION_FOLDER -Recurse -Force -ErrorAction SilentlyContinue 
 }
 
 foreach ($path in $GIT_CONFIG_FILES) {
@@ -47,6 +51,6 @@ $firefox_profile_folders = Get-ChildItem -Path $FIREFOX_CONFIG_FOLDER
 foreach ($profile in $firefox_profile_folders) {
     if ($profile -match "default-release") {
         Write-Host "copying $profile to $CONFIG_DESTINATION_FOLDER ..."
-        copy $FIREFOX_CONFIG_FOLDER\$profile $CONFIG_DESTINATION_FOLDER -Recurse -Force -ErrorAction SilentlyContinue
+        #copy $FIREFOX_CONFIG_FOLDER\$profile $CONFIG_DESTINATION_FOLDER -Recurse -Force -ErrorAction SilentlyContinue
     }
 }
