@@ -1,7 +1,5 @@
-#$CONFIG_DESTINATION_FOLDER = Read-Host -Prompt "Path where to save the configs"
-$CONFIG_DESTINATION_FOLDER = "d:\configs"
-Write-Host "TODO: switch to ask for folder"
-
+$CONFIG_DESTINATION_FOLDER = Read-Host -Prompt "Path where to save the configs"
+$RESULT = @()
 
 $GIT_CONFIG_FILES = @(
     "$env:USERPROFILE\.gitconfig",
@@ -24,33 +22,50 @@ if ( !(Test-Path $CONFIG_DESTINATION_FOLDER -PathType Container) ) {
 }
 
 if ( Test-Path $POWERSHELL_USER_PROFILE_FOLDER){ 
-    copy $POWERSHELL_USER_PROFILE_FOLDER $CONFIG_DESTINATION_FOLDER -Recurse -Force -ErrorAction SilentlyContinue 
-}
+    copy $POWERSHELL_USER_PROFILE_FOLDER\ $CONFIG_DESTINATION_FOLDER\ -Recurse -Force -ErrorAction SilentlyContinue 
+    $RESULT += "[X] Powershell User Profile expoted"
+} else { $RESULT += "[ ] Powershell User Profile not found" }
+
 
 foreach ($path in $GIT_CONFIG_FILES) {
-    mkdir $CONFIG_DESTINATION_FOLDER\git\ -ErrorAction SilentlyContinue
+    mkdir $CONFIG_DESTINATION_FOLDER\git\ -ErrorAction SilentlyContinue > $null
     if ( Test-Path $path ) {
         copy $path $CONFIG_DESTINATION_FOLDER\git\
     }
 }
+$RESULT += "[X] GIT Configs exported"
+
 
 if ( Test-Path $NOTEPAD_PP_CONFIG_FODLER){ 
-    copy $NOTEPAD_PP_CONFIG_FODLER $CONFIG_DESTINATION_FOLDER -Recurse -Force -ErrorAction SilentlyContinue 
-}
+    copy $NOTEPAD_PP_CONFIG_FODLER\ $CONFIG_DESTINATION_FOLDER -Recurse -Force -ErrorAction SilentlyContinue 
+    
+    $RESULT += "[X] NOTEPAD++ Configs exported"
+} else { $RESULT += "[ ] NOTEPAD++ not installed" }
 
 if ( Test-Path $ZIP7_CONFIG_REGISTRY.Replace("HKCU\","HKCU:") ) { 
     reg export $ZIP7_CONFIG_REGISTRY "$CONFIG_DESTINATION_FOLDER\7zip.reg" /y > $null
-}
+    
+    $RESULT += "[X] 7-ZIP registry file exported"
+} else { $RESULT += "[ ] 7-ZIP++ not installed" }
 
 if ( Test-Path $JDOWNLOADER_CONFIG_FOLDER){
-    copy $JDOWNLOADER_CONFIG_FOLDER $CONFIG_DESTINATION_FOLDER -Recurse -Force -ErrorAction SilentlyContinue
-}
+    copy $JDOWNLOADER_CONFIG_FOLDER\ $CONFIG_DESTINATION_FOLDER -Recurse -Force -ErrorAction SilentlyContinue 
+    
+    $RESULT += "[X] JDownloader cfg Folder exported"
+} else { $RESULT += "[ ] JDownloader not installed" }
 
 
-$firefox_profile_folders = Get-ChildItem -Path $FIREFOX_CONFIG_FOLDER
-foreach ($profile in $firefox_profile_folders) {
-    if ($profile -match "default-release") {
-        Write-Host "copying $profile to $CONFIG_DESTINATION_FOLDER ..."
-        #copy $FIREFOX_CONFIG_FOLDER\$profile $CONFIG_DESTINATION_FOLDER -Recurse -Force -ErrorAction SilentlyContinue
+$firefox_profile_folders = @(Get-ChildItem -Path $FIREFOX_CONFIG_FOLDER)
+if ( $firefox_profile_folders.Length -gt 0 ) {
+    foreach ($profile in $firefox_profile_folders) {
+        if ($profile -match "default-release") {
+            Write-Host "copying $profile to $CONFIG_DESTINATION_FOLDER ..."
+            copy $FIREFOX_CONFIG_FOLDER\$profile\ $CONFIG_DESTINATION_FOLDER -Recurse -Force -ErrorAction SilentlyContinue 
+        
+            $RESULT += "[X] Firefox profile exported"
+        }
     }
-}
+} else { $RESULT += "[ ] Firefox not installed" }
+
+Write-Host "--------------------------------"
+$RESULT
