@@ -99,7 +99,8 @@ $SYNCTHING_CONFIG_FILE_4 = "$env:LOCALAPPDATA\Syncthing\cert.pem"
 
 if ( (Test-Path $SYNCTRAYZOR_CONFIG_FILE) -and
      (Test-Path $SYNCTHING_CONFIG_FILE_1) -and
-     (Test-Path $SYNCTHING_CONFIG_FILE_2)){
+	 (Test-Path $SYNCTHING_CONFIG_FILE_3)
+	 (Test-Path $SYNCTHING_CONFIG_FILE_4)){
 
     copy $CONFIG_SOURCE_FOLDER\synctrayzor_config.xml $SYNCTRAYZOR_CONFIG_FILE
     copy $CONFIG_SOURCE_FOLDER\config.xml $SYNCTHING_CONFIG_FILE_1 
