@@ -90,5 +90,27 @@ if (($FIREFOX_CONFIG_FOLDER -ne $null) -and ($cfg_firefox_profile_folder -ne $nu
 } else { $RESULT += "[ ] Firefox not installed" }
 
 
+# SYNCTHING
+$SYNCTRAYZOR_CONFIG_FILE = "$env:APPDATA\SyncTrayzor\config.xml"
+$SYNCTHING_CONFIG_FILE_1 = "$env:LOCALAPPDATA\Syncthing\config.xml"
+#$SYNCTHING_CONFIG_FILE_2 = "$env:LOCALAPPDATA\Syncthing\config.xml.v36"
+$SYNCTHING_CONFIG_FILE_3 = "$env:LOCALAPPDATA\Syncthing\key.pem"
+$SYNCTHING_CONFIG_FILE_4 = "$env:LOCALAPPDATA\Syncthing\cert.pem"
+
+if ( (Test-Path $SYNCTRAYZOR_CONFIG_FILE) -and
+     (Test-Path $SYNCTHING_CONFIG_FILE_1) -and
+     (Test-Path $SYNCTHING_CONFIG_FILE_2)){
+
+    copy $CONFIG_SOURCE_FOLDER\synctrayzor_config.xml $SYNCTRAYZOR_CONFIG_FILE
+    copy $CONFIG_SOURCE_FOLDER\config.xml $SYNCTHING_CONFIG_FILE_1 
+#    copy $CONFIG_SOURCE_FOLDER\config.xml.v36 $SYNCTHING_CONFIG_FILE_2 
+    copy $CONFIG_SOURCE_FOLDER\cert.pem $SYNCTHING_CONFIG_FILE_3 
+    copy $CONFIG_SOURCE_FOLDER\key.pem $SYNCTHING_CONFIG_FILE_4
+    
+    $RESULT += "[X] Syncthing imported"
+} else { $RESULT += "[ ] Syncthing not installed" }
+
+
+# NED
 Write-Host "--------------------------------"
 $RESULT

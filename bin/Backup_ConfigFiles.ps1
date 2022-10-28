@@ -85,5 +85,27 @@ if ( $firefox_profile_folders.Length -gt 0 ) {
 } else { $RESULT += "[ ] Firefox not installed" }
 
 
+# SYNCTHING
+$SYNCTRAYZOR_CONFIG_FILE = "$env:APPDATA\SyncTrayzor\config.xml"
+$SYNCTHING_CONFIG_FILE_1 = "$env:LOCALAPPDATA\Syncthing\config.xml"
+#$SYNCTHING_CONFIG_FILE_2 = "$env:LOCALAPPDATA\Syncthing\config.xml.v36"
+$SYNCTHING_CONFIG_FILE_3 = "$env:LOCALAPPDATA\Syncthing\key.pem"
+$SYNCTHING_CONFIG_FILE_4 = "$env:LOCALAPPDATA\Syncthing\cert.pem"
+
+if ( (Test-Path $SYNCTRAYZOR_CONFIG_FILE) -and
+     (Test-Path $SYNCTHING_CONFIG_FILE_1) -and
+     (Test-Path $SYNCTHING_CONFIG_FILE_2)){
+
+    copy $SYNCTRAYZOR_CONFIG_FILE $CONFIG_DESTINATION_FOLDER\synctrayzor_config.xml
+    copy $SYNCTHING_CONFIG_FILE_1 $CONFIG_DESTINATION_FOLDER
+#    copy $SYNCTHING_CONFIG_FILE_2 $CONFIG_DESTINATION_FOLDER
+    copy $SYNCTHING_CONFIG_FILE_3 $CONFIG_DESTINATION_FOLDER
+    copy $SYNCTHING_CONFIG_FILE_4 $CONFIG_DESTINATION_FOLDER
+    
+    $RESULT += "[X] Syncthing exported"
+} else { $RESULT += "[ ] Syncthing not installed" }
+
+
+# END
 Write-Host "--------------------------------"
 $RESULT
