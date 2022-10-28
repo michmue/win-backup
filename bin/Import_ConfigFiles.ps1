@@ -13,7 +13,7 @@ $GIT_CONFIG_FILES = @(
 );
 
 $NOTEPAD_PP_CONFIG_FODLER = "$env:APPDATA\Notepad++"
-$JDOWNLOADER_CONFIG_FOLDER = "$env:ProgramFiles\JDownloader4\cfg"
+$JDOWNLOADER_CONFIG_FOLDER = "$env:ProgramFiles\JDownloader\cfg"
 $FIREFOX_CONFIG_FOLDER = "$env:APPDATA\Mozilla\Firefox\Profiles"
 $ZIP7_CONFIG_REGISTRY = "HKCU\Software\7-zip"
 $POWERSHELL_USER_PROFILE_FOLDER = [environment]::getfolderpath("mydocuments")+"\WindowsPowerShell"
@@ -25,6 +25,7 @@ if ( !(Test-Path $CONFIG_SOURCE_FOLDER -PathType Container) ) {
 }
 
 
+# POLICY
 $machine_policies = Import-Clixml $CONFIG_SOURCE_FOLDER\MachineRegistryPol.xml 
 $user_policies = Import-Clixml $CONFIG_SOURCE_FOLDER\UserRegistryPol.xml 
 
@@ -35,12 +36,15 @@ gpupdate /Force 1>$null
 $RESULT += "[X] Policies imported"
 
 
+# POWERSHELL
 if ( Test-Path $POWERSHELL_USER_PROFILE_FOLDER ) {
     copy $CONFIG_SOURCE_FOLDER\WindowsPowerShell\* $POWERSHELL_USER_PROFILE_FOLDER  -Recurse -Force
 
     $RESULT += "[X] Powershell User Profile imported"
 } else { $RESULT += "[ ] Powershell User Profile not found" }
 
+
+# GIT
 foreach ($file in $GIT_CONFIG_FILES) {
     if ( Test-Path $CONFIG_SOURCE_FOLDER\git\$file ) {
         copy $CONFIG_SOURCE_FOLDER\git\$file $env:USERPROFILE
@@ -48,18 +52,24 @@ foreach ($file in $GIT_CONFIG_FILES) {
 }
 $RESULT += "[X] GIT Configs imported"
 
+
+# NOTEPAD++
 if ( (Test-Path $NOTEPAD_PP_CONFIG_FODLER) -AND (Test-Path $CONFIG_SOURCE_FOLDER\Notepad++)){ 
     copy $CONFIG_SOURCE_FOLDER\Notepad++\* $NOTEPAD_PP_CONFIG_FODLER -Recurse -Force    
     
     $RESULT += "[X] NOTEPAD++ Configs imported"
 } else { $RESULT += "[ ] NOTEPAD++ not installed" }
 
+
+# 7-ZIP
 if ( (Test-Path $ZIP7_CONFIG_REGISTRY.Replace("HKCU\","HKCU:")) -AND (Test-Path $CONFIG_SOURCE_FOLDER\7zip.reg)) { 
     reg import $CONFIG_SOURCE_FOLDER\7zip.reg 2>$null 
 
     $RESULT += "[X] 7-ZIP registry file imported"
 } else { $RESULT += "[ ] 7-ZIP++ not installed" }
 
+
+# JDOWNLOADER
 if ( (Test-Path $JDOWNLOADER_CONFIG_FOLDER) -AND (Test-Path $CONFIG_SOURCE_FOLDER\cfg)){
     copy $CONFIG_SOURCE_FOLDER\cfg\* $JDOWNLOADER_CONFIG_FOLDER -Recurse -Force -ErrorAction SilentlyContinue
     
@@ -67,6 +77,7 @@ if ( (Test-Path $JDOWNLOADER_CONFIG_FOLDER) -AND (Test-Path $CONFIG_SOURCE_FOLDE
 } else { $RESULT += "[ ] JDownloader not installed" }
 
 
+# FIREFOX
 $firefox_profile_folder = Get-ChildItem -Path $FIREFOX_CONFIG_FOLDER | WHERE name -Match default-release
 $cfg_firefox_profile_folder = Get-ChildItem -Path $CONFIG_SOURCE_FOLDER | WHERE name -Match default-release
 if (($FIREFOX_CONFIG_FOLDER -ne $null) -and ($cfg_firefox_profile_folder -ne $null)) {
@@ -77,6 +88,7 @@ if (($FIREFOX_CONFIG_FOLDER -ne $null) -and ($cfg_firefox_profile_folder -ne $nu
     
     $RESULT += "[X] Firefox profile imported"
 } else { $RESULT += "[ ] Firefox not installed" }
+
 
 Write-Host "--------------------------------"
 $RESULT
