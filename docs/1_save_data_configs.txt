@@ -7,23 +7,10 @@ Keys:
 		 - wmic path softwarelicensingservice get OA3xOriginalProductKey
 		 - (Get-WmiObject -query ’select * from SoftwareLicensingService‘).OA3xOriginalProductKey
 		 
-	sublime text?
-	etc. ?
-
-
 
 program configs
-	gitconfig
-	7zip
 	office rules
-	jdownloader export settings
-	np++ roaming folder
-	firefox profile folder
-	obsidian
 	
-	
-	
-
 Folders (clean up)
 	C:\term
 	C:\projects
@@ -35,14 +22,7 @@ Folders (clean up)
 	users folders
 		look at C:\Users\eno
 		look at C:\Users\Michi
-		C:\Users\roam
-		
-		
 		
 Misc
 	env's
-	startmenu layout
-	winx layout
 	context menu layout
-	windos theme color
-	gpo
