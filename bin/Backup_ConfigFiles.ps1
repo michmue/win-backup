@@ -1,6 +1,9 @@
 $CONFIG_DESTINATION_FOLDER = Read-Host -Prompt "Path where to save the configs"
 $RESULT = @()
 
+$MACHINE_POLICIE_FILE = "$env:systemroot\system32\GroupPolicy\Machine\registry.pol"
+$USER_POLICIE_FILE = "$env:systemroot\system32\GroupPolicy\User\registry.pol"
+
 $GIT_CONFIG_FILES = @(
     "$env:USERPROFILE\.gitconfig",
     "$env:USERPROFILE\.bash_history",
@@ -20,6 +23,10 @@ $POWERSHELL_USER_PROFILE_FOLDER = [environment]::getfolderpath("mydocuments")+"\
 if ( !(Test-Path $CONFIG_DESTINATION_FOLDER -PathType Container) ) {
     mkdir $CONFIG_DESTINATION_FOLDER
 }
+
+Get-PolicyFileEntry -Path $MACHINE_POLICIE_FILE -All | Export-Clixml $CONFIG_DESTINATION_FOLDER\MachineRegistryPol.xml
+Get-PolicyFileEntry -Path $USER_POLICIE_FILE -All | Export-Clixml $CONFIG_DESTINATION_FOLDER\UserRegistryPol.xml
+$RESULT += "[X] Policies expoted"
 
 if ( Test-Path $POWERSHELL_USER_PROFILE_FOLDER){ 
     copy $POWERSHELL_USER_PROFILE_FOLDER\ $CONFIG_DESTINATION_FOLDER\ -Recurse -Force -ErrorAction SilentlyContinue 

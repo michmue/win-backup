@@ -1,6 +1,8 @@
 $CONFIG_SOURCE_FOLDER = Read-Host -Prompt "Path to configs"
 $RESULT = @()
 
+$MACHINE_POLICIE_FILE = "$env:systemroot\system32\GroupPolicy\Machine\registry.pol"
+$USER_POLICIE_FILE = "$env:systemroot\system32\GroupPolicy\User\registry.pol"
 
 $GIT_CONFIG_FILES = @(
     ".gitconfig",
@@ -21,6 +23,17 @@ if ( !(Test-Path $CONFIG_SOURCE_FOLDER -PathType Container) ) {
     Write-Host "Config folder not existing: $CONFIG_SOURCE_FOLDER"
     exit
 }
+
+
+$machine_policies = Import-Clixml $CONFIG_SOURCE_FOLDER\MachineRegistryPol.xml 
+$user_policies = Import-Clixml $CONFIG_SOURCE_FOLDER\UserRegistryPol.xml 
+
+foreach ($pol in $machine_policies) { $pol | Set-PolicyFileEntry -Path $MACHINE_POLICIE_FILE }
+foreach ($pol in $user_policies) { $pol | Set-PolicyFileEntry -Path $USER_POLICIE_FILE }
+
+gpupdate /Force 1>$null
+$RESULT += "[X] Policies imported"
+
 
 if ( Test-Path $POWERSHELL_USER_PROFILE_FOLDER ) {
     copy $CONFIG_SOURCE_FOLDER\WindowsPowerShell\* $POWERSHELL_USER_PROFILE_FOLDER  -Recurse -Force
@@ -64,6 +77,6 @@ if (($FIREFOX_CONFIG_FOLDER -ne $null) -and ($cfg_firefox_profile_folder -ne $nu
     
     $RESULT += "[X] Firefox profile imported"
 } else { $RESULT += "[ ] Firefox not installed" }
- 
+
 Write-Host "--------------------------------"
 $RESULT
