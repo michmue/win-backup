@@ -15,19 +15,21 @@ set job_name=%time%_downloading_%file_name%
 
 bitsadmin /transfer %job_name%_tmp /download /priority foreground /dynamic %download_page% %tmp_file%
 
-for /f "tokens=*" %%a in ('findstr /R "downloading" %tmp_file%') do set line=%%a
+REM <strong><a href="https://github.com/git-for-windows/git/releases/download/v2.38.1.windows.1/Git-2.38.1-64-bit.exe">64-bit Git for Windows Setup</a>.</strong>
+for /f "tokens=*" %%a in ('findstr /R "\-64\-bit.exe" %tmp_file%') do set line=%%a
 del %tmp_file%
 
-SETLOCAL EnableDelayedExpansion
-set "line=%line:*(<strong>=%"
-set "line=%line:<="&rem %
+set "line=%line:<=%"
+set "line=%line:"=%"
+set "line=%line:>64-bit="&rem %
+set "line=%line:*https=%"
+set "line=https%line%
 
-set version=!line!
-SETLOCAL DisableDelayedExpansion
+set "download_url=%line%"
 
-set file_name=git-%version%-64bit.exe
-set file=%~dp0git-%version%-64bit.exe
-set "download_url=https://github.com/git-for-windows/git/releases/download/v%version%.windows.1/Git-%version%-64-bit.exe"
+set "file_name=%line:*/download/=%"
+set "file_name=%file_name:*/=%"
+set file=%~dp0%file_name%
 
 bitsadmin /transfer %job_name% /download /priority foreground /dynamic %download_url% %file%
 endlocal
