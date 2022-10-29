@@ -14,13 +14,29 @@ set tmp_file=%~dp0tmp_%file_name%.html
 set job_name=%time%_downloading_%file_name%
 
 bitsadmin /transfer %job_name%_tmp /download /priority foreground /dynamic %download_page% %tmp_file%
+REM "https://github.com/canton7/SyncTrayzor/releases/expanded_assets/v1.1.29"
 
+for /f "tokens=*" %%a in ('findstr /R "\/releases\/expanded_assets\/v1.1.29" %tmp_file%') do ( 
+	set line=%%a
+	goto break1
+)
+:break1
+
+REM <div data-view-component="true">      <include-fragment loading="lazy" src="https://github.com/canton7/SyncTrayzor/releases/expanded_assets/v1.1.29" data-test-selector="lazy-asset-list-fragment">
+set "line=%line:"=%"
+set "line=%line:*https=%"
+set "line=%line:data-test-selector="&rem %
+
+set download_page=https%line%
+
+bitsadmin /transfer %job_name%_tmp /download /priority foreground /dynamic %download_page% %tmp_file%
 
 for /f "tokens=*" %%a in ('findstr /R "\/SyncTrayzorSetup-x64.exe" %tmp_file%') do ( 
 	set line=%%a
-	goto break
+	goto break2
 )
-:break
+:break2
+
 del %tmp_file%
 
 REM line = <a href="/canton7/SyncTrayzor/releases/download/v1.1.29/SyncTrayzorSetup-x64.exe" rel="nofollow">
@@ -44,3 +60,7 @@ set "file=%~dp0%file_name%"
 
 bitsadmin /transfer %job_name% /download /priority foreground /dynamic %download_url% %file%
 endlocal
+
+echo %file_name%
+echo %line%
+pause
