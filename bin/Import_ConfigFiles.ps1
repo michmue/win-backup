@@ -1,8 +1,8 @@
 $CONFIG_SOURCE_FOLDER = Read-Host -Prompt "Path to configs"
 $RESULT = @()
 
-$MACHINE_POLICIE_FILE = "$env:systemroot\system32\GroupPolicy\Machine\registry.pol"
-$USER_POLICIE_FILE = "$env:systemroot\system32\GroupPolicy\User\registry.pol"
+$MACHINE_POLICIE_FILE = "$env:systemroot\system32\GroupPolicy\Machine\Registry.pol"
+$USER_POLICIE_FILE = "$env:systemroot\system32\GroupPolicy\User\Registry.pol"
 
 $GIT_CONFIG_FILES = @(
     ".gitconfig",
@@ -13,7 +13,7 @@ $GIT_CONFIG_FILES = @(
 );
 
 $NOTEPAD_PP_CONFIG_FODLER = "$env:APPDATA\Notepad++"
-$JDOWNLOADER_CONFIG_FOLDER = "$env:ProgramFiles\JDownloader\cfg"
+$JDOWNLOADER_CONFIG_FOLDER = "$env:LOCALAPPDATA\JDownloader\cfg"
 $FIREFOX_CONFIG_FOLDER = "$env:APPDATA\Mozilla\Firefox\Profiles"
 $ZIP7_CONFIG_REGISTRY = "HKCU\Software\7-zip"
 $POWERSHELL_USER_PROFILE_FOLDER = [environment]::getfolderpath("mydocuments")+"\WindowsPowerShell"
@@ -26,14 +26,22 @@ if ( !(Test-Path $CONFIG_SOURCE_FOLDER -PathType Container) ) {
 
 
 # POLICY
-$machine_policies = Import-Clixml $CONFIG_SOURCE_FOLDER\MachineRegistryPol.xml 
-$user_policies = Import-Clixml $CONFIG_SOURCE_FOLDER\UserRegistryPol.xml 
+$machine_policies_src = "$CONFIG_SOURCE_FOLDER\MachineRegistry.pol" 
+if (Test-Path $machine_policies_src) {
+	copy $machine_policies_src $MACHINE_POLICIE_FILE -Force
+	$RESULT += "[X] Machine Policies imported"
+}
 
-foreach ($pol in $machine_policies) { $pol | Set-PolicyFileEntry -Path $MACHINE_POLICIE_FILE }
-foreach ($pol in $user_policies) { $pol | Set-PolicyFileEntry -Path $USER_POLICIE_FILE }
+$user_policies_src = "$CONFIG_SOURCE_FOLDER\UserRegistry.pol" 
+if (Test-Path $user_policies_src) {	
+    copy $user_policies_src $USER_POLICIE_FILE -Force
+	$RESULT += "[X] User Policies imported"
+}
 
-gpupdate /Force 1>$null
-$RESULT += "[X] Policies imported"
+if ( (Test-Path $machine_policies_src) -or (Test-Path $user_policies_src)) {
+    Write-Host "Force update of policies..."
+	gpupdate /Force 1>$null
+}
 
 
 # POWERSHELL
@@ -54,12 +62,14 @@ $RESULT += "[X] GIT Configs imported"
 
 
 # NOTEPAD++
-if ( (Test-Path $NOTEPAD_PP_CONFIG_FODLER) -AND (Test-Path $CONFIG_SOURCE_FOLDER\Notepad++)){ 
+if ( (Test-Path $NOTEPAD_PP_CONFIG_FODLER) -AND (Test-Path $CONFIG_SOURCE_FOLDER\Notepad++)){
+    Write-Host "close your notepad++ ..."
+    Get-Process | WHERE ProcessName -eq "notepad++" | Wait-Process
     copy $CONFIG_SOURCE_FOLDER\Notepad++\* $NOTEPAD_PP_CONFIG_FODLER -Recurse -Force    
     
     $RESULT += "[X] NOTEPAD++ Configs imported"
 } else { $RESULT += "[ ] NOTEPAD++ not installed" }
-
+<
 
 # 7-ZIP
 if ( (Test-Path $ZIP7_CONFIG_REGISTRY.Replace("HKCU\","HKCU:")) -AND (Test-Path $CONFIG_SOURCE_FOLDER\7zip.reg)) { 

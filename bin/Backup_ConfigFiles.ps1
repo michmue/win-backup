@@ -1,8 +1,8 @@
 $CONFIG_DESTINATION_FOLDER = Read-Host -Prompt "Path where to save the configs"
 $RESULT = @()
 
-$MACHINE_POLICIE_FILE = "$env:systemroot\system32\GroupPolicy\Machine\registry.pol"
-$USER_POLICIE_FILE = "$env:systemroot\system32\GroupPolicy\User\registry.pol"
+$MACHINE_POLICIE_FILE = "$env:systemroot\system32\GroupPolicy\Machine\Registry.pol"
+$USER_POLICIE_FILE = "$env:systemroot\system32\GroupPolicy\User\Registry.pol"
 
 $GIT_CONFIG_FILES = @(
     "$env:USERPROFILE\.gitconfig",
@@ -14,7 +14,7 @@ $GIT_CONFIG_FILES = @(
 
 
 $NOTEPAD_PP_CONFIG_FODLER = "$env:APPDATA\Notepad++"
-$JDOWNLOADER_CONFIG_FOLDER = "$env:ProgramFiles\JDownloader\cfg"
+$JDOWNLOADER_CONFIG_FOLDER = "$env:LOCALAPPDATA\JDownloader\cfg"
 $FIREFOX_CONFIG_FOLDER = "$env:APPDATA\Mozilla\Firefox\Profiles"
 $ZIP7_CONFIG_REGISTRY = "HKCU\Software\7-zip"
 $POWERSHELL_USER_PROFILE_FOLDER = [environment]::getfolderpath("mydocuments")+"\WindowsPowerShell"
@@ -26,8 +26,8 @@ if ( !(Test-Path $CONFIG_DESTINATION_FOLDER -PathType Container) ) {
 
 
 # POLICY
-Get-PolicyFileEntry -Path $MACHINE_POLICIE_FILE -All | Export-Clixml $CONFIG_DESTINATION_FOLDER\MachineRegistryPol.xml
-Get-PolicyFileEntry -Path $USER_POLICIE_FILE -All | Export-Clixml $CONFIG_DESTINATION_FOLDER\UserRegistryPol.xml
+copy $MACHINE_POLICIE_FILE $CONFIG_DESTINATION_FOLDER\MachineRegistry.pol
+copy $USER_POLICIE_FILE $CONFIG_DESTINATION_FOLDER\UserRegistry.pol
 $RESULT += "[X] Policies expoted"
 
 
