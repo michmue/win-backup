@@ -10,6 +10,9 @@ Get-WindowsCapability -online | where Name -Match "OpenSSH.Client" | Add-Windows
 #Get-WindowsOptionalFeature -Online | where Name -Match "Microsoft-Windows-Subsystem-Linux"      
 Get-WindowsOptionalFeature -Online | where FeatureName -Match "NetFx3" | Enable-WindowsOptionalFeature -Online
 Get-WindowsOptionalFeature -Online | where FeatureName -Match "NetFx4-AdvSrvs" | Enable-WindowsOptionalFeature -Online
+
+Write-Host "Check if all Hyper-V's are installed"
+Write-Host "Get-WindowsOptionalFeature -Online | where FeatureName -like '*Hyper*'"
 Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V -All
 
 #Get-WindowsOptionalFeature -Online | where FeatureName -Match "Microsoft-Hyper-V-All" | Enable-WindowsOptionalFeature -Online
