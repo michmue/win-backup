@@ -14,4 +14,5 @@ for %%i in (
 	move C:\%%i\desktop.in C:\%%i\desktop.ini
 	attrib +S +H C:\%%i\desktop.ini	
 	attrib +S +H C:\%%i\%%i.ico
+	attrib +R c:\%%i
 )
