@@ -1,6 +1,8 @@
 - JDownloader2Setup_windows-x64_jre17.exe -varfile response.varfile -q -splash "Installiere JDownloader" -dir %localappdata%\JDownloader
 - SyncTrazor / Syncthing
 - Eigene Dateien
+- Hide UserFolder regedit
+- disable autostarts
 
 # Customization
 - hide Shell Folders in Explorer & UserFolder?!?! https://www.winhelponline.com/blog/show-hide-shell-folder-namespace-windows-10/
