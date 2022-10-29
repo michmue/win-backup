@@ -1,0 +1,9 @@
+# install4j response file for JDownloader 2.0
+createDesktopLinkAction$Boolean=false
+createQuicklaunchIconAction$Boolean=false
+executeLauncherAction$Boolean=false
+sys.adminRights$Boolean=false
+sys.fileAssociation.extensions$StringArray="dlc","jdc","ccf","rsdf","metalink","meta4","nzb"
+sys.fileAssociation.launchers$StringArray="5977","5977","5977","5977","5977","5977","5977"
+# sys.installationDir=C\:\\Users\\eno\\AppData\\Local\\JDownloader
+sys.languageId=en

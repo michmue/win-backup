@@ -6,7 +6,7 @@ REM https://www.robvanderwoude.com/escapechars.php
 REM https://www.dostips.com/DtTipsStringManipulation.php
 setlocal
 
-set "download_url=http://installer.jdownloader.org/ic/JD2SilentSetup_x64.exe"
+set "download_url=https://mega.nz/file/2IURAaRB#84RbercQS9rTzBiBBhbWuLvAtJ1pZdG4RhCMskuWDFY"
 
 set file_name=JD2SilentSetup_x64.exe
 set job_name=%time%_downloading_%file_name%

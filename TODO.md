@@ -1,3 +1,4 @@
+- JDownloader2Setup_windows-x64_jre17.exe -varfile response.varfile -q -splash "Installiere JDownloader" -dir %localappdata%\JDownloader
 - SyncTrazor / Syncthing
 - Eigene Dateien
 
