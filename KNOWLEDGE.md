@@ -1,3 +1,6 @@
+# folder access rights
+roam & icacls roam /grant eno=(OI)(CI)F
+
 # terminal commands
 
 assoc | findstr /i "txtfile"
