@@ -1,5 +1,5 @@
 Set-PSRepository PSGallery -InstallationPolicy Trusted
-if (!(Get-InstalledModule PolicyFileEditor)) {
+if (!(Get-InstalledModule PolicyFileEditor -ea Ignore)) {
     Install-Module -Name PolicyFileEditor  -Scope CurrentUser
 }
 
