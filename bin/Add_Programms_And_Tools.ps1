@@ -1,6 +1,6 @@
 # IMPR: check versions perodically
 # IMPR: auto extract + extract if subfolder
-# IMPR: on closing stop .NET WebClient, how?
+# IMPR: on closing stop running .NET WebClient, how?
 
 enum Program  {
 	ADB
@@ -76,8 +76,8 @@ $progs = [PSCustomObject]@{
 
         
 function download( [ProgramDetails] $prog) {
-    $url = ""
-    $file = ""
+    $url
+    $file
     
     $wc = [net.webclient]::new() #New-Object net.webclient 
 
@@ -168,8 +168,20 @@ function download( [ProgramDetails] $prog) {
         }
 
 
+        # IMPR: SendKey to background window
         ([Program]::JDOWNLOADER) {
-            # TODO: JDownloader from mega.nz.co?
+            Add-Type -AssemblyName System.Windows.Forms
+            $process = Start-Process firefox.exe "https://mega.nz/file/2IURAaRB#84RbercQS9rTzBiBBhbWuLvAtJ1pZdG4RhCMskuWDFY"  -PassThru
+            While ( Get-Process *firefox* | ? MainWindowTitle -match "Download - MEGA.*") {
+                Start-Sleep -Milliseconds 200
+            }
+            Start-Sleep 5
+            [System.Windows.Forms.SendKeys]::SendWait('+{TAB}')
+            [System.Windows.Forms.SendKeys]::SendWait('+{TAB}')
+            [System.Windows.Forms.SendKeys]::SendWait('+{TAB}')
+            [System.Windows.Forms.SendKeys]::SendWait('+{TAB}')
+            [System.Windows.Forms.SendKeys]::SendWait('+{enter}')
+
         }
 
 
@@ -252,7 +264,7 @@ function download( [ProgramDetails] $prog) {
             $url = "https://downloads.jam-software.de/treesize_free/TreeSizeFree-Portable.zip"
             $file = $url.split("/") | select -Last 1
 
-            # TODO: extract treefilesize
+            # IMRP: extract treefilesize
             # powershell -command "Expand-Archive -Force '%file%' '%~dp0\tmp'"
             # copy tmp\TreeSizeFree.exe .\TreeSizeFree.exe
             # rmdir tmp /Q /S
@@ -284,9 +296,11 @@ function download( [ProgramDetails] $prog) {
         }
     }
 
-    $wc.DownloadFile($url, "$PSScriptRoot/$file")
+    if ($url -and $file) { 
+        $wc.DownloadFile($url, "$PSScriptRoot/$file")
+    }
     $wc.Dispose()
 }
 
-download $progs.TREe_FILE_SIZE
+download $progs.JDOWNLOADER
 
