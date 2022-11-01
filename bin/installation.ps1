@@ -1,0 +1,1 @@
+Get-NetAdapter Ethernet | Disable-NetAdapter -Confirm:$false

@@ -6,6 +6,15 @@
 0.X manuel execution of batch and reg files
 
 # FEATURE
+	- Annotations: Get-Contenct read Comments
+		# @Deprecated
+		function XYZ {}
+		
+		function Deprecated () {
+			write-host "XYZ is Deprecated"
+		}
+		
+		
 	- CommandLines Design & Font & clink, evtl. posh?
 	- License vaiolation, downloading required tools instead of binary integration
 	- explorer search lag, GPO: Explorer, Index search?, Cloud Search?
@@ -91,7 +100,6 @@
 			
 			
 	## INSTALLATION
-	- disable lan adapter
 	- disable driver installation (gpo & system gui)
 	- disable auto add network devices
 	
