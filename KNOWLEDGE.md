@@ -17,6 +17,17 @@ for /f "tokens=3 usebackq" %%a in (`reg query "HKEY_CURRENT_USER\Environment" ^|
 
 - C:\ProgramData\Microsoft\Windows\Start Menu\Programs\StartUp
 - C:\Users\eno\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup
+	
+	## REG
+	HKLM\Software\Microsoft\Windows\CurrentVersion\Run
+	HKLM\Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Run
+	HKLM\Software\Microsoft\Windows\CurrentVersion\RunOnce
+	HKLM\Software\Wow6432Node\Microsoft\Windows\CurrentVersion\RunOnce
+
+	HKCU\Software\Microsoft\Windows\CurrentVersion\RunOnce
+	HKCU\Software\Microsoft\Windows\CurrentVersion\Run
+	
+
 
 # dism
 dism set default apps ?

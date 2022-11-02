@@ -1,3 +1,6 @@
+# PRIMARY
+ANKI CONNECT
+
 # TODO: check more apps
 	http://www.lupopensuite.com/bestapps.htm
 	https://portableapps.com/de

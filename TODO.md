@@ -87,7 +87,11 @@
 	- export context menu screenshot (and new file tree)
 	- download drivers
 		bios
+		
 		lan realtek (lagging problems?!?!?!)
+			https://www.realtek.com/en/component/zoo/category/network-interface-controllers-10-100-1000m-gigabit-ethernet-pci-express-software
+			manuel extraction ?
+		
 		chipset
 		nvidea & driver cleaner
 		unix xona dgx uni driver
@@ -102,6 +106,7 @@
 	## INSTALLATION
 	- disable driver installation (gpo & system gui)
 	- disable auto add network devices
+	- disable media streaming
 	
 
 	## PROGRAMS
