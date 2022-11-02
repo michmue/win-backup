@@ -1,4 +1,5 @@
 #own
+bin/ResourceHacker.ini
 term/**/*.exe
 **/node_modules
 **/.idea
