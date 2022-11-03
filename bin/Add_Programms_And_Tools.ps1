@@ -3,30 +3,30 @@
 # IMPR: on closing stop running .NET WebClient, how?
 
 enum Program  {
-	ADB
-	ANDROIDSTUDIO
-	ANKI
-	DROPBOX
-	FIREFOX
-	GIT
-	GO
-	GOLAND
-	INTELLIJ
-	JAVA
-	JDOWNLOADER
-	NOTEPAD_PLUS_PLUS
-	PAINTNET
-	PHPSTORM
-	PYCHARM
-	PYTHON
-	SMARTGIT
-	SPOTIFY
-	SYNCTHING
-	TEAMVIEWER
+    ADB
+    ANDROIDSTUDIO
+    ANKI
+    DROPBOX
+    FIREFOX
+    GIT
+    GO
+    GOLAND
+    INTELLIJ
+    JAVA
+    JDOWNLOADER
+    NOTEPAD_PLUS_PLUS
+    PAINTNET
+    PHPSTORM
+    PYCHARM
+    PYTHON
+    SMARTGIT
+    SPOTIFY
+    SYNCTHING
+    TEAMVIEWER
     TREE_FILE_SIZE
-	VLCPLAYER
-	WEBSTORM
-	ZIP7
+    VLCPLAYER
+    WEBSTORM
+    ZIP7
 }
 
 
@@ -45,33 +45,32 @@ class ProgramDetails {
 }
 
 
-Write-host "missing anki & firefox url"
-# TODO firefox multilanguage download choice
+Write-host "missing anki"
 # TODO anki download
 $progs = [PSCustomObject]@{
-	[Program]::ADB				=	[ProgramDetails]@{	"Program"=[Program]::ADB;				"DownloadType"=[DownloadType]::BITS;		"Url"	=	"https://github.com/AdoptOpenJDK/openjdk11-binaries/releases"	}
-	[Program]::ANDROIDSTUDIO	=	[ProgramDetails]@{	"Program"=[Program]::ANDROIDSTUDIO;		"DownloadType"=[DownloadType]::BITS;		"Url"	=	"https://developer.android.com/studio"	}
-	[Program]::ANKI				=	[ProgramDetails]@{	"Program"=[Program]::ANKI;				"DownloadType"=[DownloadType]::BITS;		"Url"	=	""	}
-	[Program]::FIREFOX			=	[ProgramDetails]@{	"Program"=[Program]::FIREFOX;			"DownloadType"=[DownloadType]::WEBREQUEST;	"Url"	=	"https://download.mozilla.org/?product=firefox-latest-ssl^&os=win64^&lang=de"	}
-	[Program]::GIT				=	[ProgramDetails]@{	"Program"=[Program]::GIT;				"DownloadType"=[DownloadType]::BITS;		"Url"	=	"https://git-scm.com/download/win.html"	}
-	[Program]::GO				=	[ProgramDetails]@{	"Program"=[Program]::GO;				"DownloadType"=[DownloadType]::WEBREQUEST;	"Url"	=	"https://go.dev/dl/"	}
-	[Program]::GOLAND			=	[ProgramDetails]@{	"Program"=[Program]::GOLAND;			"DownloadType"=[DownloadType]::REST;		"Url"	=	"https://data.services.jetbrains.com/products/releases?code=GO"	}
-	[Program]::INTELLIJ			=	[ProgramDetails]@{	"Program"=[Program]::INTELLIJ;			"DownloadType"=[DownloadType]::BITS;		"Url"	=	"https://data.services.jetbrains.com/products/releases?code=IIU^&latest=true^&type=release^&build="	}
-	[Program]::JAVA				=	[ProgramDetails]@{	"Program"=[Program]::JAVA;				"DownloadType"=[DownloadType]::BITS;		"Url"	=	"https://github.com/AdoptOpenJDK/openjdk11-binaries/releases"	}
-	[Program]::JDOWNLOADER		=	[ProgramDetails]@{	"Program"=[Program]::JDOWNLOADER;		"DownloadType"=[DownloadType]::BITS;		"Url"	=	""	}
-	[Program]::NOTEPAD_PLUS_PLUS=	[ProgramDetails]@{	"Program"=[Program]::NOTEPAD_PLUS_PLUS;	"DownloadType"=[DownloadType]::REST;		"Url"	=	"https://api.github.com/repos/notepad-plus-plus/notepad-plus-plus/releases/latest"	}
-	[Program]::PAINTNET			=	[ProgramDetails]@{	"Program"=[Program]::PAINTNET;			"DownloadType"=[DownloadType]::BITS;		"Url"	=	"https://github.com/paintdotnet/release/releases"	}
-	[Program]::PHPSTORM			=	[ProgramDetails]@{	"Program"=[Program]::PHPSTORM;			"DownloadType"=[DownloadType]::BITS;		"Url"	=	"https://data.services.jetbrains.com/products/releases?code=PS^&latest=true^&type=release"	}
-	[Program]::PYCHARM			=	[ProgramDetails]@{	"Program"=[Program]::PYCHARM;			"DownloadType"=[DownloadType]::REST;		"Url"	=	"https://data.services.jetbrains.com/products?code=PCP"	}
-	[Program]::PYTHON			=	[ProgramDetails]@{	"Program"=[Program]::PYTHON;			"DownloadType"=[DownloadType]::WEBREQUEST;	"Url"	=	"https://www.python.org/downloads/windows/"	}
-	[Program]::SMARTGIT			=	[ProgramDetails]@{	"Program"=[Program]::SMARTGIT;			"DownloadType"=[DownloadType]::WEBREQUEST;	"Url"	=	"https://www.syntevo.com/smartgit/download/"	}
-	[Program]::SPOTIFY			=	[ProgramDetails]@{	"Program"=[Program]::SPOTIFY;			"DownloadType"=[DownloadType]::DIRECT;		"Url"	=	"https://download.scdn.co/SpotifySetup.exe"	}
-	[Program]::SYNCTHING		=	[ProgramDetails]@{	"Program"=[Program]::SYNCTHING;			"DownloadType"=[DownloadType]::BITS;		"Url"	=	"https://github.com/canton7/SyncTrayzor/releases"	}
-	[Program]::TEAMVIEWER		=	[ProgramDetails]@{	"Program"=[Program]::TEAMVIEWER;		"DownloadType"=[DownloadType]::DIRECT;		"Url"	=	"https://dl.teamviewer.com/download/TeamViewer_Setup.exe"	}
-	[Program]::TREE_FILE_SIZE	=	[ProgramDetails]@{	"Program"=[Program]::TREE_FILE_SIZE;	"DownloadType"=[DownloadType]::DIRECT;		"Url"	=	"https://downloads.jam-software.de/treesize_free/TreeSizeFree-Portable.zip"	}
-	[Program]::VLCPLAYER		=	[ProgramDetails]@{	"Program"=[Program]::VLCPLAYER;			"DownloadType"=[DownloadType]::BITS;		"Url"	=	"http://download.videolan.org/pub/videolan/vlc/last/win64/"	}
-	[Program]::WEBSTORM			=	[ProgramDetails]@{	"Program"=[Program]::WEBSTORM;			"DownloadType"=[DownloadType]::REST;		"Url"	=	"https://data.services.jetbrains.com/products/releases?code=WS"	}
-	[Program]::ZIP7				=	[ProgramDetails]@{	"Program"=[Program]::ZIP7;				"DownloadType"=[DownloadType]::BITS;		"Url"	=	"https://7-zip.de/download.html"	}
+    [Program]::ADB                 =    [ProgramDetails]@{    "Program"=[Program]::ADB;                  "DownloadType"=[DownloadType]::BITS;        "Url"    =    "https://github.com/AdoptOpenJDK/openjdk11-binaries/releases"    }
+    [Program]::ANDROIDSTUDIO       =    [ProgramDetails]@{    "Program"=[Program]::ANDROIDSTUDIO;        "DownloadType"=[DownloadType]::BITS;        "Url"    =    "https://developer.android.com/studio"    }
+    [Program]::ANKI                =    [ProgramDetails]@{    "Program"=[Program]::ANKI;                 "DownloadType"=[DownloadType]::BITS;        "Url"    =    ""    }
+    [Program]::FIREFOX             =    [ProgramDetails]@{    "Program"=[Program]::FIREFOX;              "DownloadType"=[DownloadType]::WEBREQUEST;  "Url"    =    "https://download.mozilla.org/?product=firefox-latest-ssl^&os=win64^&lang=de"    }
+    [Program]::GIT                 =    [ProgramDetails]@{    "Program"=[Program]::GIT;                  "DownloadType"=[DownloadType]::BITS;        "Url"    =    "https://git-scm.com/download/win.html"    }
+    [Program]::GO                  =    [ProgramDetails]@{    "Program"=[Program]::GO;                   "DownloadType"=[DownloadType]::WEBREQUEST;  "Url"    =    "https://go.dev/dl/"    }
+    [Program]::GOLAND              =    [ProgramDetails]@{    "Program"=[Program]::GOLAND;               "DownloadType"=[DownloadType]::REST;        "Url"    =    "https://data.services.jetbrains.com/products/releases?code=GO"    }
+    [Program]::INTELLIJ            =    [ProgramDetails]@{    "Program"=[Program]::INTELLIJ;             "DownloadType"=[DownloadType]::BITS;        "Url"    =    "https://data.services.jetbrains.com/products/releases?code=IIU^&latest=true^&type=release^&build="    }
+    [Program]::JAVA                =    [ProgramDetails]@{    "Program"=[Program]::JAVA;                 "DownloadType"=[DownloadType]::BITS;        "Url"    =    "https://github.com/AdoptOpenJDK/openjdk11-binaries/releases"    }
+    [Program]::JDOWNLOADER         =    [ProgramDetails]@{    "Program"=[Program]::JDOWNLOADER;          "DownloadType"=[DownloadType]::BITS;        "Url"    =    ""    }
+    [Program]::NOTEPAD_PLUS_PLUS   =    [ProgramDetails]@{    "Program"=[Program]::NOTEPAD_PLUS_PLUS;    "DownloadType"=[DownloadType]::REST;        "Url"    =    "https://api.github.com/repos/notepad-plus-plus/notepad-plus-plus/releases/latest"    }
+    [Program]::PAINTNET            =    [ProgramDetails]@{    "Program"=[Program]::PAINTNET;             "DownloadType"=[DownloadType]::BITS;        "Url"    =    "https://github.com/paintdotnet/release/releases"    }
+    [Program]::PHPSTORM            =    [ProgramDetails]@{    "Program"=[Program]::PHPSTORM;             "DownloadType"=[DownloadType]::BITS;        "Url"    =    "https://data.services.jetbrains.com/products/releases?code=PS^&latest=true^&type=release"    }
+    [Program]::PYCHARM             =    [ProgramDetails]@{    "Program"=[Program]::PYCHARM;              "DownloadType"=[DownloadType]::REST;        "Url"    =    "https://data.services.jetbrains.com/products?code=PCP"    }
+    [Program]::PYTHON              =    [ProgramDetails]@{    "Program"=[Program]::PYTHON;               "DownloadType"=[DownloadType]::WEBREQUEST;  "Url"    =    "https://www.python.org/downloads/windows/"    }
+    [Program]::SMARTGIT            =    [ProgramDetails]@{    "Program"=[Program]::SMARTGIT;             "DownloadType"=[DownloadType]::WEBREQUEST;  "Url"    =    "https://www.syntevo.com/smartgit/download/"    }
+    [Program]::SPOTIFY             =    [ProgramDetails]@{    "Program"=[Program]::SPOTIFY;              "DownloadType"=[DownloadType]::DIRECT;      "Url"    =    "https://download.scdn.co/SpotifySetup.exe"    }
+    [Program]::SYNCTHING           =    [ProgramDetails]@{    "Program"=[Program]::SYNCTHING;            "DownloadType"=[DownloadType]::BITS;        "Url"    =    "https://github.com/canton7/SyncTrayzor/releases"    }
+    [Program]::TEAMVIEWER          =    [ProgramDetails]@{    "Program"=[Program]::TEAMVIEWER;           "DownloadType"=[DownloadType]::DIRECT;      "Url"    =    "https://dl.teamviewer.com/download/TeamViewer_Setup.exe"    }
+    [Program]::TREE_FILE_SIZE      =    [ProgramDetails]@{    "Program"=[Program]::TREE_FILE_SIZE;       "DownloadType"=[DownloadType]::DIRECT;      "Url"    =    "https://downloads.jam-software.de/treesize_free/TreeSizeFree-Portable.zip"    }
+    [Program]::VLCPLAYER           =    [ProgramDetails]@{    "Program"=[Program]::VLCPLAYER;            "DownloadType"=[DownloadType]::BITS;        "Url"    =    "http://download.videolan.org/pub/videolan/vlc/last/win64/"    }
+    [Program]::WEBSTORM            =    [ProgramDetails]@{    "Program"=[Program]::WEBSTORM;             "DownloadType"=[DownloadType]::REST;        "Url"    =    "https://data.services.jetbrains.com/products/releases?code=WS"    }
+    [Program]::ZIP7                =    [ProgramDetails]@{    "Program"=[Program]::ZIP7;                 "DownloadType"=[DownloadType]::BITS;        "Url"    =    "https://7-zip.de/download.html"    }
 }
 
         
@@ -112,19 +111,19 @@ function download( [ProgramDetails] $prog) {
             
 
             if ($lang -eq "1") {
-	            $url = "https://download.mozilla.org/?product=firefox-latest-ssl&os=win64&lang=en-US"
-	            $file = "firefox_en-US.exe"
-	        }
+                $url = "https://download.mozilla.org/?product=firefox-latest-ssl&os=win64&lang=en-US"
+                $file = "firefox_en-US.exe"
+            }
 
             if ($lang -eq "2") {
-	            $url = "https://download.mozilla.org/?product=firefox-latest-ssl&os=win64&lang=en-GB"
-	            $file = "firefox_en-GB.exe"
+                $url = "https://download.mozilla.org/?product=firefox-latest-ssl&os=win64&lang=en-GB"
+                $file = "firefox_en-GB.exe"
             }
 
             if ($lang -eq "3") {
                 $url =  "https://download.mozilla.org/?product=firefox-latest-ssl&os=win64&lang=de"
-	            $file = "firefox_de.exe"
-            }	        
+                $file = "firefox_de.exe"
+            }            
         }
 
 
@@ -303,4 +302,3 @@ function download( [ProgramDetails] $prog) {
 }
 
 download $progs.JDOWNLOADER
-
