@@ -8,12 +8,12 @@ ANKI CONNECT
 
 # IMAGE VIEWERS
 	FastStone Image Viewer (v5.5)
+	FastStone MaxView (v2.2)
 	IrfanView (v4.41)
 	XnView (v2.22)
 	Xnview MP
-	FastStone MaxView (v2.2)
 	NexusImage (v1.1.3)
-
+    
 
 # CLI TOOLS
 	7zip sdk console

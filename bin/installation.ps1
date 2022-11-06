@@ -1,3 +1,83 @@
+<# TODO's INSTALLTION
+
+    WINDOWS
+        COMMANDLINES 
+            Design & Font 
+            cmd clink (history + search)
+            evtl. posh?
+    
+        disable OneDrive (GPO?)
+        
+        USER ICONS
+            folder
+            login
+
+        disable driver installation (gpo & system gui)
+        disable auto add network devices
+        disable media streaming
+        
+        ENVS:
+            JD2_HOME	C:\Users\eno\AppData\Local\JDownloader 2.0
+            PIPENV_VENV_IN_PROJECT	1
+            PATH: c:\term;c:\bin;c:\tools;
+            PATHEXT: .LNK
+    
+    NVIDEA
+        144hz
+		switch audio again (install audio last?)
+        
+    SOUND (LAG ?)
+        disable front mic
+		dgx default communication (already default?)
+        autostart one of the audio programs
+        
+    configer internet explorer for -BasicHtmlParsing
+    
+    EDGE 
+        disable startup boost & background in system & performance)
+		data protection delete on close enable all
+		disable cookies & preloading
+		Startpage & search & new tab
+		do not track
+
+    OFFICE
+        disable background (circles & icons...)
+		backstage disable
+		std. save to PC
+		std. save place to "Eigene Dateien"
+		std. personal templates "Eigene Dateien"
+		disable adobe plugin
+        disable settings cloud save
+        
+    NOTEPAD++
+        n&np shortcuts for cmd (:ENVS)
+		XML plugin toolbar icons
+		Markdown plugin (hide sections) ?
+        
+    HYPER-V
+        default place
+        default config place to c:\vm, c:\vm configs
+        disable autostart vm
+        
+    ADOBE
+		cleanup bat file
+		disable adobe plugin office
+		acrobat
+			fit page
+			centimeter
+			single page
+    
+    7ZIP replace lnk in start menu after icon change
+    
+    JDOWNLOADER
+        JDownloader2Setup_windows-x64_jre17.exe -varfile response.varfile -q -splash "Installiere JDownloader" -dir %localappdata%\JDownloader
+        
+    "EIGENE DATEIEN"
+    
+    ICONS SYSTEM TRAY
+#>
+
+
 Get-NetAdapter Ethernet | Disable-NetAdapter -Confirm:$false
 
 # INCLUDED IN REGISTRY_DISABLEDDRIVERS.POL
@@ -38,4 +118,20 @@ Get-NetAdapter Ethernet | Disable-NetAdapter -Confirm:$false
 gpupdate /force
  #>
  
- .\Import_ConfigFiles.ps1 -UseBasePOL -UsePolicy	
+ # .\Import_ConfigFiles.ps1 -EnableAll
+ 
+ 
+ # .\settings.ps1 -EnableAll
+ 
+ 
+ # .\customization.ps1 -EnableAll
+ 
+ 
+ # .\programs.ps1 -InstallAll
+ 
+ # run after programs, registry entries needed?
+ # .\tweaks.ps1 -EnableAll
+ 
+ # .\cleanup.ps1 -EnableAll
+ 
+ 
