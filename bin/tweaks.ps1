@@ -417,6 +417,62 @@ $tweaks = @(
         [HKEY_LOCAL_MACHINE\Software\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\notepad.exe]
         "Debugger"="\"C:\\Program Files\\Notepad++\\notepad++.exe\" -notepadStyleCmdline -z"
 '@}
+    
+    [Tweak]@{
+        Name = "Disable_WebSearchInStartMenu"
+        Scope = [Scope]::USER
+        RegContent =@'
+        Windows Registry Editor Version 5.00
+
+        [HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\Explorer]
+        "DisableSearchBoxSuggestions"=dword:00000001    ;;THIS OR
+
+        [HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Search]
+        "CortanaConsent"=dword:00000000
+        "AllowSearchToUseLocation"=dword:00000000
+        "BingSearchEnabled"=dword:00000000              ;;THIS, BOTH WORKING AFTER EXPLORER RESTART
+'@}
+    
+    [Tweak]@{
+        Name = "Disable_PasswordOnFirstLogin_netplwiz"
+        Scope = [Scope]::MACHINE
+        RegContent =@'
+        Windows Registry Editor Version 5.00
+
+        [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\PasswordLess\Device]
+        "DevicePasswordLessBuildVersion"=dword:00000000
+'@}
+    
+    [Tweak]@{
+        Name = "Disable_PasswordOnFirstLogin_netplwiz"
+        Scope = [Scope]::MACHINE
+        RegContent =@'
+        Windows Registry Editor Version 5.00
+        ;; TODO: ? "FriendlyTypeName"="@C:\\Program Files\\Microsoft Office\\Root\\VFS\\ProgramFilesCommonX86\\Microsoft Shared\\Office16\\oregres.dll,-107"
+
+        [HKEY_CLASSES_ROOT\Notepad++.MD]
+        @="Notepad++ Markdown File"
+
+        ;; TODO: chance icon path
+        [HKEY_CLASSES_ROOT\Notepad++.MD\DefaultIcon]
+        @="C:\\Program Files\\Microsoft Office\\root\\vfs\\Windows\\Installer\\{90160000-000F-0000-1000-0000000FF1CE}\\osmadminicon.exe,0"
+
+        [HKEY_CLASSES_ROOT\Notepad++.MD\shell]
+        @="Open"
+
+        [HKEY_CLASSES_ROOT\Notepad++.MD\shell\Open\command]
+        @="\"C:\\Program Files\\Notepad++\\notepad++.exe\" \"%1\""
+
+        [HKEY_CLASSES_ROOT\.md]
+        "Content Type"="text/plain"
+        "PerceivedType"="text"
+        @="Notepad++.MD"
+
+        [HKEY_CLASSES_ROOT\.md\OpenWithProgids]
+        "Notepad++.MD"=hex(0):
+'@}
+
+
 )
 
 
