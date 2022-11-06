@@ -9,6 +9,24 @@
         windows defender antivirus | Ausschlüsse
         standardmäßig indizierte pfade
         disable guest?
+        SEARCH INDEX
+            [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows Search\CurrentPolicies\DefaultIndexedPaths]
+            "C:\\projects\\"="C:\\projects\\"
+            "C:\\tools\\"="C:\\tools\\"
+            "C:\\term\\"="C:\\term\\"
+            "C:\\bin\\"="C:\\bin\\"
+            [HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search\DefaultIndexedPaths]
+            "C:\\projects\\"="C:\\projects\\"
+            "C:\\tools\\"="C:\\tools\\"
+            "C:\\term\\"="C:\\term\\"
+            "C:\\bin\\"="C:\\bin\\"
+            
+            ; EXCLUDES
+            [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows Search\CurrentPolicies\DefaultExcludedPaths]
+            "C:\\tools\\*\\**"="C:\\tools\\*\\**"
+            [HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Windows Search\DefaultExcludedPaths]
+            "C:\\tools\\*\\**"="C:\\tools\\*\\**"
+
 
     EXPORT KEYS FOR PROGRAMS
 		office
