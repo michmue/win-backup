@@ -1,8 +1,8 @@
 # MAJOR / MILESTONE
 4.0 GUI: hooks to add/skip features
 3.0 Powershell Module
-2.0 Guided Installation ?
-1.0 Full Automation
+2.0 Full Automation
+1.0 Guided Installation ?
 0.X manuel execution of batch and reg files
 
 
