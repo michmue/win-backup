@@ -10,6 +10,7 @@
     check settings app for changes in files (to auto config there)
         C:\Windows\ImmersiveControlPanel
         nirsoft check touched registry items or file access
+        reg/sys calls to files nirsoft
 
 
 # FIX
