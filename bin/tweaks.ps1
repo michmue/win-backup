@@ -1,4 +1,4 @@
-<# TODO's: TWEAKS
+<# FEATURES: TWEAKS REGISTRY
 
     ICONS
         FileTypesMan
@@ -19,6 +19,9 @@
         HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\PasswordLess\Device
         DevicePasswordLessBuildVersion DWORD 0 == Windows Hello Disabled
         netplwiz.exe "User must enter a user name"
+        
+    COPY PATH FOLDER BACKGROUND
+        https://stackoverflow.com/questions/20449316/how-add-context-menu-item-to-windows-explorer-for-folders
 #>
 
 enum Scope {
@@ -471,8 +474,43 @@ $tweaks = @(
         [HKEY_CLASSES_ROOT\.md\OpenWithProgids]
         "Notepad++.MD"=hex(0):
 '@}
+    
+    [Tweak]@{
+        Name = "Disable_PasswordOnFirstLogin_netplwiz"
+        Scope = [Scope]::MACHINE
+        RegContent =@'
+        Windows Registry Editor Version 5.00
 
+        ;; ;User Profile Home folder
+        ;; [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{f3ce0f7c-4901-4acc-8648-d5d44b04ef8f}]
+        ;; "ParsingName"="C:\\\\Users\\\\::{59031a47-3f72-44a7-89c5-5595fe6b30ee}\\"
+        ;; [HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{f3ce0f7c-4901-4acc-8648-d5d44b04ef8f}]
+        ;; "ParsingName"="C:\\\\Users\\\\::{59031a47-3f72-44a7-89c5-5595fe6b30ee}\\"
 
+        ;Desktop
+        [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{754AC886-DF64-4CBA-86B5-F7FBF4FBCEF5}]
+        "ParsingName"=-
+
+        ;Local Documents
+        [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{f42ee2d3-909f-4907-8871-4c22fc0bf756}]
+        "ParsingName"=-
+
+        ;Local Downloads
+        [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{7d83ee9b-2244-4e70-b1f5-5393042af1e4}]
+        "ParsingName"=-
+
+        ;Local Music
+        [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{a0c69a99-21c8-4671-8703-7934162fcf1d}]
+        "ParsingName"=-
+
+        ;Local Pictures
+        [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{0ddd015d-b06c-45d5-8c4c-f59713854639}]
+        "ParsingName"=-
+
+        ;Local Videos
+        [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{35286a68-3c57-41a1-bbb1-0eae73d76c95}]
+        "ParsingName"=-
+'@}
 )
 
 
