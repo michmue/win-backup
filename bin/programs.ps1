@@ -25,6 +25,7 @@ enum Program  {
     TEAMVIEWER
     TREE_FILE_SIZE
     VLCPLAYER
+    VSCODE
     WEBSTORM
     ZIP7
 }
@@ -69,6 +70,7 @@ $progs = [PSCustomObject]@{
     [Program]::TEAMVIEWER          =    [ProgramDetails]@{    "Program"=[Program]::TEAMVIEWER;           "DownloadType"=[DownloadType]::DIRECT;      "Url"    =    "https://dl.teamviewer.com/download/TeamViewer_Setup.exe"    }
     [Program]::TREE_FILE_SIZE      =    [ProgramDetails]@{    "Program"=[Program]::TREE_FILE_SIZE;       "DownloadType"=[DownloadType]::DIRECT;      "Url"    =    "https://downloads.jam-software.de/treesize_free/TreeSizeFree-Portable.zip"    }
     [Program]::VLCPLAYER           =    [ProgramDetails]@{    "Program"=[Program]::VLCPLAYER;            "DownloadType"=[DownloadType]::BITS;        "Url"    =    "http://download.videolan.org/pub/videolan/vlc/last/win64/"    }
+    [Program]::VSCODE              =    [ProgramDetails]@{    "Program"=[Program]::VSCODE;               "DownloadType"=[DownloadType]::DIRECT;      "Url"    =    "https://code.visualstudio.com/sha/download?build=stable&os=win32-x64"    }
     [Program]::WEBSTORM            =    [ProgramDetails]@{    "Program"=[Program]::WEBSTORM;             "DownloadType"=[DownloadType]::REST;        "Url"    =    "https://data.services.jetbrains.com/products/releases?code=WS"    }
     [Program]::ZIP7                =    [ProgramDetails]@{    "Program"=[Program]::ZIP7;                 "DownloadType"=[DownloadType]::BITS;        "Url"    =    "https://7-zip.de/download.html"    }
 }
@@ -277,6 +279,12 @@ function download( [ProgramDetails] $prog) {
             $file = ($html.links | ? href -Match "vlc-.+?\.4-win64\.exe$").href
             $url = "$url$file"
         }
+        
+        
+        ([Program]::VSCODE) {
+            $url = $progs.VSCODE.Url
+            $file = "VSCodeSetup-x64.exe"
+        }
 
 
         ([Program]::WEBSTORM) {
@@ -301,4 +309,4 @@ function download( [ProgramDetails] $prog) {
     $wc.Dispose()
 }
 
-download $progs.JDOWNLOADER
+download $progs.VSCODE
