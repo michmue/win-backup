@@ -20,7 +20,7 @@
             "C:\\tools\\"="C:\\tools\\"
             "C:\\term\\"="C:\\term\\"
             "C:\\bin\\"="C:\\bin\\"
-            
+
             ; EXCLUDES
             [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows Search\CurrentPolicies\DefaultExcludedPaths]
             "C:\\tools\\*\\**"="C:\\tools\\*\\**"
@@ -35,26 +35,26 @@
 			bios (empty if no bios entry)
 				wmic path softwarelicensingservice get OA3xOriginalProductKey
 				(Get-WmiObject -query ’select * from SoftwareLicensingService‘).OA3xOriginalProductKey
-				
-	
+
+
     export & filter ENVS
-	
-    
+
+
     export context menu screenshot (and new file tree)
-	
-    
+
+
     DOWNLOAD DRIVERS
 		bios
-		
+
 		lan realtek (lagging problems?!?!?!)
 			https://www.realtek.com/en/component/zoo/category/network-interface-controllers-10-100-1000m-gigabit-ethernet-pci-express-software
 			manuel extraction ?
-		
+
 		chipset
 		nvidea & driver cleaner
 		unix xona dgx uni driver
         motherboard intern sound driver
-	
+
 	OPEN FOLDERS TO CLEAN
 		C:\term, C:\projects, C:\bin, C:\vm, C:\tools, C:\scripts, C:\code
 		users folders
@@ -64,8 +64,32 @@
 #>
 
 <# IMPROVMENTs: BACKUP
-    
+
     GPO POLICYDEFINITIONS
         remvoe unused policy definitions to find needed keys quicker in gpedit.msc
         rsop.msc gpedit with chanced values only?, use to copy to new installation and manuel active needed policies
 #>
+
+function Invoke-GuidedFolderCleaning ([string[]] $folderPaths) {
+
+    foreach ($path in $folderPaths) {
+
+        Start-Process explorer.exe $path
+
+        echo "Manuel cleaning of your folder $path" > $env:tmp\guide.txt
+        notepad.exe "$env:tmp\guide.txt"
+        sleep 1
+        Wait-ProcessTitle ($path.Split("\") | Select -Last 1)
+    }
+}
+
+function Wait-ProcessTitle ($title) {
+    while ( @(Get-Process explorer | ? MainWindowTitle -eq $title).length -ne 0 ) {
+        Sleep -Seconds 0.5
+    }
+}
+
+Invoke-GuidedFolderCleaning @(
+    "C:\projects",
+    "C:\vm"
+)
