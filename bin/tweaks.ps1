@@ -6,20 +6,22 @@
         .md
         .xml
         .json
+        SecurityHealthSSO.dll replace yellow Defender Icon
 
     REGISTRY
+        SET POWERSHELL PRIVILAGES to take ownership https://www.pinvoke.net/default.aspx/ntdll/RtlAdjustPrivilege.html
         windows maximize?
-        search chances for netplwiz/autologin 
-            HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon 
-    
+        search chances for netplwiz/autologin
+            HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon
+
     HIDE USERFOLDER
         hide Shell Folders in Explorer & UserFolder?!?! https://www.winhelponline.com/blog/show-hide-shell-folder-namespace-windows-10/
-        
-    PASSWORDLESS LOGIN: 
+
+    PASSWORDLESS LOGIN:
         HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\PasswordLess\Device
         DevicePasswordLessBuildVersion DWORD 0 == Windows Hello Disabled
         netplwiz.exe "User must enter a user name"
-        
+
     COPY PATH FOLDER BACKGROUND
         https://stackoverflow.com/questions/20449316/how-add-context-menu-item-to-windows-explorer-for-folders
 #>
@@ -33,11 +35,13 @@ class Tweak {
     [string]$Name
     [Scope]$Scope
     [string]$RegContent
+    [bool]$TakeOwner = $false;
+    [string[]]$TakeOwnerPaths = @();
 }
 
 $tweaks = @(
-    [Tweak]@{ 
-        Name = "Disable_NewMenu_AccessDB"; 
+    [Tweak]@{
+        Name = "Disable_NewMenu_AccessDB";
         Scope = [Scope]::MACHINE
         RegContent = @'
         Windows Registry Editor Version 5.00
@@ -46,9 +50,9 @@ $tweaks = @(
         "Command"=-
         "~Command"="msaccess.exe /NEWDB 1"
 '@}
-    
+
     [Tweak]@{
-        Name = "Disable_NewMenu_AccessDB"; 
+        Name = "Disable_NewMenu_AccessDB";
         Scope = [Scope]::MACHINE
         RegContent = @'
         Windows Registry Editor Version 5.00
@@ -57,9 +61,9 @@ $tweaks = @(
         "FileName"=-
         "~FileName"="C:\\Program Files\\Microsoft Office\\root\\Office16\\1031\\ACCESS12.ACC"
 '@}
-    
+
     [Tweak]@{
-        Name = "Disable_NewMenu_Visio"; 
+        Name = "Disable_NewMenu_Visio";
         Scope = [Scope]::MACHINE
         RegContent = @'
         Windows Registry Editor Version 5.00
@@ -68,9 +72,9 @@ $tweaks = @(
         "FileName"=-
         "~FileName"="C:\\Program Files\\Microsoft Office\\Root\\VFS\\Windows\\ShellNew\\visio.vsdx"
 '@}
-    
+
     [Tweak]@{
-        Name = "Disable_NewMenu_RichTextFormat"; 
+        Name = "Disable_NewMenu_RichTextFormat";
         Scope = [Scope]::MACHINE
         RegContent = @'
         Windows Registry Editor Version 5.00
@@ -85,9 +89,9 @@ $tweaks = @(
           69,00,65,00,73,00,5c,00,57,00,4f,00,52,00,44,00,50,00,41,00,44,00,2e,00,45,\
           00,58,00,45,00,2c,00,2d,00,32,00,31,00,33,00,00,00
 '@}
-    
+
     [Tweak]@{
-        Name = "Disable_NewMenu_Publisher"; 
+        Name = "Disable_NewMenu_Publisher";
         Scope = [Scope]::MACHINE
         RegContent = @'
         Windows Registry Editor Version 5.00
@@ -96,9 +100,9 @@ $tweaks = @(
         "FileName"=-
         "~FileName"="C:\\Program Files\\Microsoft Office\\Root\\VFS\\Windows\\ShellNew\\mspub.pub"
 '@}
-    
+
     [Tweak]@{
-        Name = "Disable_NewMenu_PowerPoint"; 
+        Name = "Disable_NewMenu_PowerPoint";
         Scope = [Scope]::MACHINE
         RegContent = @'
         Windows Registry Editor Version 5.00
@@ -107,9 +111,9 @@ $tweaks = @(
         "FileName"=-
         "~FileName"="C:\\Program Files\\Microsoft Office\\Root\\VFS\\Windows\\ShellNew\\powerpoint.pptx"
 '@}
-    
+
     [Tweak]@{
-        Name = "Disable_NewMenu_MSProject"; 
+        Name = "Disable_NewMenu_MSProject";
         Scope = [Scope]::MACHINE
         RegContent = @'
         Windows Registry Editor Version 5.00
@@ -118,9 +122,9 @@ $tweaks = @(
         "FileName"=-
         "~FileName"="C:\\Program Files\\Microsoft Office\\Root\\VFS\\Windows\\ShellNew\\msproj11.mpp"
 '@}
-    
+
     [Tweak]@{
-        Name = "Disable_NewMenu_ZipFolder"; 
+        Name = "Disable_NewMenu_ZipFolder";
         Scope = [Scope]::MACHINE
         RegContent = @'
         Windows Registry Editor Version 5.00
@@ -134,9 +138,9 @@ $tweaks = @(
           00,7a,00,69,00,70,00,66,00,6c,00,64,00,72,00,2e,00,64,00,6c,00,6c,00,2c,00,\
           2d,00,31,00,30,00,31,00,39,00,34,00,00,00
 '@}
-    
+
     [Tweak]@{
-        Name = "Disable_Folders_InExplorer"; 
+        Name = "Disable_Folders_InExplorer";
         Scope = [Scope]::MACHINE
         RegContent = @'
         Windows Registry Editor Version 5.00
@@ -254,7 +258,7 @@ $tweaks = @(
         "ThisPCPolicy"="Hide"
 '@}
     [Tweak]@{
-        Name = "Set_StartupDelayForPrograms_toZero"; 
+        Name = "Set_StartupDelayForPrograms_toZero";
         Scope = [Scope]::USER
         RegContent = @'
         Windows Registry Editor Version 5.00
@@ -265,7 +269,7 @@ $tweaks = @(
 
 
     [Tweak]@{
-        Name = "Block_ContextMenu_PreviouseVersion"; 
+        Name = "Block_ContextMenu_PreviouseVersion";
         Scope = [Scope]::MACHINE
         RegContent = @'
         Windows Registry Editor Version 5.00
@@ -275,46 +279,46 @@ $tweaks = @(
 '@}
 
     [Tweak]@{
-        Name = "Block_ContextMenu_TroubleshootCompatibility"; 
+        Name = "Block_ContextMenu_TroubleshootCompatibility";
         Scope = [Scope]::MACHINE
         RegContent = @'
         Windows Registry Editor Version 5.00
-        
+
         [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked]
         "{1d27f844-3a1f-4410-85ac-14651078412d}"="TroubleshootCompatibility"
 '@}
 
     [Tweak]@{
-        Name = "Block_ContextMenu_Share"; 
+        Name = "Block_ContextMenu_Share";
         Scope = [Scope]::MACHINE
         RegContent = @'
         Windows Registry Editor Version 5.00
-        
+
         [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked]
         "{e2bf9676-5f8f-435c-97eb-11607a5bedf7}"="Share"
 '@}
 
     [Tweak]@{
-        Name = "Block_ContextMenu_ScanWithDefender"; 
+        Name = "Block_ContextMenu_ScanWithDefender";
         Scope = [Scope]::MACHINE
         RegContent = @'
         Windows Registry Editor Version 5.00
-        
+
         [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked]
         "{09A47860-11B0-4DA5-AFA5-26D86198A780}"="ScanWithDefender"
 '@}
-  
+
     [Tweak]@{
-        Name = "Delete_ContextMenu_PinToTaskbar"; 
+        Name = "Delete_ContextMenu_PinToTaskbar";
         Scope = [Scope]::MACHINE
         RegContent = @'
         Windows Registry Editor Version 5.00
-        
+
         [-HKEY_CLASSES_ROOT\*\shellex\ContextMenuHandlers\{90AA3A4E-1CBA-4233-B8BB-535773D48449}]
-'@}  
-    
+'@}
+
     [Tweak]@{
-        Name = "Delete_ContextMenu_IncludeInLibrary"; 
+        Name = "Delete_ContextMenu_IncludeInLibrary";
         Scope = [Scope]::MACHINE
         RegContent = @'
         Windows Registry Editor Version 5.00
@@ -322,17 +326,17 @@ $tweaks = @(
         [-HKEY_CLASSES_ROOT\Folder\ShellEx\ContextMenuHandlers\Library Location]
         [-HKEY_LOCAL_MACHINE\SOFTWARE\Classes\Folder\ShellEx\ContextMenuHandlers\Library Location]
 '@}
-    
+
     [Tweak]@{
-        Name = "Delete_ContextMenu_PinToQuickAccess"; 
+        Name = "Delete_ContextMenu_PinToQuickAccess";
         Scope = [Scope]::MACHINE
         RegContent = @'
         Windows Registry Editor Version 5.00
-        
+
         [-HKEY_CLASSES_ROOT\Folder\shell\pintohome]
         [-HKEY_LOCAL_MACHINE\SOFTWARE\Classes\Folder\shell\pintohome]
 '@}
-    
+
     [Tweak]@{
         Name = "Delete_ContextMenu_SentTo"
         Scope = [Scope]::MACHINE
@@ -342,19 +346,19 @@ $tweaks = @(
         [-HKEY_CLASSES_ROOT\AllFilesystemObjects\shellex\ContextMenuHandlers\SendTo]
         [-HKEY_CLASSES_ROOT\UserLibraryFolder\shellex\ContextMenuHandlers\SendTo]
 '@}
-    
+
     [Tweak]@{
-        Name = "Delete_ContextMenu_PinToStartScreen"; 
+        Name = "Delete_ContextMenu_PinToStartScreen";
         Scope = [Scope]::MACHINE
         RegContent = @'
         Windows Registry Editor Version 5.00
-        
+
         [-HKEY_CLASSES_ROOT\Folder\shellex\ContextMenuHandlers\PintoStartScreen]
         [-HKEY_CLASSES_ROOT\exefile\shellex\ContextMenuHandlers\PintoStartScreen]
         [-HKEY_CLASSES_ROOT\Microsoft.Website\ShellEx\ContextMenuHandlers\PintoStartScreen]
         [-HKEY_CLASSES_ROOT\mscfile\shellex\ContextMenuHandlers\PintoStartScreen
 '@}
-    
+
     [Tweak]@{
         # HINT: NonEnum can only hide TopLevel Items in Explorer SideBar
         Name = "Hide_Explorer_TopLevelDrives"
@@ -365,7 +369,7 @@ $tweaks = @(
         [HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\NonEnum]
         "{F5FB2C77-0E2F-4A16-A381-3E560C68BC83}"=dword:00000001
 '@}
-    
+
     [Tweak]@{
         Name = "Delete_ContextMenu_EditWithPaint3D"
         Scope = [Scope]::MACHINE
@@ -387,8 +391,8 @@ $tweaks = @(
         [-HKEY_LOCAL_MACHINE\SOFTWARE\Classes\SystemFileAssociations\.stl\Shell\3D Edit]
         [-HKEY_LOCAL_MACHINE\SOFTWARE\Classes\SystemFileAssociations\.tif\Shell\3D Edit]
         [-HKEY_LOCAL_MACHINE\SOFTWARE\Classes\SystemFileAssociations\.tiff\Shell\3D Edit]
-'@}    
-    
+'@}
+
     [Tweak]@{
         Name = "Delete_ContextMenu_EditWithPaint3D"
         Scope = [Scope]::MACHINE
@@ -407,7 +411,7 @@ $tweaks = @(
         Scope = [Scope]::MACHINE
         RegContent =@'
         Windows Registry Editor Version 5.00
-        
+
         [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked]
         "{f81e9010-6ea4-11ce-a7ff-00aa003ca9f6}"="GiveAccessTo"
 '@}
@@ -420,7 +424,7 @@ $tweaks = @(
         [HKEY_LOCAL_MACHINE\Software\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\notepad.exe]
         "Debugger"="\"C:\\Program Files\\Notepad++\\notepad++.exe\" -notepadStyleCmdline -z"
 '@}
-    
+
     [Tweak]@{
         Name = "Disable_WebSearchInStartMenu"
         Scope = [Scope]::USER
@@ -435,7 +439,7 @@ $tweaks = @(
         "AllowSearchToUseLocation"=dword:00000000
         "BingSearchEnabled"=dword:00000000              ;;THIS, BOTH WORKING AFTER EXPLORER RESTART
 '@}
-    
+
     [Tweak]@{
         Name = "Disable_PasswordOnFirstLogin_netplwiz"
         Scope = [Scope]::MACHINE
@@ -445,7 +449,7 @@ $tweaks = @(
         [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\PasswordLess\Device]
         "DevicePasswordLessBuildVersion"=dword:00000000
 '@}
-    
+
     [Tweak]@{
         Name = "Disable_PasswordOnFirstLogin_netplwiz"
         Scope = [Scope]::MACHINE
@@ -474,7 +478,7 @@ $tweaks = @(
         [HKEY_CLASSES_ROOT\.md\OpenWithProgids]
         "Notepad++.MD"=hex(0):
 '@}
-    
+
     [Tweak]@{
         Name = "Disable_PasswordOnFirstLogin_netplwiz"
         Scope = [Scope]::MACHINE
@@ -511,10 +515,231 @@ $tweaks = @(
         [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{35286a68-3c57-41a1-bbb1-0eae73d76c95}]
         "ParsingName"=-
 '@}
+
+[Tweak]@{
+    Name = "Modify_ContextMenuExt_Powershell"
+    Scope = [Scope]::MACHINE
+    TakeOwner = $true
+    TakeOwnerPaths = @(
+        "HKEY_CLASSES_ROOT\Directory\Background\shell\Powershell",
+        "HKEY_CLASSES_ROOT\Directory\shell\Powershell"
+    )
+    RegContent =@'
+        Windows Registry Editor Version 5.00
+        [HKEY_CLASSES_ROOT\Directory\Background\shell\Powershell]
+        @="PowerShell Konsole"
+        "Extended"=""
+        "Icon"="powershell.exe"
+        "NoWorkingDirectory"=""
+        "ShowBasedOnVelocityId"=dword:00639bc8
+
+        [HKEY_CLASSES_ROOT\Directory\Background\shell\Powershell\command]
+        @="powershell.exe -noexit -command Set-Location -literalPath '%V'"
+
+
+        [HKEY_CLASSES_ROOT\Directory\shell\Powershell]
+        @="PowerShell Konsole"
+        "Extended"=""
+        "Icon"="powershell.exe"
+        "NoWorkingDirectory"=""
+        "ShowBasedOnVelocityId"=dword:00639bc8
+
+        [HKEY_CLASSES_ROOT\Directory\shell\Powershell\command]
+        @="powershell.exe -noexit -command Set-Location -literalPath '%V'"
+
+
+        [HKEY_CLASSES_ROOT\Drive\shell\Powershell]
+        @="PowerShell Konsole"
+        "Extended"=""
+        "Icon"="powershell.exe"
+        "NoWorkingDirectory"=""
+        "ShowBasedOnVelocityId"=dword:00639bc8
+
+        [HKEY_CLASSES_ROOT\Drive\shell\Powershell\command]
+        @="powershell.exe -noexit -command Set-Location -literalPath '%V'"
+'@}
+
+    [Tweak]@{
+    Name = "Add_ContextMenuExt_CmdAdmin"
+    Scope = [Scope]::MACHINE
+    RegContent =@'
+        Windows Registry Editor Version 5.00
+        [HKEY_CLASSES_ROOT\Directory\shell\OpenCmdHereAsAdmin]
+        @="Cmd Konsole Admin"
+        "Extended"=""
+        "Icon"="imageres.dll,-5323"
+        "HasLUAShield"=""
+
+        [HKEY_CLASSES_ROOT\Directory\shell\OpenCmdHereAsAdmin\command]
+        @="cmd /c echo|set/p=\"%L\"|powershell -NoP -W 1 -NonI -NoL \"SaPs 'cmd' -Args '/c \"\"\"cd /d',$([char]34+$Input+[char]34),'^&^& start /b cmd.exe\"\"\"' -Verb RunAs\""
+
+        [HKEY_CLASSES_ROOT\Directory\Background\shell\OpenCmdHereAsAdmin]
+        @="Cmd Konsole Admin"
+        "Extended"=""
+        "Icon"="imageres.dll,-5323"
+        "HasLUAShield"=""
+
+        [HKEY_CLASSES_ROOT\Directory\Background\shell\OpenCmdHereAsAdmin\command]
+        @="cmd /c echo|set/p=\"%V\"|powershell -NoP -W 1 -NonI -NoL \"SaPs 'cmd' -Args '/c \"\"\"cd /d',$([char]34+$Input+[char]34),'^&^& start /b cmd.exe\"\"\"' -Verb RunAs\""
+
+        [HKEY_CLASSES_ROOT\Drive\shell\OpenCmdHereAsAdmin]
+        @="Cmd Konsole Admin"
+        "Extended"=""
+        "Icon"="imageres.dll,-5323"
+        "HasLUAShield"=""
+
+        [HKEY_CLASSES_ROOT\Drive\shell\OpenCmdHereAsAdmin\command]
+        @="cmd /c echo|set/p=\"%L\"|powershell -NoP -W 1 -NonI -NoL \"SaPs 'cmd' -Args '/c \"\"\"cd /d',$([char]34+$Input+[char]34),'^&^& start /b cmd.exe\"\"\"' -Verb RunAs\""
+
+        [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System]
+        "EnableLinkedConnections"=dword:00000001
+'@}
+
+    [Tweak]@{
+    Name = "Add_ContextMenuExt_Cmd"
+    Scope = [Scope]::MACHINE
+    RegContent =@'
+        Windows Registry Editor Version 5.00
+        [HKEY_CLASSES_ROOT\Directory\shell\OpenCmdHere]
+        @="CMD Konsole"
+        "Extended"=""
+        "Icon"="imageres.dll,-5323"
+        "NoWorkingDirectory"=""
+
+        [HKEY_CLASSES_ROOT\Directory\shell\OpenCmdHere\command]
+        @="cmd.exe /s /k pushd \"%V\""
+
+
+        [HKEY_CLASSES_ROOT\Directory\Background\shell\OpenCmdHere]
+        @="CMD Konsole"
+        "Extended"=""
+        "Icon"="imageres.dll,-5323"
+        "NoWorkingDirectory"=""
+
+        [HKEY_CLASSES_ROOT\Directory\Background\shell\OpenCmdHere\command]
+        @="cmd.exe /s /k pushd \"%V\""
+
+
+        [HKEY_CLASSES_ROOT\Drive\shell\OpenCmdHere]
+        @="CMD Konsole"
+        "Extended"=""
+        "Icon"="imageres.dll,-5323"
+        "NoWorkingDirectory"=""
+
+        [HKEY_CLASSES_ROOT\Drive\shell\OpenCmdHere\command]
+        @="cmd.exe /s /k pushd \"%V\""
+'@}
+
+    [Tweak]@{
+    Name = "Add_ContextMenuExt_PowershellAdmin"
+    Scope = [Scope]::MACHINE
+    RegContent =@'
+        Windows Registry Editor Version 5.00
+        [HKEY_CLASSES_ROOT\Directory\Background\shell\PowerShellAsAdmin]
+        @="PowerShell Konsole Admin"
+        "Extended"=""
+        "HasLUAShield"=""
+        "Icon"="powershell.exe"
+
+        [HKEY_CLASSES_ROOT\Directory\Background\shell\PowerShellAsAdmin\command]
+        @="PowerShell -windowstyle hidden -Command \"Start-Process cmd -ArgumentList '/s,/k,pushd,%V && start PowerShell && exit' -Verb RunAs\""
+
+        [HKEY_CLASSES_ROOT\Directory\shell\PowerShellAsAdmin]
+        @="PowerShell Konsole Admin"
+        "Extended"=""
+        "HasLUAShield"=""
+        "Icon"="powershell.exe"
+
+        [HKEY_CLASSES_ROOT\Directory\shell\PowerShellAsAdmin\command]
+        @="PowerShell -windowstyle hidden -Command \"Start-Process cmd -ArgumentList '/s,/k,pushd,%V && start PowerShell && exit' -Verb RunAs\""
+
+        [HKEY_CLASSES_ROOT\Drive\shell\PowerShellAsAdmin]
+        @="PowerShell Konsole Admin"
+        "Extended"=""
+        "HasLUAShield"=""
+        "Icon"="powershell.exe"
+
+        [HKEY_CLASSES_ROOT\Drive\shell\PowerShellAsAdmin\command]
+        @="PowerShell -windowstyle hidden -Command \"Start-Process cmd -ArgumentList '/s,/k,pushd,%V && start PowerShell && exit' -Verb RunAs\""
+
+        ; To allow mapped drives to be available in elevated PowerShell
+        [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System]
+        "EnableLinkedConnections"=dword:00000001
+'@}
+
+
+
 )
 
+function Take-Permissions {
+    # Developed for PowerShell v4.0
+    # Required Admin privileges
+    # Links:
+    #   http://shrekpoint.blogspot.ru/2012/08/taking-ownership-of-dcom-registry.html
+    #   http://www.remkoweijnen.nl/blog/2012/01/16/take-ownership-of-a-registry-key-in-powershell/
+    #   https://powertoe.wordpress.com/2010/08/28/controlling-registry-acl-permissions-with-powershell/
 
+    param($rootKey, $key, [System.Security.Principal.SecurityIdentifier]$sid = 'S-1-5-32-545', $recurse = $true)
 
+    switch -regex ($rootKey) {
+        'HKCU|HKEY_CURRENT_USER'    { $rootKey = 'CurrentUser' }
+        'HKLM|HKEY_LOCAL_MACHINE'   { $rootKey = 'LocalMachine' }
+        'HKCR|HKEY_CLASSES_ROOT'    { $rootKey = 'ClassesRoot' }
+        'HKCC|HKEY_CURRENT_CONFIG'  { $rootKey = 'CurrentConfig' }
+        'HKU|HKEY_USERS'            { $rootKey = 'Users' }
+    }
+
+    ### Step 1 - escalate current process's privilege
+    # get SeTakeOwnership, SeBackup and SeRestore privileges before executes next lines, script needs Admin privilege
+    $import = '[DllImport("ntdll.dll")] public static extern int RtlAdjustPrivilege(ulong a, bool b, bool c, ref bool d);'
+    $ntdll = Add-Type -Member $import -Name NtDll -PassThru
+    $privileges = @{ SeTakeOwnership = 9; SeBackup =  17; SeRestore = 18 }
+    foreach ($i in $privileges.Values) {
+        $null = $ntdll::RtlAdjustPrivilege($i, 1, 0, [ref]0)
+    }
+
+    function Take-KeyPermissions {
+        param($rootKey, $key, $sid, $recurse, $recurseLevel = 0)
+
+        ### Step 2 - get ownerships of key - it works only for current key
+        $regKey = [Microsoft.Win32.Registry]::$rootKey.OpenSubKey($key, 'ReadWriteSubTree', 'TakeOwnership')
+        $acl = New-Object System.Security.AccessControl.RegistrySecurity
+        $acl.SetOwner($sid)
+        $regKey.SetAccessControl($acl)
+
+        ### Step 3 - enable inheritance of permissions (not ownership) for current key from parent
+        $acl.SetAccessRuleProtection($false, $false)
+        $regKey.SetAccessControl($acl)
+
+        ### Step 4 - only for top-level key, change permissions for current key and propagate it for subkeys
+        # to enable propagations for subkeys, it needs to execute Steps 2-3 for each subkey (Step 5)
+        if ($recurseLevel -eq 0) {
+            $regKey = $regKey.OpenSubKey('', 'ReadWriteSubTree', 'ChangePermissions')
+            $rule = New-Object System.Security.AccessControl.RegistryAccessRule($sid, 'FullControl', 'ContainerInherit', 'None', 'Allow')
+            $acl.ResetAccessRule($rule)
+            $regKey.SetAccessControl($acl)
+        }
+
+        ### Step 5 - recursively repeat steps 2-5 for subkeys
+        if ($recurse) {
+            foreach($subKey in $regKey.OpenSubKey('').GetSubKeyNames()) {
+                Take-KeyPermissions $rootKey ($key+'\'+$subKey) $sid $recurse ($recurseLevel+1)
+            }
+        }
+    }
+}
+
+function takeOwnershipRegistryItem ([Tweak]$tweak) {
+    $sid = (New-Object System.Security.Principal.NTAccount('eno')).Translate([System.Security.Principal.SecurityIdentifier]).Value
+
+    foreach ($path in $tweak.TakeOwnerPaths) {
+        $root = $path.split("\") | select -First 1
+        $key = ($path.split("\") | select -Skip 1) -join "\"
+
+        Take-Permissions $root $key
+    }
+    echo $tweak.TakeOwnerPaths
+}
 
 foreach ($tweak in $tweaks)
 {
@@ -525,8 +750,11 @@ foreach ($tweak in $tweaks)
 foreach ($tweak in $tweaks)
 {
     echo $tweak.RegContent | Out-File -FilePath $PSScriptRoot\tweak.reg
+    if ($tweak.TakeOwner) {
+        #takeOwnershipRegistryItem($tweak);
+        echo "$tweak.Name needs TakeOwnership feature"
+    }
     reg.exe import "$($PSScriptRoot)\tweak.reg" 2>$null
 }
 
 Remove-Item $PSScriptRoot\tweak.reg
-
