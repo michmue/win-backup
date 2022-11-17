@@ -25,6 +25,10 @@
 
 
 # FEATURE
+    CMD
+        starship 
+        oh-my-posh
+
 	ANNOTATIONS
         Get-Contenct read Comments
 		

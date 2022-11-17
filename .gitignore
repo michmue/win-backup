@@ -133,3 +133,11 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+finished.md
+download_buffer.ps1
+tweaks/DEL/7-zip.dll
+tweaks/DEL/7z.dll
+tweaks/DEL/7zFM.exe
+tweaks/DEL/Global_Add_WindowsPhotoViewer.reg
+tweaks/DEL/Global_AT_LAST_Remove_ShortcutOverlay.reg
+tweaks/DEL/Global_Change_7zipIcon.bat
