@@ -9,7 +9,6 @@
         SecurityHealthSSO.dll replace yellow Defender Icon
 
     REGISTRY
-        SET POWERSHELL PRIVILAGES to take ownership https://www.pinvoke.net/default.aspx/ntdll/RtlAdjustPrivilege.html
         windows maximize?
         search chances for netplwiz/autologin
             HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon
