@@ -13,6 +13,7 @@
         windows maximize?
         search chances for netplwiz/autologin
             HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon
+        VLC unregister dll Context Menu
 
     HIDE USERFOLDER
         hide Shell Folders in Explorer & UserFolder?!?! https://www.winhelponline.com/blog/show-hide-shell-folder-namespace-windows-10/
@@ -522,7 +523,9 @@ $tweaks = @(
     TakeOwner = $true
     TakeOwnerPaths = @(
         "HKEY_CLASSES_ROOT\Directory\Background\shell\Powershell",
-        "HKEY_CLASSES_ROOT\Directory\shell\Powershell"
+        "HKEY_CLASSES_ROOT\Directory\Background\shell\Powershell\command",
+        "HKEY_CLASSES_ROOT\Directory\shell\Powershell",
+        "HKEY_CLASSES_ROOT\Directory\shell\Powershell\command"
     )
     RegContent =@'
         Windows Registry Editor Version 5.00
@@ -671,75 +674,87 @@ $tweaks = @(
 
 )
 
-function Take-Permissions {
-    # Developed for PowerShell v4.0
-    # Required Admin privileges
-    # Links:
-    #   http://shrekpoint.blogspot.ru/2012/08/taking-ownership-of-dcom-registry.html
-    #   http://www.remkoweijnen.nl/blog/2012/01/16/take-ownership-of-a-registry-key-in-powershell/
-    #   https://powertoe.wordpress.com/2010/08/28/controlling-registry-acl-permissions-with-powershell/
+function Take-Ownership ([string]$key) {
+    $AdjustTokenPrivileges = @"
+    using System;
+    using System.Runtime.InteropServices;
 
-    param($rootKey, $key, [System.Security.Principal.SecurityIdentifier]$sid = 'S-1-5-32-545', $recurse = $true)
+    public class TokenManipulator {
+        [DllImport("kernel32.dll", ExactSpelling = true)]
+        internal static extern IntPtr GetCurrentProcess();
 
-    switch -regex ($rootKey) {
-        'HKCU|HKEY_CURRENT_USER'    { $rootKey = 'CurrentUser' }
-        'HKLM|HKEY_LOCAL_MACHINE'   { $rootKey = 'LocalMachine' }
-        'HKCR|HKEY_CLASSES_ROOT'    { $rootKey = 'ClassesRoot' }
-        'HKCC|HKEY_CURRENT_CONFIG'  { $rootKey = 'CurrentConfig' }
-        'HKU|HKEY_USERS'            { $rootKey = 'Users' }
-    }
+        [DllImport("advapi32.dll", ExactSpelling = true, SetLastError = true)]
+        internal static extern bool AdjustTokenPrivileges(IntPtr htok, bool disall, ref TokPriv1Luid newst, int len, IntPtr prev, IntPtr relen);
+        [DllImport("advapi32.dll", ExactSpelling = true, SetLastError = true)]
+        internal static extern bool OpenProcessToken(IntPtr h, int acc, ref IntPtr phtok);
+        [DllImport("advapi32.dll", SetLastError = true)]
+        internal static extern bool LookupPrivilegeValue(string host, string name, ref long pluid);
 
-    ### Step 1 - escalate current process's privilege
-    # get SeTakeOwnership, SeBackup and SeRestore privileges before executes next lines, script needs Admin privilege
-    $import = '[DllImport("ntdll.dll")] public static extern int RtlAdjustPrivilege(ulong a, bool b, bool c, ref bool d);'
-    $ntdll = Add-Type -Member $import -Name NtDll -PassThru
-    $privileges = @{ SeTakeOwnership = 9; SeBackup =  17; SeRestore = 18 }
-    foreach ($i in $privileges.Values) {
-        $null = $ntdll::RtlAdjustPrivilege($i, 1, 0, [ref]0)
-    }
-
-    function Take-KeyPermissions {
-        param($rootKey, $key, $sid, $recurse, $recurseLevel = 0)
-
-        ### Step 2 - get ownerships of key - it works only for current key
-        $regKey = [Microsoft.Win32.Registry]::$rootKey.OpenSubKey($key, 'ReadWriteSubTree', 'TakeOwnership')
-        $acl = New-Object System.Security.AccessControl.RegistrySecurity
-        $acl.SetOwner($sid)
-        $regKey.SetAccessControl($acl)
-
-        ### Step 3 - enable inheritance of permissions (not ownership) for current key from parent
-        $acl.SetAccessRuleProtection($false, $false)
-        $regKey.SetAccessControl($acl)
-
-        ### Step 4 - only for top-level key, change permissions for current key and propagate it for subkeys
-        # to enable propagations for subkeys, it needs to execute Steps 2-3 for each subkey (Step 5)
-        if ($recurseLevel -eq 0) {
-            $regKey = $regKey.OpenSubKey('', 'ReadWriteSubTree', 'ChangePermissions')
-            $rule = New-Object System.Security.AccessControl.RegistryAccessRule($sid, 'FullControl', 'ContainerInherit', 'None', 'Allow')
-            $acl.ResetAccessRule($rule)
-            $regKey.SetAccessControl($acl)
+        [StructLayout(LayoutKind.Sequential, Pack = 1)]
+            internal struct TokPriv1Luid {
+            public int Count;
+            public long Luid;
+            public int Attr;
         }
 
-        ### Step 5 - recursively repeat steps 2-5 for subkeys
-        if ($recurse) {
-            foreach($subKey in $regKey.OpenSubKey('').GetSubKeyNames()) {
-                Take-KeyPermissions $rootKey ($key+'\'+$subKey) $sid $recurse ($recurseLevel+1)
-            }
+        internal const int SE_PRIVILEGE_ENABLED = 0x00000002;
+        internal const int TOKEN_QUERY = 0x00000008;
+        internal const int TOKEN_ADJUST_PRIVILEGES = 0x00000020;
+
+        public static bool AddPrivilege(string privilege) {
+            bool retVal;
+            TokPriv1Luid tp;
+            IntPtr hproc = GetCurrentProcess();
+            IntPtr htok = IntPtr.Zero;
+            retVal = OpenProcessToken(hproc, TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, ref htok);
+            tp.Count = 1;
+            tp.Luid = 0;
+            tp.Attr = SE_PRIVILEGE_ENABLED;
+            retVal = LookupPrivilegeValue(null, privilege, ref tp.Luid);
+            retVal = AdjustTokenPrivileges(htok, false, ref tp, 0, IntPtr.Zero, IntPtr.Zero);
+
+            return retVal;
         }
+  }
+"@
+
+    Add-Type $AdjustTokenPrivileges -PassThru > $null
+    [void][TokenManipulator]::AddPrivilege("SeTakeOwnershipPrivilege")
+
+    $admins = New-Object System.Security.Principal.SecurityIdentifier("S-1-5-32-544")
+    $admins = $admins.Translate([System.Security.Principal.NTAccount])
+
+    switch ($key.Split("\")[0]) {
+        "HKEY_CLASSES_ROOT" { $rootKey = [Microsoft.Win32.Registry]::ClassesRoot }
+        "HKEY_CURRENT_USER" { $rootKey = [Microsoft.Win32.Registry]::CurrentUser }
+        "HKEY_LOCAL_MACHINE" { $rootKey = [Microsoft.Win32.Registry]::LocalMachine }
     }
+
+    $subKey = ($key.Split("\") | select -Skip 1) -join "\"
+    $keyItem = $rootKey.OpenSubKey($subKey,
+        [Microsoft.Win32.RegistryKeyPermissionCheck]::ReadWriteSubTree,
+        [System.Security.AccessControl.RegistryRights]::TakeOwnership
+    );
+
+    $acl = $keyItem.GetAccessControl()
+    $acl.SetOwner($admins)
+    $keyItem.SetAccessControl($acl)
+
+    $ruleR = $acl.Access | ? IdentityReference -eq VORDEFINIERT\Administratoren
+    $ruleR | % { $acl.RemoveAccessRuleSpecific($_) }
+
+    $rule = New-Object System.Security.AccessControl.RegistryAccessRule(
+            $admins,
+            [System.Security.AccessControl.RegistryRights]::FullControl,
+            [System.Security.AccessControl.InheritanceFlags]::ContainerInherit,
+            [System.Security.AccessControl.PropagationFlags]::None,
+            [System.Security.AccessControl.AccessControlType]::Allow
+    )
+
+    $acl.AddAccessRule($rule)
+    $keyItem.SetAccessControl($acl)
 }
 
-function takeOwnershipRegistryItem ([Tweak]$tweak) {
-    $sid = (New-Object System.Security.Principal.NTAccount('eno')).Translate([System.Security.Principal.SecurityIdentifier]).Value
-
-    foreach ($path in $tweak.TakeOwnerPaths) {
-        $root = $path.split("\") | select -First 1
-        $key = ($path.split("\") | select -Skip 1) -join "\"
-
-        Take-Permissions $root $key
-    }
-    echo $tweak.TakeOwnerPaths
-}
 
 foreach ($tweak in $tweaks)
 {
@@ -749,11 +764,13 @@ foreach ($tweak in $tweaks)
 
 foreach ($tweak in $tweaks)
 {
-    echo $tweak.RegContent | Out-File -FilePath $PSScriptRoot\tweak.reg
     if ($tweak.TakeOwner) {
-        #takeOwnershipRegistryItem($tweak);
-        echo "$tweak.Name needs TakeOwnership feature"
+        foreach ($path in $tweak.TakeOwnerPaths) {
+            Take-Ownership $path
+        }
     }
+
+    echo $tweak.RegContent | Out-File -FilePath $PSScriptRoot\tweak.reg
     reg.exe import "$($PSScriptRoot)\tweak.reg" 2>$null
 }
 
