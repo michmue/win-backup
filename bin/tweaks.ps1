@@ -669,8 +669,18 @@ $tweaks = @(
         "EnableLinkedConnections"=dword:00000001
 '@}
 
+    [Tweak]@{
+    Name = "Disable_ContextMenu_VLC_OnDirectory"
+    Scope = [Scope]::MACHINE
+    RegContent =@'
+        Windows Registry Editor Version 5.00
 
+        [HKEY_CLASSES_ROOT\Directory\shell\PlayWithVLC]
+        "LegacyDisable"=""
 
+        [HKEY_CLASSES_ROOT\Directory\shell\AddToPlaylistVLC]
+        "LegacyDisable"=""
+'@}
 )
 
 function Take-Ownership ([string]$key) {
