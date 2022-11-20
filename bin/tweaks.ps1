@@ -602,7 +602,7 @@ $tweaks = @(
     RegContent =@'
         Windows Registry Editor Version 5.00
         [HKEY_CLASSES_ROOT\Directory\shell\OpenCmdHere]
-        @="CMD Konsole"
+        @="Cmd Konsole"
         "Extended"=""
         "Icon"="imageres.dll,-5323"
         "NoWorkingDirectory"=""
@@ -612,7 +612,7 @@ $tweaks = @(
 
 
         [HKEY_CLASSES_ROOT\Directory\Background\shell\OpenCmdHere]
-        @="CMD Konsole"
+        @="Cmd Konsole"
         "Extended"=""
         "Icon"="imageres.dll,-5323"
         "NoWorkingDirectory"=""
@@ -622,7 +622,7 @@ $tweaks = @(
 
 
         [HKEY_CLASSES_ROOT\Drive\shell\OpenCmdHere]
-        @="CMD Konsole"
+        @="Cmd Konsole"
         "Extended"=""
         "Icon"="imageres.dll,-5323"
         "NoWorkingDirectory"=""
