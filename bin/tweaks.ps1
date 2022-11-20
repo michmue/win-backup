@@ -13,8 +13,8 @@
         search chances for netplwiz/autologin
             HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon
 
-    HIDE USERFOLDER
-        hide Shell Folders in Explorer & UserFolder?!?! https://www.winhelponline.com/blog/show-hide-shell-folder-namespace-windows-10/
+    WHITELIST USERFOLDER
+        https://www.winhelponline.com/blog/show-hide-shell-folder-namespace-windows-10/
 
     PASSWORDLESS LOGIN:
         HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\PasswordLess\Device

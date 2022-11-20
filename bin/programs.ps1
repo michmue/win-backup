@@ -31,14 +31,42 @@ enum Program  {
 }
 
 
+enum DriverType {
+    BIOS
+    LAN_REALTEK
+    CHIPSET
+    NVIDIA
+    AUDIO_UNIX_XONAR
+    AUDIO_INTERN
+}
+
+
+class Driver {
+    [DriverType]$Driver
+    [DownloadType]$DownloadType
+    [string]$Url
+}
+
+
 enum DownloadType {
     DIRECT
     WEBREQUEST
     REST
     BITS
+    SEMI_AUTOMATIC
+    MANUEL
 }
 
-    
+
+$drivers = [Driver[]]@(
+    @{ Driver = [DriverType]::BIOS;             DownloadType = [DownloadType]::SEMI_AUTOMATIC;  Url = "https://www.asus.com/de/motherboards-components/motherboards/prime/prime-b350-plus/helpdesk_bios/" }
+    @{ Driver = [DriverType]::LAN_REALTEK;      DownloadType = [DownloadType]::SEMI_AUTOMATIC;  Url = "https://www.realtek.com/en/component/zoo/category/network-interface-controllers-10-100-1000m-gigabit-ethernet-pci-express-software" }
+    @{ Driver = [DriverType]::NVIDIA;           DownloadType = [DownloadType]::MANUEL;          Url = "https://www.nvidia.de/Download/index.aspx?lang=de" }
+    @{ Driver = [DriverType]::AUDIO_UNIX_XONAR; DownloadType = [DownloadType]::DIRECT;          Url = "https://maxedtech.com/wp-content/uploads/2016/11/UNi-Xonar-1822-v1.75a-r3.exe" }
+
+)
+
+
 class ProgramDetails {
     [Program]$Program
     [DownloadType]$DownloadType
@@ -75,12 +103,12 @@ $progs = [PSCustomObject]@{
     [Program]::ZIP7                =    [ProgramDetails]@{    "Program"=[Program]::ZIP7;                 "DownloadType"=[DownloadType]::BITS;        "Url"    =    "https://7-zip.de/download.html"    }
 }
 
-        
-function download( [ProgramDetails] $prog) {
+
+function downloadProgram( [ProgramDetails] $prog) {
     $url
     $file
-    
-    $wc = [net.webclient]::new() #New-Object net.webclient 
+
+    $wc = [net.webclient]::new() #New-Object net.webclient
 
     switch ($prog.Program) {
         ([Program]::ADB) {
@@ -110,7 +138,7 @@ function download( [ProgramDetails] $prog) {
             echo "2. Firefox en-GB"
             echo "3. Firefox de"
             $lang = Read-Host -Prompt "Choose Firefox language [1, 2, 3]: "
-            
+
 
             if ($lang -eq "1") {
                 $url = "https://download.mozilla.org/?product=firefox-latest-ssl&os=win64&lang=en-US"
@@ -125,7 +153,7 @@ function download( [ProgramDetails] $prog) {
             if ($lang -eq "3") {
                 $url =  "https://download.mozilla.org/?product=firefox-latest-ssl&os=win64&lang=de"
                 $file = "firefox_de.exe"
-            }            
+            }
         }
 
 
@@ -137,7 +165,7 @@ function download( [ProgramDetails] $prog) {
 
 
         ([Program]::GO) {
-            # TPUT get version from github, go.dev is slow            
+            # TPUT get version from github, go.dev is slow
             # $last_tag = (((Invoke-WebRequest "https://api.github.com/repos/golang/go/tags?page=1&per_page=1").headers.link.split(',')) | ? {$_.EndsWith('rel="last"')}).split(";")[0].replace("<","").replace(">","").replace(" ", "")
 
             $html = Invoke-WebRequest -Uri "https://go.dev/dl/" -UseBasicParsing
@@ -203,7 +231,7 @@ function download( [ProgramDetails] $prog) {
 
 
         ([Program]::PHPSTORM) {
-            
+
             $api = Invoke-RestMethod -uri "https://data.services.jetbrains.com/products/releases?code=PS&latest=true&type=release"
             $url = ($api.PS | ? type -Match "release")[0].downloads.windows.link
             $file = $url.Split("/") | select -Last 1
@@ -279,8 +307,8 @@ function download( [ProgramDetails] $prog) {
             $file = ($html.links | ? href -Match "vlc-.+?\.4-win64\.exe$").href
             $url = "$url$file"
         }
-        
-        
+
+
         ([Program]::VSCODE) {
             $url = $progs.VSCODE.Url
             $file = "VSCodeSetup-x64.exe"
@@ -294,7 +322,7 @@ function download( [ProgramDetails] $prog) {
         }
 
 
-        ([Program]::ZIP7) {            
+        ([Program]::ZIP7) {
             $url = "https://7-zip.org/download.html"
             $html = Invoke-WebRequest $url
             $href = ($html.links | ? href -Match "7z.+?-x64.exe$")[0].href
@@ -303,10 +331,69 @@ function download( [ProgramDetails] $prog) {
         }
     }
 
-    if ($url -and $file) { 
+    if ($url -and $file) {
         $wc.DownloadFile($url, "$PSScriptRoot/$file")
     }
     $wc.Dispose()
 }
 
-download $progs.VSCODE
+
+
+#download $progs.VSCODE
+
+function downloadDriver ( [DriverType] $driverType ) {
+    [Driver]$driver = $drivers | ? Driver -eq $driverType
+    $url
+    $file
+
+    $wc = [net.webclient]::new() #New-Object net.webclient
+
+    switch ($driverType) {
+        ([DriverType]::LAN_REALTEK) {
+
+            $html = Invoke-WebRequest -Uri $driver.Url -UseBasicParsing
+            $lines = $html.Content.Split("`n")
+            $Win10Index = $lines.IndexOf(($lines | ? { sls -InputObject $_  "Win10 Auto"}))
+            $hrefLine = $lines[$Win10Index-2]
+            $downloadPage = ($hrefLine | sls '".*?"').matches.value
+
+            Add-Type -AssemblyName System.Windows.Forms
+            Start-Process firefox.exe $downloadPage
+
+            While ( Get-Process *firefox* | ? MainWindowTitle -eq "Direct Download - REALTEK") {
+                Start-Sleep -Milliseconds 200
+            }
+
+            Start-Sleep 5
+            [System.Windows.Forms.SendKeys]::SendWait('{TAB 6}')
+            [System.Windows.Forms.SendKeys]::SendWait('{ENTER}')
+            Write-Host "find in Downloads: 'Install_Win10_' ..."
+        }
+
+
+        ([DriverType]::BIOS) {
+            Start-Process firefox.exe $driver.Url
+        }
+
+
+        ([DriverType]::NVIDIA) {
+            Start-Process firefox.exe $driver.Url
+        }
+
+
+        ([DriverType]::AUDIO_UNIX_XONAR) {
+            $url = $driver.Url
+            $file = $driver.Url.Split("/") | select -Last 1
+        }
+    }
+
+
+    if ($url -and $file) {
+        $wc.DownloadFile($url, "$PSScriptRoot\$file")
+    }
+
+    $wc.Dispose()
+}
+
+
+downloadDriver ([DriverType]::AUDIO_UNIX_XONAR)

@@ -7,6 +7,8 @@
 
 
 # TODO
+    check for more tweaks: https://github.com/jelbo/Windows10Tweaks/blob/master/Tweaks%20Collection.reg
+
     check settings app for changes in files (to auto config there)
         C:\Windows\ImmersiveControlPanel
         nirsoft check touched registry items or file access
@@ -17,7 +19,7 @@
     EXPLORER SEARCH LAG
         GPO: Explorer, Index search?, Cloud Search?
 		disable index search on file explorer?
-    
+
     ADOBE PDF PRINTER
         remove printer first
         precracked acrobat?
@@ -26,25 +28,25 @@
 
 # FEATURE
     CMD
-        starship 
+        starship
         oh-my-posh
 
 	ANNOTATIONS
         Get-Contenct read Comments
-		
+
         # @Deprecated
 		function XYZ {}
 		function Deprecated () {
 			write-host "XYZ is Deprecated"
 		}
-    
-	
+
+
     LICENSE VAIOLATION
         downloading required tools instead of binary integration
         or encrypt *.exe
-	
+
 
 # THROUGHPUT
-    
+
 
 # IMPROVMENT
