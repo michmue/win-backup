@@ -6,6 +6,7 @@
         .md
         .xml
         .json
+        .php
         SecurityHealthSSO.dll replace yellow Defender Icon
 
     REGISTRY

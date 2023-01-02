@@ -59,10 +59,10 @@ enum DownloadType {
 
 
 $drivers = [Driver[]]@(
-    @{ Driver = [DriverType]::BIOS;             DownloadType = [DownloadType]::SEMI_AUTOMATIC;  Url = "https://www.asus.com/de/motherboards-components/motherboards/prime/prime-b350-plus/helpdesk_bios/" }
-    @{ Driver = [DriverType]::LAN_REALTEK;      DownloadType = [DownloadType]::SEMI_AUTOMATIC;  Url = "https://www.realtek.com/en/component/zoo/category/network-interface-controllers-10-100-1000m-gigabit-ethernet-pci-express-software" }
-    @{ Driver = [DriverType]::NVIDIA;           DownloadType = [DownloadType]::MANUEL;          Url = "https://www.nvidia.de/Download/index.aspx?lang=de" }
-    @{ Driver = [DriverType]::AUDIO_UNIX_XONAR; DownloadType = [DownloadType]::DIRECT;          Url = "https://maxedtech.com/wp-content/uploads/2016/11/UNi-Xonar-1822-v1.75a-r3.exe" }
+    @{ Driver = [DriverType]::BIOS;             DownloadType = [DownloadType]::MANUEL;  Url = "https://www.asus.com/de/motherboards-components/motherboards/prime/prime-b350-plus/helpdesk_bios/" }
+    @{ Driver = [DriverType]::LAN_REALTEK;      DownloadType = [DownloadType]::MANUEL;  Url = "https://www.realtek.com/en/component/zoo/category/network-interface-controllers-10-100-1000m-gigabit-ethernet-pci-express-software" }
+    @{ Driver = [DriverType]::NVIDIA;           DownloadType = [DownloadType]::MANUEL;  Url = "https://www.nvidia.de/Download/index.aspx?lang=de" }
+    @{ Driver = [DriverType]::AUDIO_UNIX_XONAR; DownloadType = [DownloadType]::DIRECT;  Url = "https://maxedtech.com/wp-content/uploads/2016/11/UNi-Xonar-1822-v1.75a-r3.exe" }
 
 )
 
@@ -200,7 +200,7 @@ function downloadProgram( [ProgramDetails] $prog) {
         # IMPR: SendKey to background window
         ([Program]::JDOWNLOADER) {
             Add-Type -AssemblyName System.Windows.Forms
-            $process = Start-Process firefox.exe "https://mega.nz/file/2IURAaRB#84RbercQS9rTzBiBBhbWuLvAtJ1pZdG4RhCMskuWDFY"  -PassThru
+            Start-Process firefox.exe "https://mega.nz/file/2IURAaRB#84RbercQS9rTzBiBBhbWuLvAtJ1pZdG4RhCMskuWDFY"  -PassThru
             While ( Get-Process *firefox* | ? MainWindowTitle -match "Download - MEGA.*") {
                 Start-Sleep -Milliseconds 200
             }
@@ -350,24 +350,8 @@ function downloadDriver ( [DriverType] $driverType ) {
 
     switch ($driverType) {
         ([DriverType]::LAN_REALTEK) {
-
-            $html = Invoke-WebRequest -Uri $driver.Url -UseBasicParsing
-            $lines = $html.Content.Split("`n")
-            $Win10Index = $lines.IndexOf(($lines | ? { sls -InputObject $_  "Win10 Auto"}))
-            $hrefLine = $lines[$Win10Index-2]
-            $downloadPage = ($hrefLine | sls '".*?"').matches.value
-
-            Add-Type -AssemblyName System.Windows.Forms
-            Start-Process firefox.exe $downloadPage
-
-            While ( Get-Process *firefox* | ? MainWindowTitle -eq "Direct Download - REALTEK") {
-                Start-Sleep -Milliseconds 200
-            }
-
-            Start-Sleep 5
-            [System.Windows.Forms.SendKeys]::SendWait('{TAB 6}')
-            [System.Windows.Forms.SendKeys]::SendWait('{ENTER}')
-            Write-Host "find in Downloads: 'Install_Win10_' ..."
+            # removed SEMI_AUTOMATIC download cookie problem disables download
+            Start-Process firefox.exe $driver.Url
         }
 
 
@@ -394,6 +378,3 @@ function downloadDriver ( [DriverType] $driverType ) {
 
     $wc.Dispose()
 }
-
-
-downloadDriver ([DriverType]::AUDIO_UNIX_XONAR)

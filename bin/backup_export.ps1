@@ -1,5 +1,4 @@
 param(
-    [Switch]$UseDisabledDriverPOL,
     [Switch]$UseNotepadPlusPlus,
     [Switch]$UseJDownloader,
     [Switch]$UseFirefox,
@@ -11,6 +10,12 @@ param(
     [Switch]$DisableAll,
     [Switch]$EnableAll
 )
+
+<#
+    VSCode
+#>
+Write-Host "VSCode missing" -ForegroundColor Red
+
 
 if ($DisableAll) {
     $UseNotepadPlusPlus = $false
@@ -47,10 +52,10 @@ if ( !(Test-Path $CONFIG_DESTINATION_FOLDER -PathType Container) ) {
 if ($UsePolicy) {
     $MACHINE_POLICIE_FILE = "$env:systemroot\system32\GroupPolicy\Machine\Registry.pol"
     $USER_POLICIE_FILE = "$env:systemroot\system32\GroupPolicy\User\Registry.pol"
-    
+
     copy $MACHINE_POLICIE_FILE $CONFIG_DESTINATION_FOLDER\Machine_DisableDriver.pol
     copy $MACHINE_POLICIE_FILE $CONFIG_DESTINATION_FOLDER\Machine.pol
-    copy $USER_POLICIE_FILE $CONFIG_DESTINATION_FOLDER\User.pol    
+    copy $USER_POLICIE_FILE $CONFIG_DESTINATION_FOLDER\User.pol
     $RESULT += "[X] Policies expoted"
 }
 
@@ -59,8 +64,8 @@ if ($UsePolicy) {
 if ($UsePowershell) {
     $POWERSHELL_USER_PROFILE_FOLDER = [environment]::getfolderpath("mydocuments")+"\WindowsPowerShell"
 
-    if ( Test-Path $POWERSHELL_USER_PROFILE_FOLDER){ 
-        copy $POWERSHELL_USER_PROFILE_FOLDER\ $CONFIG_DESTINATION_FOLDER\ -Recurse -Force -ErrorAction SilentlyContinue 
+    if ( Test-Path $POWERSHELL_USER_PROFILE_FOLDER){
+        copy $POWERSHELL_USER_PROFILE_FOLDER\ $CONFIG_DESTINATION_FOLDER\ -Recurse -Force -ErrorAction SilentlyContinue
         $RESULT += "[X] Powershell User Profile expoted"
     } else { $RESULT += "[ ] Powershell User Profile not found" }
 }
@@ -75,7 +80,7 @@ if ($UseGit) {
         "$env:USERPROFILE\.inputrc"
         "$env:USERPROFILE\.bash_profile"
     );
-    
+
     foreach ($path in $GIT_CONFIG_FILES) {
         mkdir $CONFIG_DESTINATION_FOLDER\git\ -ErrorAction SilentlyContinue > $null
         if ( Test-Path $path ) {
@@ -89,10 +94,10 @@ if ($UseGit) {
 # NOTEPAD++
 if ($UseNotepadPlusPlus) {
     $NOTEPAD_PP_CONFIG_FODLER = "$env:APPDATA\Notepad++"
-    
-    if ( Test-Path $NOTEPAD_PP_CONFIG_FODLER){ 
-        copy $NOTEPAD_PP_CONFIG_FODLER\ $CONFIG_DESTINATION_FOLDER -Recurse -Force -ErrorAction SilentlyContinue 
-        
+
+    if ( Test-Path $NOTEPAD_PP_CONFIG_FODLER){
+        copy $NOTEPAD_PP_CONFIG_FODLER\ $CONFIG_DESTINATION_FOLDER -Recurse -Force -ErrorAction SilentlyContinue
+
         $RESULT += "[X] NOTEPAD++ Configs exported"
     } else { $RESULT += "[ ] NOTEPAD++ not installed" }
 }
@@ -101,10 +106,10 @@ if ($UseNotepadPlusPlus) {
 # 7-ZIP
 if ($UseZIP7) {
     $ZIP7_CONFIG_REGISTRY = "HKCU\Software\7-zip"
-    
-    if ( Test-Path $ZIP7_CONFIG_REGISTRY.Replace("HKCU\","HKCU:") ) { 
+
+    if ( Test-Path $ZIP7_CONFIG_REGISTRY.Replace("HKCU\","HKCU:") ) {
         reg export $ZIP7_CONFIG_REGISTRY "$CONFIG_DESTINATION_FOLDER\7zip.reg" /y > $null
-        
+
         $RESULT += "[X] 7-ZIP registry file exported"
     } else { $RESULT += "[ ] 7-ZIP++ not installed" }
 }
@@ -113,10 +118,10 @@ if ($UseZIP7) {
 # JDOWNLOADER
 if ($UseJDownloader) {
     $JDOWNLOADER_CONFIG_FOLDER = "$env:LOCALAPPDATA\JDownloader\cfg"
-    
+
     if ( Test-Path $JDOWNLOADER_CONFIG_FOLDER){
-        copy $JDOWNLOADER_CONFIG_FOLDER\ $CONFIG_DESTINATION_FOLDER -Recurse -Force -ErrorAction SilentlyContinue 
-        
+        copy $JDOWNLOADER_CONFIG_FOLDER\ $CONFIG_DESTINATION_FOLDER -Recurse -Force -ErrorAction SilentlyContinue
+
         $RESULT += "[X] JDownloader cfg Folder exported"
     } else { $RESULT += "[ ] JDownloader not installed" }
 }
@@ -131,8 +136,8 @@ if ($UseFirefox) {
         foreach ($profile in $firefox_profile_folders) {
             if ($profile -match "default-release") {
                 Write-Host "copying $profile to $CONFIG_DESTINATION_FOLDER ..."
-                copy $FIREFOX_CONFIG_FOLDER\$profile\ $CONFIG_DESTINATION_FOLDER -Recurse -Force -ErrorAction SilentlyContinue 
-            
+                copy $FIREFOX_CONFIG_FOLDER\$profile\ $CONFIG_DESTINATION_FOLDER -Recurse -Force -ErrorAction SilentlyContinue
+
                 $RESULT += "[X] Firefox profile exported"
             }
         }
@@ -158,7 +163,7 @@ if ($UseSyncthing) {
         #    copy $SYNCTHING_CONFIG_FILE_2 $CONFIG_DESTINATION_FOLDER
             copy $SYNCTHING_CONFIG_FILE_3 $CONFIG_DESTINATION_FOLDER
             copy $SYNCTHING_CONFIG_FILE_4 $CONFIG_DESTINATION_FOLDER
-            
+
             $RESULT += "[X] Syncthing exported"
         } else { $RESULT += "[ ] Syncthing not installed" }
 }

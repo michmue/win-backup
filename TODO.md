@@ -7,7 +7,10 @@
 
 
 # TODO
-    check for more tweaks: https://github.com/jelbo/Windows10Tweaks/blob/master/Tweaks%20Collection.reg
+    CHECK FOR MORE TWEAKS
+        https://github.com/jelbo/Windows10Tweaks/blob/master/Tweaks%20Collection.reg
+        https://gist.github.com/NickCraver/7ebf9efbfd0c3eab72e9
+
 
     check settings app for changes in files (to auto config there)
         C:\Windows\ImmersiveControlPanel
