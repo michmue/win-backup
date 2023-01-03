@@ -1,4 +1,4 @@
-function Win-Backup {
+function Win-Backup2 {
 [CmdletBinding()]
     param (
         [Parameter()][switch]$TweakListAll,
@@ -81,4 +81,4 @@ function Tweak-List ([Tweak[]] $tweaks) {
 # backup import (all)
 # backup import ABC, CDE, EFG
 
-Export-ModuleMember -Function Win-Backup
+Export-ModuleMember -Function Win-Backup2
