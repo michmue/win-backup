@@ -1,4 +1,4 @@
-function Win-Backup2 {
+function Win-Backup {
 [CmdletBinding()]
     param (
         [Parameter()][switch]$TweakListAll,
@@ -31,6 +31,7 @@ function Tweak-List-All () {
         TakeOwnerPaths = @("")
     })
 }
+
 
 function Tweak-List ([Tweak[]] $tweaks) {
     echo "listing []tweaks..."
@@ -81,4 +82,4 @@ function Tweak-List ([Tweak[]] $tweaks) {
 # backup import (all)
 # backup import ABC, CDE, EFG
 
-Export-ModuleMember -Function Win-Backup2
+Export-ModuleMember -Function Win-Backup
