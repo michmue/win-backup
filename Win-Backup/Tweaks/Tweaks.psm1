@@ -765,28 +765,31 @@ function Take-Ownership ([string]$key) {
 }
 
 
-# foreach ($tweak in $tweaks)
-# {
-#     $tweak.RegContent = $tweak.RegContent.Replace("        ", "");
-# }
+function Enable-WinBackupTweaksAll {
+    foreach ($tweak in $tweaks)
+    {
+        $tweak.RegContent = $tweak.RegContent.Replace("        ", "");
+    }
 
 
-# foreach ($tweak in $tweaks)
-# {
-#     if ($tweak.TakeOwner) {
-#         foreach ($path in $tweak.TakeOwnerPaths) {
-#             Take-Ownership $path
-#         }
-#     }
+    foreach ($tweak in $tweaks)
+    {
+        if ($tweak.TakeOwner) {
+            foreach ($path in $tweak.TakeOwnerPaths) {
+                Take-Ownership $path
+            }
+        }
 
-#     echo $tweak.RegContent | Out-File -FilePath $PSScriptRoot\tweak.reg
-#     reg.exe import "$($PSScriptRoot)\tweak.reg" 2>$null
-# }
+        echo $tweak.RegContent | Out-File -FilePath $PSScriptRoot\tweak.reg
+        reg.exe import "$($PSScriptRoot)\tweak.reg" 2>$null
+    }
 
-# Remove-Item $PSScriptRoot\tweak.reg
+    Remove-Item $PSScriptRoot\tweak.reg
+}
+
 
 function Get-WinBackupTweaksAll () {
     $tweaks
 }
 
-Export-ModuleMember -Function Get-WinBackupTweaksAll
+Export-ModuleMember -Function Get-WinBackupTweaksAll, Enable-WinBackupTweaksAll
