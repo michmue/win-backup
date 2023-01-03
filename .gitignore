@@ -134,7 +134,6 @@ dmypy.json
 # Pyre type checker
 .pyre/
 finished.md
-download_buffer.ps1
 tweaks/DEL/7-zip.dll
 tweaks/DEL/7z.dll
 tweaks/DEL/7zFM.exe
