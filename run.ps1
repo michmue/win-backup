@@ -3,5 +3,7 @@ Import-Module .\Win-Backup -Force
 
 
 #Get-WBPrograms | ? Name -eq ([Programs]::ZIP7) | Install-WBProgram
-Get-WBFeatures | ? Name -Match pol | Enable-WBFeature
+#Get-WBFeatures | ? Name -Match pol | Enable-WBFeature
 #Invoke-Command -ScriptBlock $d.InstallCommand
+
+Export-WBBackup -UseGit
