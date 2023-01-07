@@ -6,4 +6,5 @@ Import-Module .\Win-Backup -Force
 #Get-WBFeatures | ? Name -Match pol | Enable-WBFeature
 #Invoke-Command -ScriptBlock $d.InstallCommand
 
-Export-WBBackup -UseGit
+. .\Win-Backup\Backup\Utils.psm1
+Get-ContextMenuScreenshot
