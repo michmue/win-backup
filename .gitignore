@@ -1,4 +1,6 @@
 #own
+.vscode/
+bin/
 bin/ResourceHacker.ini
 term/**/*.exe
 **/node_modules
