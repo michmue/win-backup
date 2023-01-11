@@ -49,13 +49,6 @@ $tweaks = @(
         [HKEY_CLASSES_ROOT\.mdb\ShellNew]
         "Command"=-
         "~Command"="msaccess.exe /NEWDB 1"
-'@}
-
-    [Tweak]@{
-        Name = "Disable_NewMenu_AccessDB";
-        Scope = [Scope]::MACHINE
-        RegContent = @'
-        Windows Registry Editor Version 5.00
 
         [HKEY_CLASSES_ROOT\.accdb\Access.Application.16\ShellNew]
         "FileName"=-
@@ -257,6 +250,7 @@ $tweaks = @(
         [HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{0ddd015d-b06c-45d5-8c4c-f59713854639}\PropertyBag]
         "ThisPCPolicy"="Hide"
 '@}
+
     [Tweak]@{
         Name = "Set_StartupDelayForPrograms_toZero";
         Scope = [Scope]::USER
@@ -266,7 +260,6 @@ $tweaks = @(
         [HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Serialize]
         "StartupDelayInMSec"=dword:00000000
 '@}
-
 
     [Tweak]@{
         Name = "Block_ContextMenu_PreviouseVersion";
@@ -406,6 +399,7 @@ $tweaks = @(
         "VerbHandler"="{f3d06e7c-1e45-4a26-847e-f9fcdee59be0}"
         "VerbName"="copyaspath"
 '@}
+
     [Tweak]@{
         Name = "Block_ContextMenu_GiveAccessTo"
         Scope = [Scope]::MACHINE
@@ -415,6 +409,7 @@ $tweaks = @(
         [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Blocked]
         "{f81e9010-6ea4-11ce-a7ff-00aa003ca9f6}"="GiveAccessTo"
 '@}
+
     [Tweak]@{
         Name = "Replace_Notepad_With_Notepad++"
         Scope = [Scope]::MACHINE
@@ -516,170 +511,170 @@ $tweaks = @(
         "ParsingName"=-
 '@}
 
-[Tweak]@{
-    Name = "Modify_ContextMenuExt_Powershell"
-    Scope = [Scope]::MACHINE
-    TakeOwner = $true
-    TakeOwnerPaths = @(
-        "HKEY_CLASSES_ROOT\Directory\Background\shell\Powershell",
-        "HKEY_CLASSES_ROOT\Directory\Background\shell\Powershell\command",
-        "HKEY_CLASSES_ROOT\Directory\shell\Powershell",
-        "HKEY_CLASSES_ROOT\Directory\shell\Powershell\command"
-    )
-    RegContent =@'
-        Windows Registry Editor Version 5.00
-        [HKEY_CLASSES_ROOT\Directory\Background\shell\Powershell]
-        @="PowerShell Konsole"
-        "Extended"=""
-        "Icon"="powershell.exe"
-        "NoWorkingDirectory"=""
-        "ShowBasedOnVelocityId"=dword:00639bc8
+    [Tweak]@{
+        Name = "Modify_ContextMenuExt_Powershell"
+        Scope = [Scope]::MACHINE
+        TakeOwner = $true
+        TakeOwnerPaths = @(
+            "HKEY_CLASSES_ROOT\Directory\Background\shell\Powershell",
+            "HKEY_CLASSES_ROOT\Directory\Background\shell\Powershell\command",
+            "HKEY_CLASSES_ROOT\Directory\shell\Powershell",
+            "HKEY_CLASSES_ROOT\Directory\shell\Powershell\command"
+        )
+        RegContent =@'
+            Windows Registry Editor Version 5.00
+            [HKEY_CLASSES_ROOT\Directory\Background\shell\Powershell]
+            @="PowerShell Konsole"
+            "Extended"=""
+            "Icon"="powershell.exe"
+            "NoWorkingDirectory"=""
+            "ShowBasedOnVelocityId"=dword:00639bc8
 
-        [HKEY_CLASSES_ROOT\Directory\Background\shell\Powershell\command]
-        @="powershell.exe -noexit -command Set-Location -literalPath '%V'"
-
-
-        [HKEY_CLASSES_ROOT\Directory\shell\Powershell]
-        @="PowerShell Konsole"
-        "Extended"=""
-        "Icon"="powershell.exe"
-        "NoWorkingDirectory"=""
-        "ShowBasedOnVelocityId"=dword:00639bc8
-
-        [HKEY_CLASSES_ROOT\Directory\shell\Powershell\command]
-        @="powershell.exe -noexit -command Set-Location -literalPath '%V'"
+            [HKEY_CLASSES_ROOT\Directory\Background\shell\Powershell\command]
+            @="powershell.exe -noexit -command Set-Location -literalPath '%V'"
 
 
-        [HKEY_CLASSES_ROOT\Drive\shell\Powershell]
-        @="PowerShell Konsole"
-        "Extended"=""
-        "Icon"="powershell.exe"
-        "NoWorkingDirectory"=""
-        "ShowBasedOnVelocityId"=dword:00639bc8
+            [HKEY_CLASSES_ROOT\Directory\shell\Powershell]
+            @="PowerShell Konsole"
+            "Extended"=""
+            "Icon"="powershell.exe"
+            "NoWorkingDirectory"=""
+            "ShowBasedOnVelocityId"=dword:00639bc8
 
-        [HKEY_CLASSES_ROOT\Drive\shell\Powershell\command]
-        @="powershell.exe -noexit -command Set-Location -literalPath '%V'"
+            [HKEY_CLASSES_ROOT\Directory\shell\Powershell\command]
+            @="powershell.exe -noexit -command Set-Location -literalPath '%V'"
+
+
+            [HKEY_CLASSES_ROOT\Drive\shell\Powershell]
+            @="PowerShell Konsole"
+            "Extended"=""
+            "Icon"="powershell.exe"
+            "NoWorkingDirectory"=""
+            "ShowBasedOnVelocityId"=dword:00639bc8
+
+            [HKEY_CLASSES_ROOT\Drive\shell\Powershell\command]
+            @="powershell.exe -noexit -command Set-Location -literalPath '%V'"
 '@}
 
     [Tweak]@{
-    Name = "Add_ContextMenuExt_CmdAdmin"
-    Scope = [Scope]::MACHINE
-    RegContent =@'
-        Windows Registry Editor Version 5.00
-        [HKEY_CLASSES_ROOT\Directory\shell\OpenCmdHereAsAdmin]
-        @="Cmd Konsole Admin"
-        "Extended"=""
-        "Icon"="imageres.dll,-5323"
-        "HasLUAShield"=""
+        Name = "Add_ContextMenuExt_CmdAdmin"
+        Scope = [Scope]::MACHINE
+        RegContent =@'
+            Windows Registry Editor Version 5.00
+            [HKEY_CLASSES_ROOT\Directory\shell\OpenCmdHereAsAdmin]
+            @="Cmd Konsole Admin"
+            "Extended"=""
+            "Icon"="imageres.dll,-5323"
+            "HasLUAShield"=""
 
-        [HKEY_CLASSES_ROOT\Directory\shell\OpenCmdHereAsAdmin\command]
-        @="cmd /c echo|set/p=\"%L\"|powershell -NoP -W 1 -NonI -NoL \"SaPs 'cmd' -Args '/c \"\"\"cd /d',$([char]34+$Input+[char]34),'^&^& start /b cmd.exe\"\"\"' -Verb RunAs\""
+            [HKEY_CLASSES_ROOT\Directory\shell\OpenCmdHereAsAdmin\command]
+            @="cmd /c echo|set/p=\"%L\"|powershell -NoP -W 1 -NonI -NoL \"SaPs 'cmd' -Args '/c \"\"\"cd /d',$([char]34+$Input+[char]34),'^&^& start /b cmd.exe\"\"\"' -Verb RunAs\""
 
-        [HKEY_CLASSES_ROOT\Directory\Background\shell\OpenCmdHereAsAdmin]
-        @="Cmd Konsole Admin"
-        "Extended"=""
-        "Icon"="imageres.dll,-5323"
-        "HasLUAShield"=""
+            [HKEY_CLASSES_ROOT\Directory\Background\shell\OpenCmdHereAsAdmin]
+            @="Cmd Konsole Admin"
+            "Extended"=""
+            "Icon"="imageres.dll,-5323"
+            "HasLUAShield"=""
 
-        [HKEY_CLASSES_ROOT\Directory\Background\shell\OpenCmdHereAsAdmin\command]
-        @="cmd /c echo|set/p=\"%V\"|powershell -NoP -W 1 -NonI -NoL \"SaPs 'cmd' -Args '/c \"\"\"cd /d',$([char]34+$Input+[char]34),'^&^& start /b cmd.exe\"\"\"' -Verb RunAs\""
+            [HKEY_CLASSES_ROOT\Directory\Background\shell\OpenCmdHereAsAdmin\command]
+            @="cmd /c echo|set/p=\"%V\"|powershell -NoP -W 1 -NonI -NoL \"SaPs 'cmd' -Args '/c \"\"\"cd /d',$([char]34+$Input+[char]34),'^&^& start /b cmd.exe\"\"\"' -Verb RunAs\""
 
-        [HKEY_CLASSES_ROOT\Drive\shell\OpenCmdHereAsAdmin]
-        @="Cmd Konsole Admin"
-        "Extended"=""
-        "Icon"="imageres.dll,-5323"
-        "HasLUAShield"=""
+            [HKEY_CLASSES_ROOT\Drive\shell\OpenCmdHereAsAdmin]
+            @="Cmd Konsole Admin"
+            "Extended"=""
+            "Icon"="imageres.dll,-5323"
+            "HasLUAShield"=""
 
-        [HKEY_CLASSES_ROOT\Drive\shell\OpenCmdHereAsAdmin\command]
-        @="cmd /c echo|set/p=\"%L\"|powershell -NoP -W 1 -NonI -NoL \"SaPs 'cmd' -Args '/c \"\"\"cd /d',$([char]34+$Input+[char]34),'^&^& start /b cmd.exe\"\"\"' -Verb RunAs\""
+            [HKEY_CLASSES_ROOT\Drive\shell\OpenCmdHereAsAdmin\command]
+            @="cmd /c echo|set/p=\"%L\"|powershell -NoP -W 1 -NonI -NoL \"SaPs 'cmd' -Args '/c \"\"\"cd /d',$([char]34+$Input+[char]34),'^&^& start /b cmd.exe\"\"\"' -Verb RunAs\""
 
-        [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System]
-        "EnableLinkedConnections"=dword:00000001
+            [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System]
+            "EnableLinkedConnections"=dword:00000001
 '@}
 
     [Tweak]@{
-    Name = "Add_ContextMenuExt_Cmd"
-    Scope = [Scope]::MACHINE
-    RegContent =@'
-        Windows Registry Editor Version 5.00
-        [HKEY_CLASSES_ROOT\Directory\shell\OpenCmdHere]
-        @="Cmd Konsole"
-        "Extended"=""
-        "Icon"="imageres.dll,-5323"
-        "NoWorkingDirectory"=""
+        Name = "Add_ContextMenuExt_Cmd"
+        Scope = [Scope]::MACHINE
+        RegContent =@'
+            Windows Registry Editor Version 5.00
+            [HKEY_CLASSES_ROOT\Directory\shell\OpenCmdHere]
+            @="Cmd Konsole"
+            "Extended"=""
+            "Icon"="imageres.dll,-5323"
+            "NoWorkingDirectory"=""
 
-        [HKEY_CLASSES_ROOT\Directory\shell\OpenCmdHere\command]
-        @="cmd.exe /s /k pushd \"%V\""
-
-
-        [HKEY_CLASSES_ROOT\Directory\Background\shell\OpenCmdHere]
-        @="Cmd Konsole"
-        "Extended"=""
-        "Icon"="imageres.dll,-5323"
-        "NoWorkingDirectory"=""
-
-        [HKEY_CLASSES_ROOT\Directory\Background\shell\OpenCmdHere\command]
-        @="cmd.exe /s /k pushd \"%V\""
+            [HKEY_CLASSES_ROOT\Directory\shell\OpenCmdHere\command]
+            @="cmd.exe /s /k pushd \"%V\""
 
 
-        [HKEY_CLASSES_ROOT\Drive\shell\OpenCmdHere]
-        @="Cmd Konsole"
-        "Extended"=""
-        "Icon"="imageres.dll,-5323"
-        "NoWorkingDirectory"=""
+            [HKEY_CLASSES_ROOT\Directory\Background\shell\OpenCmdHere]
+            @="Cmd Konsole"
+            "Extended"=""
+            "Icon"="imageres.dll,-5323"
+            "NoWorkingDirectory"=""
 
-        [HKEY_CLASSES_ROOT\Drive\shell\OpenCmdHere\command]
-        @="cmd.exe /s /k pushd \"%V\""
+            [HKEY_CLASSES_ROOT\Directory\Background\shell\OpenCmdHere\command]
+            @="cmd.exe /s /k pushd \"%V\""
+
+
+            [HKEY_CLASSES_ROOT\Drive\shell\OpenCmdHere]
+            @="Cmd Konsole"
+            "Extended"=""
+            "Icon"="imageres.dll,-5323"
+            "NoWorkingDirectory"=""
+
+            [HKEY_CLASSES_ROOT\Drive\shell\OpenCmdHere\command]
+            @="cmd.exe /s /k pushd \"%V\""
 '@}
 
     [Tweak]@{
-    Name = "Add_ContextMenuExt_PowershellAdmin"
-    Scope = [Scope]::MACHINE
-    RegContent =@'
-        Windows Registry Editor Version 5.00
-        [HKEY_CLASSES_ROOT\Directory\Background\shell\PowerShellAsAdmin]
-        @="PowerShell Konsole Admin"
-        "Extended"=""
-        "HasLUAShield"=""
-        "Icon"="powershell.exe"
+        Name = "Add_ContextMenuExt_PowershellAdmin"
+        Scope = [Scope]::MACHINE
+        RegContent =@'
+            Windows Registry Editor Version 5.00
+            [HKEY_CLASSES_ROOT\Directory\Background\shell\PowerShellAsAdmin]
+            @="PowerShell Konsole Admin"
+            "Extended"=""
+            "HasLUAShield"=""
+            "Icon"="powershell.exe"
 
-        [HKEY_CLASSES_ROOT\Directory\Background\shell\PowerShellAsAdmin\command]
-        @="PowerShell -windowstyle hidden -Command \"Start-Process cmd -ArgumentList '/s,/k,pushd,%V && start PowerShell && exit' -Verb RunAs\""
+            [HKEY_CLASSES_ROOT\Directory\Background\shell\PowerShellAsAdmin\command]
+            @="PowerShell -windowstyle hidden -Command \"Start-Process cmd -ArgumentList '/s,/k,pushd,%V && start PowerShell && exit' -Verb RunAs\""
 
-        [HKEY_CLASSES_ROOT\Directory\shell\PowerShellAsAdmin]
-        @="PowerShell Konsole Admin"
-        "Extended"=""
-        "HasLUAShield"=""
-        "Icon"="powershell.exe"
+            [HKEY_CLASSES_ROOT\Directory\shell\PowerShellAsAdmin]
+            @="PowerShell Konsole Admin"
+            "Extended"=""
+            "HasLUAShield"=""
+            "Icon"="powershell.exe"
 
-        [HKEY_CLASSES_ROOT\Directory\shell\PowerShellAsAdmin\command]
-        @="PowerShell -windowstyle hidden -Command \"Start-Process cmd -ArgumentList '/s,/k,pushd,%V && start PowerShell && exit' -Verb RunAs\""
+            [HKEY_CLASSES_ROOT\Directory\shell\PowerShellAsAdmin\command]
+            @="PowerShell -windowstyle hidden -Command \"Start-Process cmd -ArgumentList '/s,/k,pushd,%V && start PowerShell && exit' -Verb RunAs\""
 
-        [HKEY_CLASSES_ROOT\Drive\shell\PowerShellAsAdmin]
-        @="PowerShell Konsole Admin"
-        "Extended"=""
-        "HasLUAShield"=""
-        "Icon"="powershell.exe"
+            [HKEY_CLASSES_ROOT\Drive\shell\PowerShellAsAdmin]
+            @="PowerShell Konsole Admin"
+            "Extended"=""
+            "HasLUAShield"=""
+            "Icon"="powershell.exe"
 
-        [HKEY_CLASSES_ROOT\Drive\shell\PowerShellAsAdmin\command]
-        @="PowerShell -windowstyle hidden -Command \"Start-Process cmd -ArgumentList '/s,/k,pushd,%V && start PowerShell && exit' -Verb RunAs\""
+            [HKEY_CLASSES_ROOT\Drive\shell\PowerShellAsAdmin\command]
+            @="PowerShell -windowstyle hidden -Command \"Start-Process cmd -ArgumentList '/s,/k,pushd,%V && start PowerShell && exit' -Verb RunAs\""
 
-        ; To allow mapped drives to be available in elevated PowerShell
-        [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System]
-        "EnableLinkedConnections"=dword:00000001
+            ; To allow mapped drives to be available in elevated PowerShell
+            [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System]
+            "EnableLinkedConnections"=dword:00000001
 '@}
 
     [Tweak]@{
-    Name = "Disable_ContextMenu_VLC_OnDirectory"
-    Scope = [Scope]::MACHINE
-    RegContent =@'
-        Windows Registry Editor Version 5.00
+        Name = "Disable_ContextMenu_VLC_OnDirectory"
+        Scope = [Scope]::MACHINE
+        RegContent =@'
+            Windows Registry Editor Version 5.00
 
-        [HKEY_CLASSES_ROOT\Directory\shell\PlayWithVLC]
-        "LegacyDisable"=""
+            [HKEY_CLASSES_ROOT\Directory\shell\PlayWithVLC]
+            "LegacyDisable"=""
 
-        [HKEY_CLASSES_ROOT\Directory\shell\AddToPlaylistVLC]
-        "LegacyDisable"=""
+            [HKEY_CLASSES_ROOT\Directory\shell\AddToPlaylistVLC]
+            "LegacyDisable"=""
 '@}
 )
 
@@ -765,31 +760,95 @@ function Take-Ownership ([string]$key) {
 }
 
 
-function Enable-WinBackupTweaksAll {
-    foreach ($tweak in $tweaks)
-    {
-        $tweak.RegContent = $tweak.RegContent.Replace("        ", "");
+function Enable-WBTweak {
+    [CmdletBinding()]
+    param (
+        [Parameter(ValueFromPipeline)]
+        [Tweak[]]
+        $Tweaks
+    )
+
+    begin {
+        $Tweaks = @($Tweaks)
     }
 
+    process {
+        foreach ($tweak in $Tweaks)
+        {
+            $tweak.RegContent = $tweak.RegContent.Replace("        ", "");
+        }
 
-    foreach ($tweak in $tweaks)
-    {
-        if ($tweak.TakeOwner) {
-            foreach ($path in $tweak.TakeOwnerPaths) {
-                Take-Ownership $path
+
+        foreach ($tweak in $Tweaks)
+        {
+            if ($tweak.TakeOwner) {
+                foreach ($path in $tweak.TakeOwnerPaths) {
+                    Take-Ownership $path
+                }
+            }
+
+            echo $tweak.RegContent | Out-File -FilePath $PSScriptRoot\tweak.reg
+            reg.exe import "$($PSScriptRoot)\tweak.reg" 2>$null
+        }
+    }
+
+    end {
+        Remove-Item $PSScriptRoot\tweak.reg
+    }
+}
+
+function Get-WBTweak {
+    [CmdletBinding()]
+    param (
+        [string[]]$Name,
+        [ValidateSet('USER','MACHINE')]
+        [string]$Scope,
+        [string]$RegContent,
+        [bool]$TakeOwner,
+        [string[]]$TakeOwnerPaths
+    )
+
+    begin {
+        $filterdTweaks = [System.Collections.ArrayList]::new($tweaks)
+        $Name = @($Name)
+        $TakeOwnerPaths = @($TakeOwnerPaths)
+        $removeTweaks = @()
+    }
+
+    process {
+        if ($Name) {
+            foreach ($name in $Name) {
+                $removeTweaks = $filterdTweaks | where { $_.Name -notlike $Name }
+                $removeTweaks | % { $filterdTweaks.Remove($_) }
             }
         }
 
-        echo $tweak.RegContent | Out-File -FilePath $PSScriptRoot\tweak.reg
-        reg.exe import "$($PSScriptRoot)\tweak.reg" 2>$null
+        if ($Scope){
+            $removeTweaks = $filterdTweaks | where { $_.Scope -notlike $Scope }
+            $removeTweaks | % { $filterdTweaks.Remove($_) }
+        }
+
+        if ($RegContent){
+            $removeTweaks = $filterdTweaks | where { $_.RegContent -notlike $RegContent }
+            $removeTweaks | % { $filterdTweaks.Remove($_) }
+        }
+
+        if ($PSBoundParameters.ContainsKey('TakeOwner')){
+            $removeTweaks = $filterdTweaks | where { $_.TakeOwner -ne $TakeOwner }
+            $removeTweaks | % { $filterdTweaks.Remove($_) }
+        }
+
+        if ($TakeOwnerPaths){
+            foreach ($path in $TakeOwnerPaths) {
+                $removeTweaks = $filterdTweaks | where { $_.TakeOwnerPaths -notlike $path }
+                $removeTweaks | % { $filterdTweaks.Remove($_) }
+            }
+        }
     }
 
-    Remove-Item $PSScriptRoot\tweak.reg
+    end {
+        return $filterdTweaks
+    }
 }
 
-
-function Get-WinBackupTweaksAll () {
-    $tweaks
-}
-
-Export-ModuleMember -Function Get-WinBackupTweaksAll, Enable-WinBackupTweaksAll
+Export-ModuleMember -Function Get-WBTweak, Enable-WBTweak

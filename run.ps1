@@ -6,5 +6,7 @@ Import-Module .\Win-Backup -Force
 #Get-WBFeatures | ? Name -Match pol | Enable-WBFeature
 #Invoke-Command -ScriptBlock $d.InstallCommand
 
-. .\Win-Backup\Backup\Utils.psm1
-Get-ContextMenuScreenshot
+#. .\Win-Backup\Backup\Utils.psm1
+#Get-ContextMenuScreenshot
+
+Get-WBTweak Disable_NewMenu_AccessDB | Enable-WBTweak
