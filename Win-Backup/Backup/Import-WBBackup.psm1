@@ -220,4 +220,51 @@ function Import-WBBackup {
     $RESULT
 }
 
-Export-ModuleMember -Function Import-WBBackup
+$CONFIG_SRC_FOLDER = "D:\configsNew"
+function Import-WBBackup2 ($appConfigs) {
+    foreach ($appConfig in $appConfigs) {
+        $srcFolder = "$CONFIG_SRC_FOLDER/$($appConfig.Name)"
+
+        foreach ($folder in $appConfig.Folders) {
+            if (-Not $folder) { continue; }
+
+            $folder = $ExecutionContext.InvokeCommand.ExpandString($folder)
+            if (Test-Path -Path $folder -PathType Container) {
+                copy $srcFolder/* $folder -Recurse -Force -ErrorAction Continue
+            }
+        }
+
+
+        foreach ($file in $appConfig.Files) {
+            if (-Not $file) { continue; }
+
+            $file = $ExecutionContext.InvokeCommand.ExpandString($file)
+            if (Test-Path -Path $file -PathType Leaf) {
+                Write-Host "copy file: $file"
+
+                $fileName = Split-Path -Path $file -Leaf
+                $fileSrc = "$CONFIG_SRC_FOLDER/$($appConfig.Name)/$fileName"
+                New-Item -Path $fileSrc -ItemType File -Force > $null
+
+                copy $fileSrc $path -Force -ErrorAction Continue
+            }
+        }
+
+
+        # FEAT: add export regValue similar to regTree
+        # FEAT: add export regKey similar to regTree
+        foreach ($regTree in $appConfig.RegistryTrees) {
+            if (-Not $regTree) { continue; }
+            Write-Host "import reg: $regTree"
+            $regTree = $ExecutionContext.InvokeCommand.ExpandString($regTree)
+
+            if (Test-Path $regTree -PathType Container) {
+                $regTree = $regTree -replace ":", "\" -replace "/", "\"
+
+                reg import $regTree "$srcFolder\$($appConfig.Name).reg" /y > $null
+            }
+        }
+    }
+}
+
+Export-ModuleMember -Function Import-WBBackup, Import-WBBackup2
