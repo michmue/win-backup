@@ -229,6 +229,9 @@ function Import-WBBackup2 ($appConfigs) {
             if (-Not $folder) { continue; }
 
             $folder = $ExecutionContext.InvokeCommand.ExpandString($folder)
+
+            New-Item $folder -ItemType Directory
+
             if (Test-Path -Path $folder -PathType Container) {
                 copy $srcFolder/* $folder -Recurse -Force -ErrorAction Continue
             }
@@ -239,12 +242,15 @@ function Import-WBBackup2 ($appConfigs) {
             if (-Not $file) { continue; }
 
             $file = $ExecutionContext.InvokeCommand.ExpandString($file)
+            $fileName = Split-Path -Path $file -Leaf
+            $fileSrc = "$CONFIG_SRC_FOLDER/$($appConfig.Name)/$fileName"
+
+            New-Item -Path $fileSrc -ItemType File -Force > $null
+
             if (Test-Path -Path $file -PathType Leaf) {
                 Write-Host "copy file: $file"
 
-                $fileName = Split-Path -Path $file -Leaf
-                $fileSrc = "$CONFIG_SRC_FOLDER/$($appConfig.Name)/$fileName"
-                New-Item -Path $fileSrc -ItemType File -Force > $null
+
 
                 copy $fileSrc $path -Force -ErrorAction Continue
             }
