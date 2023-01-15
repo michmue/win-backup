@@ -196,15 +196,13 @@ function Export-WBBackup2 ($appConfigs) {
             if (-Not $file) { continue; }
 
             $file = $ExecutionContext.InvokeCommand.ExpandString($file)
-            if (Test-Path -Path $file -PathType Leaf) {
                 Write-Host "copy file: $file"
 
                 $fileName = Split-Path -Path $file -Leaf
                 $newItemPath = "$CONFIG_DESTINATION_FOLDER/$($appConfig.Name)/$fileName"
-                New-Item -Path $newItemPath -ItemType File -Force > $null
 
+                New-Item -Path $newItemPath -ItemType File -Force > $null
                 copy $file $newItemPath -Force -ErrorAction Continue
-            }
         }
 
 

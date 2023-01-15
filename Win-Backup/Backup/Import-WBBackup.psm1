@@ -220,9 +220,12 @@ function Import-WBBackup {
     $RESULT
 }
 
-$CONFIG_SRC_FOLDER = "D:\configsNew"
+$CONFIG_SRC_FOLDER = "C:\projects\configsNew"
 function Import-WBBackup2 ($appConfigs) {
+
     foreach ($appConfig in $appConfigs) {
+
+
         $srcFolder = "$CONFIG_SRC_FOLDER/$($appConfig.Name)"
 
         foreach ($folder in $appConfig.Folders) {
@@ -230,7 +233,12 @@ function Import-WBBackup2 ($appConfigs) {
 
             $folder = $ExecutionContext.InvokeCommand.ExpandString($folder)
 
-            New-Item $folder -ItemType Directory
+            if ($appConfig.Name -eq "Firefox") {
+                # select first '../profiles/*default-release' to remove '*' in path
+                $folder = (gci $folder)[0]
+            }
+
+            New-Item $folder -ItemType Directory -Force > $null
 
             if (Test-Path -Path $folder -PathType Container) {
                 copy $srcFolder/* $folder -Recurse -Force -ErrorAction Continue
@@ -238,6 +246,7 @@ function Import-WBBackup2 ($appConfigs) {
         }
 
 
+        # FIX: create folder first -ea SilentContinue
         foreach ($file in $appConfig.Files) {
             if (-Not $file) { continue; }
 
@@ -249,9 +258,6 @@ function Import-WBBackup2 ($appConfigs) {
 
             if (Test-Path -Path $file -PathType Leaf) {
                 Write-Host "copy file: $file"
-
-
-
                 copy $fileSrc $path -Force -ErrorAction Continue
             }
         }
