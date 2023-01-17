@@ -1,6 +1,10 @@
 Remove-Module Win-Backup -Force -ErrorAction SilentlyContinue
-Import-Module .\Win-Backup -Force
+Remove-Module Backup -Force -ErrorAction SilentlyContinue
+Remove-Module Cleanup -Force -ErrorAction SilentlyContinue
+Remove-Module Features -Force -ErrorAction SilentlyContinue
+Remove-Module Programs -Force -ErrorAction SilentlyContinue
 
+Import-Module .\Win-Backup -Force
 
 #Get-WBPrograms | ? Name -eq ([Programs]::ZIP7) | Install-WBProgram
 #Get-WBFeatures | ? Name -Match pol | Enable-WBFeature
@@ -9,4 +13,13 @@ Import-Module .\Win-Backup -Force
 #. .\Win-Backup\Backup\Utils.psm1
 #Get-ContextMenuScreenshot
 
-Get-WBTweak Disable_NewMenu_AccessDB | Enable-WBTweak
+$config = Read-WBBackupConfig .\BackupConfig.json
+Export-WBBackup -Path d:\confgis3New $config
+
+
+
+Remove-Module Win-Backup -Force -ErrorAction SilentlyContinue
+Remove-Module Backup -Force -ErrorAction SilentlyContinue
+Remove-Module Cleanup -Force -ErrorAction SilentlyContinue
+Remove-Module Features -Force -ErrorAction SilentlyContinue
+Remove-Module Programs -Force -ErrorAction SilentlyContinue

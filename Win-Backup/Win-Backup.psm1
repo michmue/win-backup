@@ -37,41 +37,8 @@ function Tweak-List ([Tweak[]] $tweaks) {
     echo "listing []tweaks..."
 }
 
-# tweaks (list)
-# tweaks list enabled
-# tweaks list disabled
-# tweaks enable all
-# tweaks enable ABC, CDE, EFG
-
-# #TODO: requires backup before enabled
-# tweaks disable all
-# tweaks disable ABC, CDE, EFG
-
-
-# cleanup list
-# cleanup list installed
-# cleanup list uninstalled
-# cleanup all
-# cleanup ABC, CDE, EFG
-
-
-# features list
-# features list installed
-# features list uninstalled
-# features enable all
-# features enable ABC, CDE, EFG
-
-# programs list
-# programs list installed
-# programs list uninstalled
-# programs install all
-# programs install ABC, CDE, EFG
 
 # # TODO: backup default settings
-# settings list
-# settings list enabled
-# settings list disabled
-
 # backup list
 # backup list export
 # backup list exported
@@ -81,5 +48,40 @@ function Tweak-List ([Tweak[]] $tweaks) {
 # backup export ABC, CDE, EFG
 # backup import (all)
 # backup import ABC, CDE, EFG
+
+
+# features list
+# features list installed
+# features list uninstalled
+# features enable all
+# features enable ABC, CDE, EFG
+
+
+# settings list
+# settings list enabled
+# settings list disabled
+
+
+# tweaks list enabled
+# tweaks list disabled
+
+# #TODO: requires backup before enabled
+# tweaks disable all
+# tweaks disable ABC, CDE, EFG
+
+
+# programs list
+# programs list installed
+# programs list uninstalled
+# programs install all
+# programs install ABC, CDE, EFG
+
+
+# cleanup list
+# cleanup list installed
+# cleanup list uninstalled
+# cleanup all
+# cleanup ABC, CDE, EFG
+
 
 Export-ModuleMember -Function Win-Backup

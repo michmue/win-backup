@@ -1,0 +1,66 @@
+[
+    {
+        "Name": "Policy",
+        "Files": [
+            "$env:SystemRoot/system32/GroupPolicy/Machine/Registry.pol",
+            "$env:SystemRoot/system32/GroupPolicy/User/Registry.pol",
+            "$env:SystemRoot/system32/GroupPolicy/Machine/Machine_DisableDriver.pol"
+        ]
+    },
+    {
+        "Name": "Powershell",
+        "Folders": [
+            "$env:USERPROFILE/Documents/WindowsPowerShell"
+        ]
+    },
+    {
+        "Name": "Git",
+        "Files": [
+            "$env:USERPROFILE/.gitconfig",
+            "$env:USERPROFILE/.bash_history",
+            "$env:USERPROFILE/.minttyrc",
+            "$env:USERPROFILE/.inputrc",
+            "$env:USERPROFILE/.bash_profile"
+        ]
+    },
+    {
+        "Name": "ZIP7",
+        "RegistryTrees": [
+            "HKCU:Software/7-zip"
+        ]
+    },
+    {
+        "Name": "JDownloader",
+        "Folders": [
+            "$env:LOCALAPPDATA/JDownloader/cfg"
+        ]
+    },
+    {
+        "Name": "Firefox",
+        "Folders": [
+            "$env:APPDATA/Mozilla/Firefox/Profiles/*default-release"
+        ]
+    },{
+        "Name": "SyncTrayzor",
+        "Files": [
+            "$env:APPDATA/SyncTrayzor/config.xml"
+        ]
+    },
+    {
+        "Name": "Syncthing",
+        "# TODO:": [
+            "$env:LOCALAPPDATA/Syncthing/config.xml.v36"
+        ],
+        "Files": [
+            "$env:LOCALAPPDATA/Syncthing/config.xml",
+            "$env:LOCALAPPDATA/Syncthing/key.pem",
+            "$env:LOCALAPPDATA/Syncthing/cert.pem"
+        ]
+    },
+    {
+        "Name": "Notepad++",
+        "Folders": [
+            "$env:APPDATA/Notepad++"
+        ]
+    }
+]
