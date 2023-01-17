@@ -14,7 +14,7 @@ Import-Module .\Win-Backup -Force
 #Get-ContextMenuScreenshot
 
 $config = Read-WBBackupConfig .\BackupConfig.json
-Import-WBBackup2 $config
+Export-WBBackup -Path d:\confgis3New $config
 
 
 

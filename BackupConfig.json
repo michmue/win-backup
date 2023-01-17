@@ -1,6 +1,6 @@
 [
     {
-        "Name": "LocalPolicy",
+        "Name": "Policy",
         "Files": [
             "$env:SystemRoot/system32/GroupPolicy/Machine/Registry.pol",
             "$env:SystemRoot/system32/GroupPolicy/User/Registry.pol",
@@ -10,7 +10,7 @@
     {
         "Name": "Powershell",
         "Folders": [
-            "$PROFILE/.."
+            "$env:USERPROFILE/Documents/WindowsPowerShell"
         ]
     },
     {
@@ -40,14 +40,27 @@
         "Folders": [
             "$env:APPDATA/Mozilla/Firefox/Profiles/*default-release"
         ]
+    },{
+        "Name": "SyncTrayzor",
+        "Files": [
+            "$env:APPDATA/SyncTrayzor/config.xml"
+        ]
     },
     {
         "Name": "Syncthing",
+        "# TODO:": [
+            "$env:LOCALAPPDATA/Syncthing/config.xml.v36"
+        ],
         "Files": [
-            "$env:APPDATA/SyncTrayzor/config.xml",
             "$env:LOCALAPPDATA/Syncthing/config.xml",
             "$env:LOCALAPPDATA/Syncthing/key.pem",
             "$env:LOCALAPPDATA/Syncthing/cert.pem"
+        ]
+    },
+    {
+        "Name": "Notepad++",
+        "Folders": [
+            "$env:APPDATA/Notepad++"
         ]
     }
 ]
