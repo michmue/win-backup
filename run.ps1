@@ -5,18 +5,13 @@ Remove-Module Features -Force -ErrorAction SilentlyContinue
 Remove-Module Programs -Force -ErrorAction SilentlyContinue
 
 Import-Module .\Win-Backup -Force
+# $d = Get-Content .\Win-Backup\Tweaks\tweaks.json | ConvertFrom-Json
+# $prop = ($d.Keys.Properties | ? { $_.Type -eq "DWord" })[0]
+#Set-ItemProperty -Path "HKCU:/Software/1My" -Type Boolean -Name $prop.Name -Value $prop.Value
 
-#Get-WBPrograms | ? Name -eq ([Programs]::ZIP7) | Install-WBProgram
-#Get-WBFeatures | ? Name -Match pol | Enable-WBFeature
-#Invoke-Command -ScriptBlock $d.InstallCommand
+(Get-WBTweak -Name *powershell*)
 
-#. .\Win-Backup\Backup\Utils.psm1
-#Get-ContextMenuScreenshot
-
-$config = Read-WBBackupConfig .\BackupConfig.json
-Export-WBBackup -Path d:\confgis3New $config
-
-
+#Get-ValueKind $key.key $key.Properties[0].Name
 
 Remove-Module Win-Backup -Force -ErrorAction SilentlyContinue
 Remove-Module Backup -Force -ErrorAction SilentlyContinue
