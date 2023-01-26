@@ -3,21 +3,18 @@ function Import-WBBackup {
     [CmdletBinding()]
     param (
         # Specifies a path to one or more locations.
-        [Parameter(Mandatory=$true,
-                   ValueFromPipeline=$true,
-                   ValueFromPipelineByPropertyName=$true,
-                   HelpMessage="Path to one or more locations.")]
+        [Parameter(Mandatory = $true,
+            ValueFromPipeline = $true,
+            ValueFromPipelineByPropertyName = $true,
+            HelpMessage = "Path to one or more locations.")]
         [Alias("PSPath")]
         [ValidateNotNullOrEmpty()]
         [ValidateScript({
-            if(-Not ($_ | Test-Path -PathType Leaf) ){
-                throw "File or folder does not exist"
-            }
-            if ($_ -notmatch "\.json$") {
-                throw "The file specified in the path argument must end with .json"
-            }
-            return $true
-        })]
+                if (-Not ($_ | Test-Path -PathType Container) ) {
+                    throw "File or folder does not exist"
+                }
+                return $true
+            })]
         $Path,
         [PSCustomObject] $AppsJsonConfig
     )
@@ -35,7 +32,13 @@ function Import-WBBackup {
 
             if ($appConfig.Name -eq "Firefox") {
                 # select first '../profiles/*default-release' to remove '*' in path
-                $folder = (gci $folder)[0]
+                try {
+                    $folder = (gci $folder)[0]
+                }
+                catch {
+                    Write-Warning "Firefox found no profile, skipping firefox import"
+                    continue;
+                }
             }
 
             if (Test-Path -Path $folder -PathType Container) {
@@ -62,7 +65,8 @@ function Import-WBBackup {
 
             if (Test-Path -Path $file -PathType Leaf) {
                 Write-Host "override file: $file"
-            } else {
+            }
+            else {
                 Write-Host "create file: $file"
                 New-Item -Path $file -ItemType File -Force > $null
             }
@@ -78,7 +82,8 @@ function Import-WBBackup {
 
             if (Test-Path $regTree -PathType Container) {
                 Write-Host "override reg: $regTree"
-            } else {
+            }
+            else {
                 Write-Host "create reg: $regTree"
             }
             $regTree = $regTree -replace ":", "\" -replace "/", "\"
