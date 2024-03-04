@@ -21,7 +21,7 @@ After reinstall of windows:
 Invoke-WBFolderCleaning
 
 # Install features like Hyper-V & dotNet Framework
-Get-WBFeatures | Enable-WBFeature
+Get-WBFeature | Enable-WBFeature
 
 # Add registry tweaks: file explorer hide specific folder which I don't use (Documents, 3D Objets, Music...)
 Get-WBTweak | Enable-WBTweak

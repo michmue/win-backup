@@ -56,8 +56,8 @@ function Enable-WBFeature {
     }
 }
 
-function Get-WBFeatures {
+function Get-WBFeature {
     return $features
 }
 
-Export-ModuleMember -Function Get-WBFeatures, Enable-WBFeature
+Export-ModuleMember -Function Get-WBFeature, Enable-WBFeature
