@@ -27,5 +27,5 @@ Get-WBFeature | Enable-WBFeature
 Get-WBTweak | Enable-WBTweak
 
 # Downloads my programs (installtion still missing)
-Get-WBPrograms | Install-WBProgram
+Get-WBProgram | Install-WBProgram
 ```

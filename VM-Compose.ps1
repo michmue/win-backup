@@ -1,11 +1,38 @@
 # Enable-VMIntegrationService -VMName MyTestVM -Name "Guest Service Interface"
+$prevHashes = @()
+Get-Content .\.vm\hashes -ErrorAction SilentlyContinue | % {
+    $item = $_.Split('  ')
+    $prevHashes += [pscustomobject]@{ 
+        "Path"= $item[0];
+        "Hash"= $item[1]
+    }
+}
 
-$VMName = "Clean10"
-$CheckpointName = "fresh_install"
+$currHashes = @()
+Get-ChildItem -File -Recurse | ? {@(".vm", ".vscode") -notcontains $_.Directory.Name} | % {
+    $hash = Get-FileHash $_.FullName
+    $currHashes += [pscustomobject]@{ 
+        "Path"= $_.FullName;
+        "Hash"= $hash.Hash
+    }
+}
 
-$VM = Get-VM -Name $VMName
-$Checkpoint = Get-VMSnapshot -VM $VM -Name $CheckpointName
-Restore-VMSnapshot -VMSnapshot $Checkpoint -Confirm:$false
+
+$currHashes | % { 
+    "$($_.Path)  $($_.Hash)" >> .\.vm\hashes
+}
+
+$currHashes | ? {$_.Path -in $currHashes.Path} | % {
+    
+}
+
+
+exit
+# $VMName = "Clean10"
+# $CheckpointName = "fresh_install_network"
+# $VM = Get-VM -Name $VMName
+# $Checkpoint = Get-VMSnapshot -VM $VM -Name $CheckpointName
+# Restore-VMSnapshot -VMSnapshot $Checkpoint -Confirm:$false
 
 
 

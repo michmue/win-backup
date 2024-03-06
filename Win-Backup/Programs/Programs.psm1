@@ -71,36 +71,37 @@ class Program {
     [Programs]$Name
     [DownloadType]$DownloadType
     [string]$Url
+    [string[]]$InstallerArguments
 }
 
 
 Write-host "missing anki"
 # TODO anki download
 $progs = @(
-    [Program]@{    "Name"=[Programs]::ADB;                  "DownloadType"=[DownloadType]::BITS;        "Url"    =    "https://github.com/AdoptOpenJDK/openjdk11-binaries/releases"    }
-    [Program]@{    "Name"=[Programs]::ANDROIDSTUDIO;        "DownloadType"=[DownloadType]::BITS;        "Url"    =    "https://developer.android.com/studio"    }
-    [Program]@{    "Name"=[Programs]::ANKI;                 "DownloadType"=[DownloadType]::BITS;        "Url"    =    ""    }
-    [Program]@{    "Name"=[Programs]::FIREFOX;              "DownloadType"=[DownloadType]::WEBREQUEST;  "Url"    =    "https://download.mozilla.org/?product=firefox-latest-ssl^&os=win64^&lang=de"    }
-    [Program]@{    "Name"=[Programs]::GIT;                  "DownloadType"=[DownloadType]::BITS;        "Url"    =    "https://git-scm.com/download/win.html"    }
-    [Program]@{    "Name"=[Programs]::GO;                   "DownloadType"=[DownloadType]::WEBREQUEST;  "Url"    =    "https://go.dev/dl/"    }
-    [Program]@{    "Name"=[Programs]::GOLAND;               "DownloadType"=[DownloadType]::REST;        "Url"    =    "https://data.services.jetbrains.com/products/releases?code=GO"    }
-    [Program]@{    "Name"=[Programs]::INTELLIJ;             "DownloadType"=[DownloadType]::BITS;        "Url"    =    "https://data.services.jetbrains.com/products/releases?code=IIU^&latest=true^&type=release^&build="    }
-    [Program]@{    "Name"=[Programs]::JAVA;                 "DownloadType"=[DownloadType]::BITS;        "Url"    =    "https://github.com/AdoptOpenJDK/openjdk11-binaries/releases"    }
-    [Program]@{    "Name"=[Programs]::JDOWNLOADER;          "DownloadType"=[DownloadType]::BITS;        "Url"    =    ""    }
-    [Program]@{    "Name"=[Programs]::NOTEPAD_PLUS_PLUS;    "DownloadType"=[DownloadType]::REST;        "Url"    =    "https://api.github.com/repos/notepad-plus-plus/notepad-plus-plus/releases/latest"    }
-    [Program]@{    "Name"=[Programs]::PAINTNET;             "DownloadType"=[DownloadType]::BITS;        "Url"    =    "https://github.com/paintdotnet/release/releases"    }
-    [Program]@{    "Name"=[Programs]::PHPSTORM;             "DownloadType"=[DownloadType]::BITS;        "Url"    =    "https://data.services.jetbrains.com/products/releases?code=PS^&latest=true^&type=release"    }
-    [Program]@{    "Name"=[Programs]::PYCHARM;              "DownloadType"=[DownloadType]::REST;        "Url"    =    "https://data.services.jetbrains.com/products?code=PCP"    }
-    [Program]@{    "Name"=[Programs]::PYTHON;               "DownloadType"=[DownloadType]::WEBREQUEST;  "Url"    =    "https://www.python.org/downloads/windows/"    }
-    [Program]@{    "Name"=[Programs]::SMARTGIT;             "DownloadType"=[DownloadType]::WEBREQUEST;  "Url"    =    "https://www.syntevo.com/smartgit/download/"    }
-    [Program]@{    "Name"=[Programs]::SPOTIFY;              "DownloadType"=[DownloadType]::DIRECT;      "Url"    =    "https://download.scdn.co/SpotifySetup.exe"    }
-    [Program]@{    "Name"=[Programs]::SYNCTHING;            "DownloadType"=[DownloadType]::BITS;        "Url"    =    "https://github.com/canton7/SyncTrayzor/releases"    }
-    [Program]@{    "Name"=[Programs]::TEAMVIEWER;           "DownloadType"=[DownloadType]::DIRECT;      "Url"    =    "https://dl.teamviewer.com/download/TeamViewer_Setup.exe"    }
-    [Program]@{    "Name"=[Programs]::TREE_FILE_SIZE;       "DownloadType"=[DownloadType]::DIRECT;      "Url"    =    "https://downloads.jam-software.de/treesize_free/TreeSizeFree-Portable.zip"    }
-    [Program]@{    "Name"=[Programs]::VLCPLAYER;            "DownloadType"=[DownloadType]::BITS;        "Url"    =    "http://download.videolan.org/pub/videolan/vlc/last/win64/"    }
-    [Program]@{    "Name"=[Programs]::VSCODE;               "DownloadType"=[DownloadType]::DIRECT;      "Url"    =    "https://code.visualstudio.com/sha/download?build=stable&os=win32-x64"    }
-    [Program]@{    "Name"=[Programs]::WEBSTORM;             "DownloadType"=[DownloadType]::REST;        "Url"    =    "https://data.services.jetbrains.com/products/releases?code=WS"    }
-    [Program]@{    "Name"=[Programs]::ZIP7;                 "DownloadType"=[DownloadType]::BITS;        "Url"    =    "https://7-zip.de/download.html"    }
+    [Program]@{    "Name"=[Programs]::ADB;                  "DownloadType"=[DownloadType]::BITS;        "InstallerArguments"=@();   "Url"    =    "https://github.com/AdoptOpenJDK/openjdk11-binaries/releases"    }
+    [Program]@{    "Name"=[Programs]::ANDROIDSTUDIO;        "DownloadType"=[DownloadType]::BITS;        "InstallerArguments"=@();   "Url"    =    "https://developer.android.com/studio"    }
+    [Program]@{    "Name"=[Programs]::ANKI;                 "DownloadType"=[DownloadType]::BITS;        "InstallerArguments"=@();   "Url"    =    ""    }
+    [Program]@{    "Name"=[Programs]::FIREFOX;              "DownloadType"=[DownloadType]::WEBREQUEST;  "InstallerArguments"=@("/S","/DesktopShortcut=false", "/PrivateBrowsingShortcut=false");   "Url"    =    "https://download.mozilla.org/?product=firefox-latest-ssl^&os=win64^&lang=de"    }
+    [Program]@{    "Name"=[Programs]::GIT;                  "DownloadType"=[DownloadType]::BITS;        "InstallerArguments"=@();   "Url"    =    "https://git-scm.com/download/win.html"    }
+    [Program]@{    "Name"=[Programs]::GO;                   "DownloadType"=[DownloadType]::WEBREQUEST;  "InstallerArguments"=@();   "Url"    =    "https://go.dev/dl/"    }
+    [Program]@{    "Name"=[Programs]::GOLAND;               "DownloadType"=[DownloadType]::REST;        "InstallerArguments"=@();   "Url"    =    "https://data.services.jetbrains.com/products/releases?code=GO"    }
+    [Program]@{    "Name"=[Programs]::INTELLIJ;             "DownloadType"=[DownloadType]::BITS;        "InstallerArguments"=@();   "Url"    =    "https://data.services.jetbrains.com/products/releases?code=IIU^&latest=true^&type=release^&build="    }
+    [Program]@{    "Name"=[Programs]::JAVA;                 "DownloadType"=[DownloadType]::BITS;        "InstallerArguments"=@();   "Url"    =    "https://github.com/AdoptOpenJDK/openjdk11-binaries/releases"    }
+    [Program]@{    "Name"=[Programs]::JDOWNLOADER;          "DownloadType"=[DownloadType]::BITS;        "InstallerArguments"=@();   "Url"    =    ""    }
+    [Program]@{    "Name"=[Programs]::NOTEPAD_PLUS_PLUS;    "DownloadType"=[DownloadType]::REST;        "InstallerArguments"=@();   "Url"    =    "https://api.github.com/repos/notepad-plus-plus/notepad-plus-plus/releases/latest"    }
+    [Program]@{    "Name"=[Programs]::PAINTNET;             "DownloadType"=[DownloadType]::BITS;        "InstallerArguments"=@();   "Url"    =    "https://github.com/paintdotnet/release/releases"    }
+    [Program]@{    "Name"=[Programs]::PHPSTORM;             "DownloadType"=[DownloadType]::BITS;        "InstallerArguments"=@();   "Url"    =    "https://data.services.jetbrains.com/products/releases?code=PS^&latest=true^&type=release"    }
+    [Program]@{    "Name"=[Programs]::PYCHARM;              "DownloadType"=[DownloadType]::REST;        "InstallerArguments"=@();   "Url"    =    "https://data.services.jetbrains.com/products?code=PCP"    }
+    [Program]@{    "Name"=[Programs]::PYTHON;               "DownloadType"=[DownloadType]::WEBREQUEST;  "InstallerArguments"=@();   "Url"    =    "https://www.python.org/downloads/windows/"    }
+    [Program]@{    "Name"=[Programs]::SMARTGIT;             "DownloadType"=[DownloadType]::WEBREQUEST;  "InstallerArguments"=@();   "Url"    =    "https://www.syntevo.com/smartgit/download/"    }
+    [Program]@{    "Name"=[Programs]::SPOTIFY;              "DownloadType"=[DownloadType]::DIRECT;      "InstallerArguments"=@();   "Url"    =    "https://download.scdn.co/SpotifySetup.exe"    }
+    [Program]@{    "Name"=[Programs]::SYNCTHING;            "DownloadType"=[DownloadType]::BITS;        "InstallerArguments"=@();   "Url"    =    "https://github.com/canton7/SyncTrayzor/releases"    }
+    [Program]@{    "Name"=[Programs]::TEAMVIEWER;           "DownloadType"=[DownloadType]::DIRECT;      "InstallerArguments"=@();   "Url"    =    "https://dl.teamviewer.com/download/TeamViewer_Setup.exe"    }
+    [Program]@{    "Name"=[Programs]::TREE_FILE_SIZE;       "DownloadType"=[DownloadType]::DIRECT;      "InstallerArguments"=@();   "Url"    =    "https://downloads.jam-software.de/treesize_free/TreeSizeFree-Portable.zip"    }
+    [Program]@{    "Name"=[Programs]::VLCPLAYER;            "DownloadType"=[DownloadType]::BITS;        "InstallerArguments"=@();   "Url"    =    "http://download.videolan.org/pub/videolan/vlc/last/win64/"    }
+    [Program]@{    "Name"=[Programs]::VSCODE;               "DownloadType"=[DownloadType]::DIRECT;      "InstallerArguments"=@();   "Url"    =    "https://code.visualstudio.com/sha/download?build=stable&os=win32-x64"    }
+    [Program]@{    "Name"=[Programs]::WEBSTORM;             "DownloadType"=[DownloadType]::REST;        "InstallerArguments"=@();   "Url"    =    "https://data.services.jetbrains.com/products/releases?code=WS"    }
+    [Program]@{    "Name"=[Programs]::ZIP7;                 "DownloadType"=[DownloadType]::BITS;        "InstallerArguments"=@();   "Url"    =    "https://7-zip.de/download.html"    }
 )
 
 
@@ -134,9 +135,9 @@ function downloadProgram( [Program] $prog) {
 
 
         ([Programs]::FIREFOX) {
-            echo "1. Firefox en-US"
-            echo "2. Firefox en-GB"
-            echo "3. Firefox de"
+            Write-Host "1. Firefox en-US"
+            Write-Host "2. Firefox en-GB"
+            Write-Host "3. Firefox de"
             $lang = Read-Host -Prompt "Choose Firefox language [1, 2, 3]: "
 
 
@@ -335,6 +336,8 @@ function downloadProgram( [Program] $prog) {
         $wc.DownloadFile($url, "$PSScriptRoot/$file")
     }
     $wc.Dispose()
+
+    Resolve-Path $PSScriptRoot\$file
 }
 
 
@@ -379,20 +382,28 @@ function downloadDriver ( [DriverType] $driverType ) {
     $wc.Dispose()
 }
 
-function Get-WBPrograms {
-    return $progs
+function Get-WBProgram ($name) {
+    return $progs | ? Name -Like $name
 }
+
+
 
 function Install-WBProgram {
     param(
         [Parameter(Mandatory,ValueFromPipeline)]
-        [Program]
         $programDetail
     )
 
-    process {
-        downloadProgram $programDetail
-    }
+
+    $filePath = (downloadProgram $programDetail).Path
+    $fileName = Split-Path $filePath -Leaf
+    
+    
+    Write-Host "installing $fileName..."
+    Start-Process -FilePath $filePath -ArgumentList $programDetail.InstallerArguments -PassThru |
+     Wait-Process
+    Write-Host "$fileName should be installed"
+
 }
 
-Export-ModuleMember -Function Get-WBPrograms, Install-WBProgram
+Export-ModuleMember -Function Get-WBProgram, Install-WBProgram
