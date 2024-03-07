@@ -6,4 +6,4 @@ Remove-Module Programs -Force -ErrorAction SilentlyContinue
 
 Import-Module .\Win-Backup
 
-Get-WBProgram firefox | Install-WBProgram
+Get-WBProgram NOTEPAD_PLUS_PLUS | Install-WBProgram
