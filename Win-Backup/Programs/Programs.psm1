@@ -180,8 +180,8 @@ function downloadProgram([Program]$prog) {
 
 
         ([Programs]::SYNCTHING) {
-            $api = Invoke-RestMethod -Uri "https://api.github.com/repos/syncthing/syncthing/releases/latest"
-            $asset = ($api.assets | ? name -Match "syncthing-windows-arm64-v.+?.zip$")
+            $api = Invoke-RestMethod -Uri "https://api.github.com/repos/bill-stewart/SyncthingWindowsSetup/releases/latest"
+            $asset = ($api.assets | ? name -Match "syncthing-[\.,\d]+-setup\.exe$")
             $file = $asset.name
             $url = $asset.browser_download_url
         }
@@ -208,7 +208,7 @@ function downloadProgram([Program]$prog) {
         ([Programs]::VLCPLAYER) {
             $url = "http://download.videolan.org/pub/videolan/vlc/last/win64/"
             $html = Invoke-WebRequest $url
-            $file = ($html.links | ? href -Match "vlc-.+?\.4-win64\.exe$").href
+            $file = ($html.links | ? href -Match "vlc-.+?-win64\.exe$").href
             $url = "$url$file"
         }
 
@@ -294,7 +294,6 @@ function Install-WBProgram {
         [Program]$programDetail
     )
 
-
     $filePath = (downloadProgram $programDetail).Path
     $fileName = Split-Path $filePath -Leaf
 
@@ -305,14 +304,15 @@ function Install-WBProgram {
         echo $programDetail.AnswerFile | Out-File "$PSScriptRoot\answerfile"
     }
 
-    $programDetail.InstallerArguments
-    $programDetail.InstallerArguments | gm
-    $programDetail.InstallerArguments.Length
     Start-Process -FilePath $filePath -ArgumentList $programDetail.InstallerArguments  -PassThru |
      Wait-Process
-    Write-Host "$fileName should be installed"
+
+     Write-Host "$fileName should be installed"
     if ( (Test-Path $PSScriptRoot\answerfile) ) {
         Remove-Item $PSScriptRoot\answerfile
+    }
+    if ( ($null -ne $programDetail.Script) ) {
+        Invoke-Command -ScriptBlock $programDetail.Script
     }
 }
 

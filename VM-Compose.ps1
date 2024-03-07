@@ -27,10 +27,10 @@
 # }
 
 $VMName = "Clean10"
-# $CheckpointName = "fresh_install_network"
-# $VM = Get-VM -Name $VMName
-# $Checkpoint = Get-VMSnapshot -VM $VM -Name $CheckpointName
-# Restore-VMSnapshot -VMSnapshot $Checkpoint -Confirm:$false
+#$CheckpointName = "fresh_install_network"
+#$VM = Get-VM -Name $VMName
+#$Checkpoint = Get-VMSnapshot -VM $VM -Name $CheckpointName
+#Restore-VMSnapshot -VMSnapshot $Checkpoint -Confirm:$false
 
 
 

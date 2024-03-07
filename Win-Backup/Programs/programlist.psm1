@@ -93,7 +93,7 @@ $progs = @(
     [Program]@{
         "Name"               = [Programs]::FIREFOX;
         "DownloadType"       = [DownloadType]::WEBREQUEST;
-        "InstallerArguments" = @("/", "/DesktopShortcut=false", "/PrivateBrowsingShortcut=false");
+        "InstallerArguments" = @("/S", "/DesktopShortcut=false", "/PrivateBrowsingShortcut=false");
         "Url"                = "https://download.mozilla.org/?product=firefox-latest-ssl^&os=win64^&lang=de"
     },
     [Program]@{
@@ -163,7 +163,10 @@ EnableFSMonitor=Disabled
         "InstallerArguments" = @("/S");
         "Url"                = "https://api.github.com/repos/notepad-plus-plus/notepad-plus-plus/releases/latest"
         "Script"             = {
-
+            $registryPath = "HKLM:\Software\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\notepad.exe"
+            $debuggerValue = "`"C:\Program Files\Notepad++\notepad++.exe`" -notepadStyleCmdline -z"
+            New-Item -Path $registryPath -Force | Out-Null
+            New-ItemProperty -Path $registryPath -Name "Debugger" -Value $debuggerValue -PropertyType String -Force | Out-Null
         }
     },
     [Program]@{
@@ -205,8 +208,8 @@ EnableFSMonitor=Disabled
     [Program]@{
         "Name"               = [Programs]::SYNCTHING;
         "DownloadType"       = [DownloadType]::BITS;
-        "InstallerArguments" = @();
-        "Url"                = "https://github.com/canton7/SyncTrayzor/releases"
+        "InstallerArguments" = @("/allusers", "/silent");
+        "Url"                = "https://github.com/Bill-Stewart/SyncthingWindowsSetup/releases"
     },
     [Program]@{
         "Name"               = [Programs]::TEAMVIEWER;
@@ -223,7 +226,7 @@ EnableFSMonitor=Disabled
     [Program]@{
         "Name"               = [Programs]::VLCPLAYER;
         "DownloadType"       = [DownloadType]::BITS;
-        "InstallerArguments" = @();
+        "InstallerArguments" = @("/S");
         "Url"                = "http://download.videolan.org/pub/videolan/vlc/last/win64/"
     },
     [Program]@{
