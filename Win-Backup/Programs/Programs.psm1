@@ -297,19 +297,36 @@ function Install-WBProgram {
     $filePath = (downloadProgram $programDetail).Path
     $fileName = Split-Path $filePath -Leaf
 
-
-    Write-Host "installing $fileName..."
-
     if (($programDetail.AnswerFile.length -gt 0)) {
         echo $programDetail.AnswerFile | Out-File "$PSScriptRoot\answerfile"
     }
 
-    Start-Process -FilePath $filePath -ArgumentList $programDetail.InstallerArguments  -PassThru |
-     Wait-Process
+    if ($fileName -like "*.zip") {
+        Expand-Archive -Path $filePath -DestinationPath $PSScriptRoot -Verbose
+        $fileNameZip = $fileName;
+        $filePathZip = $filePath;
+        $fileName = $fileName.Replace(".zip", ".exe")
+        $filePath = $filePath.Replace(".zip", ".exe")
+    }
 
-     Write-Host "$fileName should be installed"
+    if (($null -ne $programDetail.InstallerArguments) -and ($programDetail.InstallerArguments.Length -gt 0)) {
+        Write-Host "installing $fileName..."
+        Start-Process -FilePath $filePath -ArgumentList $programDetail.InstallerArguments  -PassThru |
+            Wait-Process
+    }
+
+    if (($null -ne $fileNameZip)) {
+        Remove-Item $filePathZip
+    }
+
+    if ( Test-Path $filePath ) {
+        Remove-Item $filePath
+    }
+    
+    Write-Host "$fileName should be installed"
     if ( (Test-Path $PSScriptRoot\answerfile) ) {
         Remove-Item $PSScriptRoot\answerfile
+        
     }
     if ( ($null -ne $programDetail.Script) ) {
         Invoke-Command -ScriptBlock $programDetail.Script

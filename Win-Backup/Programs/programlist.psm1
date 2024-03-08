@@ -172,8 +172,8 @@ EnableFSMonitor=Disabled
     [Program]@{
         "Name"               = [Programs]::PAINTNET;
         "DownloadType"       = [DownloadType]::BITS;
-        "InstallerArguments" = @();
-        "Url"                = "https://github.com/paintdotnet/release/releases"
+        "InstallerArguments" = @("/auto");
+        "Url"                = "https://api.github.com/repos/paintdotnet/release/releases/latest"
     },
     [Program]@{
         "Name"               = [Programs]::PHPSTORM;

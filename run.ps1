@@ -6,4 +6,4 @@ Remove-Module Programs -Force -ErrorAction SilentlyContinue
 
 Import-Module .\Win-Backup
 
-Get-WBProgram VLCPLAYER | Install-WBProgram
+Get-WBProgram PAINTNET | Install-WBProgram
