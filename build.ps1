@@ -25,4 +25,4 @@ foreach ($modPath in $modPaths) {
 $functions = $functions | select -Unique | sort
 $nestedModules = $nestedModules | select -Unique | sort
 
-New-ModuleManifest -Path ".\Win-Backup\Win-Backup.psd1" -NestedModules $nestedModules -RootModule ".\Win-Backup\Win-Backup.psm1" -FunctionsToExport $functions -Verbose
+New-ModuleManifest -Path ".\Win-Backup\Win-Backup.psd1" -NestedModules $nestedModules -RootModule ".\Win-Backup\Win-Backup.psm1" -FunctionsToExport $functions

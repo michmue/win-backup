@@ -153,18 +153,18 @@ EnableFSMonitor=Disabled
     [Program]@{
         "Name"               = [Programs]::JDOWNLOADER;
         "DownloadType"       = [DownloadType]::BITS;
-        "InstallerArguments" = @("-q", "-c", "-varfile $PSScriptRoot\answerfile");
+        "InstallerArguments" = @("-q", "-c", "-varfile `"$($PSScriptRoot)\answerfile`"");
         "Url"                = "";
-        "AnswerFile"         = @"
+        "AnswerFile"         = @'
 createDesktopLinkAction$Boolean=false
 createQuicklaunchIconAction$Boolean=false
 executeLauncherAction$Boolean=false
 sys.adminRights$Boolean=true
 sys.fileAssociation.extensions$StringArray="dlc","jdc","ccf","rsdf","metalink","meta4","nzb"
 sys.fileAssociation.launchers$StringArray="5977","5977","5977","5977","5977","5977","5977"
-#sys.installationDir=C\:\\Users\\eno\\AppData\\Local\\JDownloader 2
+sys.installationDir=C\:\\Program Files\\JDownloader
 sys.languageId=en
-"@;
+'@;
     },
     [Program]@{
         "Name"               = [Programs]::NOTEPAD_PLUS_PLUS;

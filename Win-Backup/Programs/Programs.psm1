@@ -142,8 +142,9 @@ function downloadProgram {
                 Import-Module Selenium -Force
             }
 
+            if (-Not ((Get-ChildItem  "$PSScriptRoot\JDownloader2Setup_windows-x64_jre??.exe" -File).Name)) {
             Write-Host "starting selenium/firefox"
-            Start-SeFirefox -StartURL "https://mega.nz/file/2IURAaRB#84RbercQS9rTzBiBBhbWuLvAtJ1pZdG4RhCMskuWDFY" -DefaultDownloadPath $PSScriptRoot -AsDefaultDriver -Headless -Quiet -WebDriverDirectory "C:\bin"
+            $driver = (Start-SeFirefox -StartURL "https://mega.nz/file/2IURAaRB#84RbercQS9rTzBiBBhbWuLvAtJ1pZdG4RhCMskuWDFY" -DefaultDownloadPath $PSScriptRoot -AsDefaultDriver -Headless -Quiet -WebDriverDirectory "C:\bin")
             Write-Host "waiting for download"
             $downloadBtn = Get-SeElement -By CssSelector ".js-default-download > span" -Wait
             $downloadBtn.Click()
@@ -153,10 +154,10 @@ function downloadProgram {
                 sleep -Milliseconds 500
                 $downloadCompleteLbl = Get-SeElement -By CssSelector ".download.complete-block"
             }
+        }
 
-            sleep -Seconds 2
-
-            $file = (Get-ChildItem  "$PSScriptRoot\jdownloader*.exe" -File).Name
+            sleep -Seconds 5
+            $file = (Get-ChildItem  "$PSScriptRoot\JDownloader2Setup_windows-x64_jre??.exe" -File).Name
             Write-Host "++++++++"
             Write-Host $file
             Write-Host "++++++++"
@@ -288,7 +289,12 @@ function downloadProgram {
     $wc.Dispose()
 
 
-    Resolve-Path "$PSScriptRoot\$file"
+    while (-Not (Resolve-Path "$PSScriptRoot\$file").Path) {
+        Write-Host "resolving"
+        sleep -Milliseconds 50
+    }
+
+    return (Resolve-Path "$PSScriptRoot\$file")
 }
 
 
@@ -344,20 +350,13 @@ function Install-WBProgram {
         [Program]$programDetail,
         [switch]$Force
     )
-
-    Write-Host ".Path"
-    $filePath = (downloadProgram $programDetail).Path
+    
+    $resolve = downloadProgram $programDetail
+    $filePath = $resolve.Path
     $fileName = Split-Path $filePath -Leaf
 
-    Write-Host "======="
-    Write-Host $filePath
-    Write-Host $fileName
-    Write-Host "======="
-
-
     if (($programDetail.AnswerFile.length -gt 0)) {
-        echo $programDetail.AnswerFile | Out-File "$PSScriptRoot\answerfile"
-        sleep -Seconds 2
+        $programDetail.AnswerFile | Out-File "$PSScriptRoot\answerfile" -Encoding ascii -Force
     }
 
     if ($fileName -like "*.zip") {
@@ -376,7 +375,6 @@ function Install-WBProgram {
 
     if (($null -ne $programDetail.InstallerArguments) -and ($programDetail.InstallerArguments.Length -gt 0)) {
         Write-Host "installing $fileName..."
-        sleep -Milliseconds 500
         Start-Process -FilePath $filePath -ArgumentList $programDetail.InstallerArguments  -PassThru -Verbose -Wait
     }
 
