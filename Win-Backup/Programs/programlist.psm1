@@ -55,10 +55,10 @@ enum DownloadType {
 
 
 $drivers = [Driver[]]@(
-    @{ Driver = [DriverType]::BIOS;             DownloadType = [DownloadType]::MANUEL;  Url = "https://www.asus.com/de/motherboards-components/motherboards/prime/prime-b350-plus/helpdesk_bios/" }
-    @{ Driver = [DriverType]::LAN_REALTEK;      DownloadType = [DownloadType]::MANUEL;  Url = "https://www.realtek.com/en/component/zoo/category/network-interface-controllers-10-100-1000m-gigabit-ethernet-pci-express-software" }
-    @{ Driver = [DriverType]::NVIDIA;           DownloadType = [DownloadType]::MANUEL;  Url = "https://www.nvidia.de/Download/index.aspx?lang=de" }
-    @{ Driver = [DriverType]::AUDIO_UNIX_XONAR; DownloadType = [DownloadType]::DIRECT;  Url = "https://maxedtech.com/wp-content/uploads/2016/11/UNi-Xonar-1822-v1.75a-r3.exe" }
+    @{ Driver = [DriverType]::BIOS; DownloadType = [DownloadType]::MANUEL; Url = "https://www.asus.com/de/motherboards-components/motherboards/prime/prime-b350-plus/helpdesk_bios/" }
+    @{ Driver = [DriverType]::LAN_REALTEK; DownloadType = [DownloadType]::MANUEL; Url = "https://www.realtek.com/en/component/zoo/category/network-interface-controllers-10-100-1000m-gigabit-ethernet-pci-express-software" }
+    @{ Driver = [DriverType]::NVIDIA; DownloadType = [DownloadType]::MANUEL; Url = "https://www.nvidia.de/Download/index.aspx?lang=de" }
+    @{ Driver = [DriverType]::AUDIO_UNIX_XONAR; DownloadType = [DownloadType]::DIRECT; Url = "https://maxedtech.com/wp-content/uploads/2016/11/UNi-Xonar-1822-v1.75a-r3.exe" }
 
 )
 class Program {
@@ -69,7 +69,6 @@ class Program {
     [string]$AnswerFile
     [scriptblock]$Script
 }
-
 
 $progs = @(
     [Program]@{
@@ -154,8 +153,18 @@ EnableFSMonitor=Disabled
     [Program]@{
         "Name"               = [Programs]::JDOWNLOADER;
         "DownloadType"       = [DownloadType]::BITS;
-        "InstallerArguments" = @();
-        "Url"                = ""
+        "InstallerArguments" = @("-q", "-c", "-varfile $PSScriptRoot\answerfile");
+        "Url"                = "";
+        "AnswerFile"         = @"
+createDesktopLinkAction$Boolean=false
+createQuicklaunchIconAction$Boolean=false
+executeLauncherAction$Boolean=false
+sys.adminRights$Boolean=true
+sys.fileAssociation.extensions$StringArray="dlc","jdc","ccf","rsdf","metalink","meta4","nzb"
+sys.fileAssociation.launchers$StringArray="5977","5977","5977","5977","5977","5977","5977"
+#sys.installationDir=C\:\\Users\\eno\\AppData\\Local\\JDownloader 2
+sys.languageId=en
+"@;
     },
     [Program]@{
         "Name"               = [Programs]::NOTEPAD_PLUS_PLUS;
@@ -172,7 +181,7 @@ EnableFSMonitor=Disabled
     [Program]@{
         "Name"               = [Programs]::PAINTNET;
         "DownloadType"       = [DownloadType]::BITS;
-        "InstallerArguments" = @("/auto");
+        "InstallerArguments" = @("/qn", "/norestart");
         "Url"                = "https://api.github.com/repos/paintdotnet/release/releases/latest"
     },
     [Program]@{
@@ -249,4 +258,4 @@ EnableFSMonitor=Disabled
     }
 )
 
-Export-ModuleMember -Variable drivers,progs
+Export-ModuleMember -Variable drivers, progs

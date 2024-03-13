@@ -60,4 +60,4 @@ function Get-WBFeature {
     return $features
 }
 
-Export-ModuleMember -Function Get-WBFeature, Enable-WBFeature
+Export-ModuleMember -Function Get-WBFeature, Enable-WBFeature -Variable features

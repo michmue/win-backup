@@ -2,7 +2,7 @@
 # $prevHashes = @()
 # Get-Content .\.vm\hashes -ErrorAction SilentlyContinue | % {
 #     $item = $_.Split('  ')
-#     $prevHashes += [pscustomobject]@{ 
+#     $prevHashes += [pscustomobject]@{
 #         "Path"= $item[0];
 #         "Hash"= $item[1]
 #     }
@@ -27,12 +27,12 @@
 # }
 
 $VMName = "Clean10"
-#$CheckpointName = "fresh_install_network"
-#$VM = Get-VM -Name $VMName
-#$Checkpoint = Get-VMSnapshot -VM $VM -Name $CheckpointName
-#Restore-VMSnapshot -VMSnapshot $Checkpoint -Confirm:$false
+$CheckpointName = "fresh_install_network"
+$VM = Get-VM -Name $VMName
+$Checkpoint = Get-VMSnapshot -VM $VM -Name $CheckpointName
+Restore-VMSnapshot -VMSnapshot $Checkpoint -Confirm:$false
 
-
+. .\build.ps1
 
 # Define the source and destination paths
 $source = "."
@@ -55,4 +55,5 @@ $psCred = New-Object System.Management.Automation.PSCredential -ArgumentList ($u
 Invoke-Command -VMName Clean10 -Credential $psCred -ScriptBlock {
     cd $env:USERPROFILE\Desktop\Win-Backup
     . .\run.ps1
+    #Wait-Process $process
 }

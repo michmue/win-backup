@@ -1,5 +1,3 @@
-using module .\Cleanup-Programs.psm1
-
 $FOLDERS_TO_CLEAN = @(
     "shell:common startup"
     "shell:startup"

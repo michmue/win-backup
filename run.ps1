@@ -1,9 +1,14 @@
-Remove-Module Win-Backup -Force -ErrorAction SilentlyContinue
-Remove-Module Backup -Force -ErrorAction SilentlyContinue
-Remove-Module Cleanup -Force -ErrorAction SilentlyContinue
-Remove-Module Features -Force -ErrorAction SilentlyContinue
-Remove-Module Programs -Force -ErrorAction SilentlyContinue
+Remove-Module .\Win-Backup -Force -ErrorAction SilentlyContinue
+Import-Module .\Win-Backup -Force
 
-Import-Module .\Win-Backup
 
-Get-WBProgram PAINTNET | Install-WBProgram
+Get-WBProgram JDOWNLOADER | Install-WBProgram
+# Get-WBProgram ZIP7 | Install-WBProgram
+# Get-WBProgram GIT | Install-WBProgram
+# Get-WBProgram NOTEPAD_PLUS_PLUS | Install-WBProgram
+# Get-WBProgram PAINTNET | Install-WBProgram
+# Get-WBProgram VLCPLAYER | Install-WBProgram
+# Get-WBProgram SYNCTHING | Install-WBProgram
+
+Remove-Module .\Win-Backup -Force -ErrorAction SilentlyContinue
+

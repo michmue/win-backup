@@ -2,13 +2,20 @@
 # IMPR: auto extract + extract if subfolder
 # IMPR: on closing stop running .NET WebClient, how?
 
+
 using module ".\programlist.psm1"
 Import-Module "$PSScriptRoot\programlist.psm1"
 
 Write-host "missing anki"
 # TODO anki download
 
-function downloadProgram([Program]$prog) {
+function downloadProgram {
+    [CmdletBinding(ConfirmImpact="none",SupportsShouldProcess=$true)]
+    param(
+        [Program]$prog,
+        [switch]$Force
+    )
+
     $url
     $file
 
@@ -24,7 +31,7 @@ function downloadProgram([Program]$prog) {
         # IMPR: safer, search table[class='download'] for Windows 64-bit
         ([Programs]::ANDROIDSTUDIO) {
             $html = Invoke-WebRequest "https://developer.android.com/studio" -UseBasicParsing
-            $url = @($html.links | ? { $_.href -match  "-windows.exe" } | select href | ? { $_ -notmatch "bundle" })[0].href
+            $url = @($html.links | ? { $_.href -match "-windows.exe" } | select href | ? { $_ -notmatch "bundle" })[0].href
             $file = $url.Split("/") | select -Last 1
         }
 
@@ -55,7 +62,7 @@ function downloadProgram([Program]$prog) {
             }
 
             if ($lang -eq "3") {
-                $url =  "https://download.mozilla.org/?product=firefox-latest-ssl&os=win64&lang=de"
+                $url = "https://download.mozilla.org/?product=firefox-latest-ssl&os=win64&lang=de"
                 $file = "firefox_de.exe"
             }
         }
@@ -103,18 +110,56 @@ function downloadProgram([Program]$prog) {
 
         # IMPR: SendKey to background window
         ([Programs]::JDOWNLOADER) {
-            Add-Type -AssemblyName System.Windows.Forms
-            Start-Process firefox.exe "https://mega.nz/file/2IURAaRB#84RbercQS9rTzBiBBhbWuLvAtJ1pZdG4RhCMskuWDFY"  -PassThru
-            While ( Get-Process *firefox* | ? MainWindowTitle -match "Download - MEGA.*") {
-                Start-Sleep -Milliseconds 200
-            }
-            Start-Sleep 5
-            [System.Windows.Forms.SendKeys]::SendWait('+{TAB}')
-            [System.Windows.Forms.SendKeys]::SendWait('+{TAB}')
-            [System.Windows.Forms.SendKeys]::SendWait('+{TAB}')
-            [System.Windows.Forms.SendKeys]::SendWait('+{TAB}')
-            [System.Windows.Forms.SendKeys]::SendWait('+{enter}')
 
+            if (-NOT (Test-Path "C:\Program Files\Mozilla Firefox\firefox.exe")) {
+                Get-WBProgram FIREFOX | Install-WBProgram
+            }
+
+            if (-NOT (Test-Path "C:\bin\geckodriver.exe")) {
+                $api = Invoke-RestMethod -Uri "https://api.github.com/repos/mozilla/geckodriver/releases/latest"
+                $asset = ($api.assets | ? name -Match "geckodriver-v[\.,\d]+-win64.zip$")
+                $file = $asset.name
+                $url = $asset.browser_download_url
+                $wc.DownloadFile($url, "$PSScriptRoot\$file");
+                Expand-Archive -Path "$PSScriptRoot\$file" -DestinationPath "C:\bin" -Force
+                Remove-Item "$PSScriptRoot\geckodriver*.zip" -Force
+            }
+
+            if (-Not (Get-PackageProvider | ? Name -eq NuGet)) {
+                Install-PackageProvider -Name "NuGet" -Force -ForceBootstrap -Confirm:$false
+            }
+
+            if (-Not (get-PSRepository -Name PSGallery)) {
+                Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
+            }
+
+            if (-not (Get-Module -Name Selenium)) {
+                if (-not (Get-Module -ListAvailable -name Selenium)) {
+                    Write-Host "Installing module selenium"
+                    Install-Module Selenium -Force
+                }
+
+                Import-Module Selenium -Force
+            }
+
+            Write-Host "starting selenium/firefox"
+            Start-SeFirefox -StartURL "https://mega.nz/file/2IURAaRB#84RbercQS9rTzBiBBhbWuLvAtJ1pZdG4RhCMskuWDFY" -DefaultDownloadPath $PSScriptRoot -AsDefaultDriver -Headless -Quiet -WebDriverDirectory "C:\bin"
+            Write-Host "waiting for download"
+            $downloadBtn = Get-SeElement -By CssSelector ".js-default-download > span" -Wait
+            $downloadBtn.Click()
+            $downloadCompleteLbl = Get-SeElement -By CssSelector ".download.complete-block"
+            while (!($downloadCompleteLbl.Displayed)) {
+                Write-Host "sleeping"
+                sleep -Milliseconds 500
+                $downloadCompleteLbl = Get-SeElement -By CssSelector ".download.complete-block"
+            }
+
+            sleep -Seconds 2
+
+            $file = (Get-ChildItem  "$PSScriptRoot\jdownloader*.exe" -File).Name
+            Write-Host "++++++++"
+            Write-Host $file
+            Write-Host "++++++++"
         }
 
 
@@ -128,7 +173,7 @@ function downloadProgram([Program]$prog) {
 
         ([Programs]::PAINTNET) {
             $api = Invoke-RestMethod -Uri "https://api.github.com/repos/paintdotnet/release/releases/latest"
-            $asset = ($api.assets | ? name -Match "paint\.net\..+?\.install\.x64\.zip$")
+            $asset = ($api.assets | ? name -Match "paint\.net\..+?\.winmsi\.x64\.zip$")
             $file = $asset.name
             $url = $asset.browser_download_url
         }
@@ -221,7 +266,7 @@ function downloadProgram([Program]$prog) {
 
         ([Programs]::WEBSTORM) {
             $api = Invoke-RestMethod -uri "https://data.services.jetbrains.com/products/releases?code=WS"
-            $url= ($api.WS | ? type -Match "release")[0].downloads.windows.link
+            $url = ($api.WS | ? type -Match "release")[0].downloads.windows.link
             $file = $url.Split("/") | select -Last 1
         }
 
@@ -235,12 +280,15 @@ function downloadProgram([Program]$prog) {
         }
     }
 
-    if ($url -and $file) {
-        $wc.DownloadFile($url, "$PSScriptRoot/$file")
+    if (($url -and $file) -and
+        -NOT ($file -Match "JDownloader.*")) {
+
+            $wc.DownloadFile($url, "$PSScriptRoot/$file")
     }
     $wc.Dispose()
 
-    Resolve-Path $PSScriptRoot\$file
+
+    Resolve-Path "$PSScriptRoot\$file"
 }
 
 
@@ -289,30 +337,47 @@ function Get-WBProgram ($name) {
 
 
 function Install-WBProgram {
+    [CmdletBinding(ConfirmImpact="none",SupportsShouldProcess=$true)]
+
     param(
-        [Parameter(Mandatory,ValueFromPipeline)]
-        [Program]$programDetail
+        [Parameter(Mandatory, ValueFromPipeline)]
+        [Program]$programDetail,
+        [switch]$Force
     )
 
+    Write-Host ".Path"
     $filePath = (downloadProgram $programDetail).Path
     $fileName = Split-Path $filePath -Leaf
 
+    Write-Host "======="
+    Write-Host $filePath
+    Write-Host $fileName
+    Write-Host "======="
+
+
     if (($programDetail.AnswerFile.length -gt 0)) {
         echo $programDetail.AnswerFile | Out-File "$PSScriptRoot\answerfile"
+        sleep -Seconds 2
     }
 
     if ($fileName -like "*.zip") {
         Expand-Archive -Path $filePath -DestinationPath $PSScriptRoot -Verbose
         $fileNameZip = $fileName;
         $filePathZip = $filePath;
+
         $fileName = $fileName.Replace(".zip", ".exe")
         $filePath = $filePath.Replace(".zip", ".exe")
+
+        if ( -Not (Test-Path $filePath)) {
+            $fileName = $fileName.Replace(".exe", ".msi")
+            $filePath = $filePath.Replace(".exe", ".msi")
+        }
     }
 
     if (($null -ne $programDetail.InstallerArguments) -and ($programDetail.InstallerArguments.Length -gt 0)) {
         Write-Host "installing $fileName..."
-        Start-Process -FilePath $filePath -ArgumentList $programDetail.InstallerArguments  -PassThru |
-            Wait-Process
+        sleep -Milliseconds 500
+        Start-Process -FilePath $filePath -ArgumentList $programDetail.InstallerArguments  -PassThru -Verbose -Wait
     }
 
     if (($null -ne $fileNameZip)) {
@@ -322,13 +387,14 @@ function Install-WBProgram {
     if ( Test-Path $filePath ) {
         Remove-Item $filePath
     }
-    
+
     Write-Host "$fileName should be installed"
     if ( (Test-Path $PSScriptRoot\answerfile) ) {
         Remove-Item $PSScriptRoot\answerfile
-        
+
     }
     if ( ($null -ne $programDetail.Script) ) {
+        Write-Host "invoking for np++"
         Invoke-Command -ScriptBlock $programDetail.Script
     }
 }

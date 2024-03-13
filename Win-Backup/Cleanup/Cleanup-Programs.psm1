@@ -1,5 +1,5 @@
 #   input   process     validation      output
-#   none    
+#   none
 
 $appxPrograms = @(
 "microsoft.windowscommunicationsapps",
@@ -33,12 +33,12 @@ $appxPrograms = @(
 )
 
 function Remove-WBDefaultPrograms {
-    
+
     $appxPrograms | % {
         Get-AppxPackage -AllUsers $_ | Remove-AppxPackage
         Get-ProvisionedAppPackage -Online | ? DisplayName -EQ $_ | Remove-ProvisionedAppPackage -Online -AllUsers >$null
     }
-    
+
 }
 
 Export-ModuleMember -Function Remove-WBDefaultPrograms

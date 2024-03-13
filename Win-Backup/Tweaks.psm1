@@ -851,4 +851,4 @@ function Get-WBTweak {
     }
 }
 
-Export-ModuleMember -Function Get-WBTweak, Enable-WBTweak
+Export-ModuleMember -Function Get-WBTweak,Enable-WBTweak

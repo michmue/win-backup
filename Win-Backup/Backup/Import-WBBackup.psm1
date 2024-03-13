@@ -93,4 +93,6 @@ function Import-WBBackup {
     }
 }
 
+. $PSScriptRoot\Utils.ps1
+
 Export-ModuleMember -Function Import-WBBackup
