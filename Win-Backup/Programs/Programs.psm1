@@ -6,8 +6,6 @@
 using module ".\programlist.psm1"
 Import-Module "$PSScriptRoot\programlist.psm1"
 
-Write-host "missing anki"
-# TODO anki download
 
 function downloadProgram {
     [CmdletBinding(ConfirmImpact="none",SupportsShouldProcess=$true)]
@@ -144,23 +142,34 @@ function downloadProgram {
 
             if (-Not ((Get-ChildItem  "$PSScriptRoot\JDownloader2Setup_windows-x64_jre??.exe" -File).Name)) {
             Write-Host "starting selenium/firefox"
-            $driver = (Start-SeFirefox -StartURL "https://mega.nz/file/2IURAaRB#84RbercQS9rTzBiBBhbWuLvAtJ1pZdG4RhCMskuWDFY" -DefaultDownloadPath $PSScriptRoot -AsDefaultDriver -Headless -Quiet -WebDriverDirectory "C:\bin")
+            $driver = (Start-SeFirefox -StartURL "https://mega.nz/file/2IURAaRB#84RbercQS9rTzBiBBhbWuLvAtJ1pZdG4RhCMskuWDFY" -DefaultDownloadPath $PSScriptRoot -Headless -Quiet -WebDriverDirectory "C:\bin")
             Write-Host "waiting for download"
-            $downloadBtn = Get-SeElement -By CssSelector ".js-default-download > span" -Wait
+            $downloadBtn = Get-SeElement -By CssSelector ".js-default-download > span" -Wait -Target $driver
             $downloadBtn.Click()
-            $downloadCompleteLbl = Get-SeElement -By CssSelector ".download.complete-block"
+            $downloadCompleteLbl = Get-SeElement -By CssSelector ".download.complete-block" -Target $driver
             while (!($downloadCompleteLbl.Displayed)) {
                 Write-Host "sleeping"
-                sleep -Milliseconds 500
-                $downloadCompleteLbl = Get-SeElement -By CssSelector ".download.complete-block"
+                sleep -Seconds 1
+                $downloadCompleteLbl = Get-SeElement -By CssSelector ".download.complete-block" -Target $driver
             }
+
+            write-host "time buffer for gecko..."
+            sleep -Seconds 5
+
+            $d1 = get-date
+            write-host "close gecko"
+            $driver.close()
+            write-host "quit gecko"
+            $driver.quit()
+            write-host "dispose gecko"
+            $driver.Dispose()
+            $d2 = get-date
+            $timespan = $d2.Subtract($d1)
+            write-host "closed gecko, time: $timespan"
         }
 
-            sleep -Seconds 5
+
             $file = (Get-ChildItem  "$PSScriptRoot\JDownloader2Setup_windows-x64_jre??.exe" -File).Name
-            Write-Host "++++++++"
-            Write-Host $file
-            Write-Host "++++++++"
         }
 
 
