@@ -253,7 +253,7 @@ function downloadProgram {
 
         ([Programs]::VLCPLAYER) {
             $url = "http://download.videolan.org/pub/videolan/vlc/last/win64/"
-            $html = Invoke-WebRequest $url
+            $html = Invoke-WebRequest $url -usebasicparsing
             $file = ($html.links | ? href -Match "vlc-.+?-win64\.exe$").href
             $url = "$url$file"
         }
@@ -274,7 +274,7 @@ function downloadProgram {
 
         ([Programs]::ZIP7) {
             $url = "https://7-zip.org/download.html"
-            $html = Invoke-WebRequest $url
+            $html = Invoke-WebRequest $url -UseBasicParsing
             $href = ($html.links | ? href -Match "7z.+?-x64.exe$")[0].href
             $file = $href.split("/") | select -Last 1
             $url = "https://7-zip.org/a/$file"
@@ -350,7 +350,7 @@ function Install-WBProgram {
         [Program]$programDetail,
         [switch]$Force
     )
-    
+
     $resolve = downloadProgram $programDetail
     $filePath = $resolve.Path
     $fileName = Split-Path $filePath -Leaf
@@ -360,7 +360,7 @@ function Install-WBProgram {
     }
 
     if ($fileName -like "*.zip") {
-        Expand-Archive -Path $filePath -DestinationPath $PSScriptRoot -Verbose
+        Expand-Archive -Path $filePath -DestinationPath $PSScriptRoot
         $fileNameZip = $fileName;
         $filePathZip = $filePath;
 
@@ -375,7 +375,7 @@ function Install-WBProgram {
 
     if (($null -ne $programDetail.InstallerArguments) -and ($programDetail.InstallerArguments.Length -gt 0)) {
         Write-Host "installing $fileName..."
-        Start-Process -FilePath $filePath -ArgumentList $programDetail.InstallerArguments  -PassThru -Verbose -Wait
+        Start-Process -FilePath $filePath -ArgumentList $programDetail.InstallerArguments -Wait
     }
 
     if (($null -ne $fileNameZip)) {
