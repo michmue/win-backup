@@ -8,7 +8,7 @@ Import-Module "$PSScriptRoot\programlist.psm1"
 
 
 function downloadProgram {
-    [CmdletBinding(ConfirmImpact="none",SupportsShouldProcess=$true)]
+    [CmdletBinding(ConfirmImpact = "none", SupportsShouldProcess = $true)]
     param(
         [Program]$prog,
         [switch]$Force
@@ -99,10 +99,13 @@ function downloadProgram {
 
 
         ([Programs]::JAVA) {
-            $api = Invoke-RestMethod -Uri "https://api.github.com/repos/adoptium/temurin11-binaries/releases/latest"
-            $asset = ($api.assets | ? name -Match "OpenJDK.+?-jdk_x64_windows_hotspot_.+?\.msi$")
-            $file = $asset.name
-            $url = $asset.browser_download_url
+            # $api = Invoke-RestMethod -Uri "https://api.github.com/repos/adoptium/temurin11-binaries/releases/latest"
+            # $asset = ($api.assets | ? name -Match "OpenJDK.+?-jdk_x64_windows_hotspot_.+?\.msi$")
+            # $file = $asset.name
+            # $url = $asset.browser_download_url
+
+            $file = "jdk-21_windows-x64_bin.msi"
+            $url = "https://download.oracle.com/java/21/latest/jdk-21_windows-x64_bin.msi"
         }
 
 
@@ -141,32 +144,27 @@ function downloadProgram {
             }
 
             if (-Not ((Get-ChildItem  "$PSScriptRoot\JDownloader2Setup_windows-x64_jre??.exe" -File).Name)) {
-            Write-Host "starting selenium/firefox"
-            $driver = (Start-SeFirefox -StartURL "https://mega.nz/file/2IURAaRB#84RbercQS9rTzBiBBhbWuLvAtJ1pZdG4RhCMskuWDFY" -DefaultDownloadPath $PSScriptRoot -Headless -Quiet -WebDriverDirectory "C:\bin")
-            Write-Host "waiting for download"
-            $downloadBtn = Get-SeElement -By CssSelector ".js-default-download > span" -Wait -Target $driver
-            $downloadBtn.Click()
-            $downloadCompleteLbl = Get-SeElement -By CssSelector ".download.complete-block" -Target $driver
-            while (!($downloadCompleteLbl.Displayed)) {
-                Write-Host "sleeping"
-                sleep -Seconds 1
-                $downloadCompleteLbl = Get-SeElement -By CssSelector ".download.complete-block" -Target $driver
+                Write-Host "downloading jdownloader"
+                $driver = (Start-SeFirefox -StartURL "https://mega.nz/file/2IURAaRB#84RbercQS9rTzBiBBhbWuLvAtJ1pZdG4RhCMskuWDFY" -DefaultDownloadPath $PSScriptRoot -Headless -Quiet -WebDriverDirectory "C:\bin")
+
+                $downloadBtn = $driver.FindElementByCssSelector('.js-default-download > span')
+                $downloadBtn.Click()
+                $downloadCompleteLbl = $driver.FindElementByCssSelector('.download.complete-block')
+                while (!($downloadCompleteLbl.Displayed)) {
+                    Write-Host "sleeping"
+                    sleep -Seconds 1
+                    $downloadCompleteLbl = $driver.FindElementByCssSelector('.download.complete-block')
+                }
+
+                sleep -Seconds 2
+                $driver.Dispose()
+
+                $headlessFirefoxesNotDisposed = (Get-CimInstance Win32_Process -Filter "Name = 'firefox.exe'" | ? CommandLine -match "-marionette.*-headless").processid
+                if ($headlessFirefoxesNotDisposed.Count -gt 0) {
+                    Stop-Process $headlessFirefoxesNotDisposed
+                }
+
             }
-
-            write-host "time buffer for gecko..."
-            sleep -Seconds 5
-
-            $d1 = get-date
-            write-host "close gecko"
-            $driver.close()
-            write-host "quit gecko"
-            $driver.quit()
-            write-host "dispose gecko"
-            $driver.Dispose()
-            $d2 = get-date
-            $timespan = $d2.Subtract($d1)
-            write-host "closed gecko, time: $timespan"
-        }
 
 
             $file = (Get-ChildItem  "$PSScriptRoot\JDownloader2Setup_windows-x64_jre??.exe" -File).Name
@@ -293,15 +291,9 @@ function downloadProgram {
     if (($url -and $file) -and
         -NOT ($file -Match "JDownloader.*")) {
 
-            $wc.DownloadFile($url, "$PSScriptRoot/$file")
+        $wc.DownloadFile($url, "$PSScriptRoot/$file")
     }
     $wc.Dispose()
-
-
-    while (-Not (Resolve-Path "$PSScriptRoot\$file").Path) {
-        Write-Host "resolving"
-        sleep -Milliseconds 50
-    }
 
     return (Resolve-Path "$PSScriptRoot\$file")
 }
@@ -352,7 +344,7 @@ function Get-WBProgram ($name) {
 
 
 function Install-WBProgram {
-    [CmdletBinding(ConfirmImpact="none",SupportsShouldProcess=$true)]
+    [CmdletBinding(ConfirmImpact = "none", SupportsShouldProcess = $true)]
 
     param(
         [Parameter(Mandatory, ValueFromPipeline)]
@@ -385,6 +377,9 @@ function Install-WBProgram {
     if (($null -ne $programDetail.InstallerArguments) -and ($programDetail.InstallerArguments.Length -gt 0)) {
         Write-Host "installing $fileName..."
         Start-Process -FilePath $filePath -ArgumentList $programDetail.InstallerArguments -Wait
+    } else {
+        throw "Skipping because no silent parameters for " + $programDetail.Name
+        return
     }
 
     if (($null -ne $fileNameZip)) {
@@ -401,7 +396,6 @@ function Install-WBProgram {
 
     }
     if ( ($null -ne $programDetail.Script) ) {
-        Write-Host "invoking for np++"
         Invoke-Command -ScriptBlock $programDetail.Script
     }
 }
