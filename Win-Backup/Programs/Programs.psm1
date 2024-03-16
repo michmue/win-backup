@@ -151,13 +151,17 @@ function downloadProgram {
                 $downloadBtn.Click()
                 $downloadCompleteLbl = $driver.FindElementByCssSelector('.download.complete-block')
                 while (!($downloadCompleteLbl.Displayed)) {
-                    Write-Host "sleeping"
                     sleep -Seconds 1
                     $downloadCompleteLbl = $driver.FindElementByCssSelector('.download.complete-block')
                 }
 
-                sleep -Seconds 2
+                ### wait till firefox download really finished. Sometimes *.exe exists but has 0 bytes => Start-Process throws file is no vaild executable
+                while ( (Get-ChildItem "$PSScriptRoot\JDownloader2Setup_windows-x64_jre??.exe" -ea SilentlyContinue).Length -le 0 ) {
+                    Start-Sleep -Milliseconds 250
+                }
+                start-sleep -Seconds 1
                 $driver.Dispose()
+                ###
 
                 $headlessFirefoxesNotDisposed = (Get-CimInstance Win32_Process -Filter "Name = 'firefox.exe'" | ? CommandLine -match "-marionette.*-headless").processid
                 if ($headlessFirefoxesNotDisposed.Count -gt 0) {
